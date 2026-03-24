@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:tecgs.com)",
+      "Bash(for file in solutions.html contact.html healthedge.html secureid.html buildx.html ehealth.html onewealth.html mivita.html wow.html agentic-ai.html)",
+      "Bash(do sed -i '' 's|<a href=\"\"index.html\"\" class=\"\"nav-logo\"\">TEC<span>GS</span></a>|<a href=\"\"index.html\"\" class=\"\"nav-logo\"\"><img src=\"\"photos/TECG Soft Logo.png\"\" alt=\"\"TECG SOFT\"\" class=\"\"nav-logo-img\"\"></a>|g' \"$file\")",
+      "Bash(echo \"Logo replaced in $file\")",
+      "Bash(done)",
+      "Bash(for file in index.html about.html solutions.html contact.html healthedge.html secureid.html buildx.html ehealth.html onewealth.html mivita.html wow.html agentic-ai.html)",
+      "Bash(do sed -i '' 's/TECGS/TECG SOFT/g' \"$file\")",
+      "Bash(echo \"Renamed TECGS in $file\")",
+      "Bash(do sed -i '' 's|photos/TECG Soft Logo.png|photos/TECG%20Soft%20Logo.png|g' \"$file\")",
+      "Bash(echo \"Fixed path in $file\")"
+    ]
+  }
+}
