@@ -53,13 +53,13 @@
   <!-- ===== CONTACT FORM + INFO ===== -->
   <section class="contact-section">
     <div class="contact-grid">
-      <form class="contact-form fade-up">
+      <form class="contact-form fade-up" action="https://formspree.io/f/mgopeepd" method="POST">
         <h3 style="margin-bottom: 24px;">Send Us a Message</h3>
-        <input type="text" placeholder="Full Name *" required>
-        <input type="email" placeholder="Email Address *" required>
-        <input type="tel" placeholder="Phone Number">
-        <input type="text" placeholder="Company / Organization">
-        <select required>
+        <input type="text" name="name" placeholder="Full Name *" required>
+        <input type="email" name="email" placeholder="Email Address *" required>
+        <input type="tel" name="phone" placeholder="Phone Number">
+        <input type="text" name="company" placeholder="Company / Organization">
+        <select name="interest" required>
           <option value="" disabled selected>Interested In... *</option>
           <option value="secureid">SecureID — Smart Card & NFC Solutions</option>
           <option value="healthedge">HealthEdge — Healthcare Platforms</option>
@@ -68,7 +68,7 @@
           <option value="partnership">Partnership Inquiry</option>
           <option value="general">General Inquiry</option>
         </select>
-        <textarea placeholder="Tell us about your project or requirements..." required></textarea>
+        <textarea name="message" placeholder="Tell us about your project or requirements..." required></textarea>
         <button type="submit" class="btn btn-gold" style="width: 100%;">Send Message</button>
         <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; text-align: center;">Our AI agents will analyze your inquiry and route it to the right team.</p>
       </form>
