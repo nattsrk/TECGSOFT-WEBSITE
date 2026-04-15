@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual OT — Digital Operation Theatre</title>
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f4f8;
+    color: #1a2a3a;
+    min-height: 100vh;
+  }
+
+  /* ===== APOLLO-INSPIRED PALETTE ===== */
+  :root {
+    --primary: #003366;
+    --primary-light: #004a8f;
+    --accent: #00a89d;
+    --accent-light: #00c9bc;
+    --accent-dark: #008f86;
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --border: #dce4ed;
+    --text: #1a2a3a;
+    --text-light: #5a6a7a;
+    --danger: #dc3545;
+    --success: #28a745;
+    --warning: #f0ad4e;
+    --live-red: #e53935;
+    --idle-grey: #90a4ae;
+    --recording-orange: #ff6d00;
+    --shadow: 0 2px 12px rgba(0,51,102,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,51,102,0.12);
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  /* ===== SCREEN MANAGEMENT ===== */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ===== LOGIN SCREEN ===== */
+  #login-screen {
+    background: linear-gradient(135deg, var(--primary) 0%, #001a33 50%, var(--primary) 100%);
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #login-screen::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,168,157,0.15) 0%, transparent 70%);
+    top: -200px; right: -200px;
+  }
+  #login-screen::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,168,157,0.1) 0%, transparent 70%);
+    bottom: -100px; left: -100px;
+  }
+  .login-card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 48px 40px;
+    width: 420px;
+    max-width: 90vw;
+    box-shadow: var(--shadow-lg);
+    z-index: 1;
+    text-align: center;
+  }
+  .login-logo {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 32px; color: #fff;
+  }
+  .login-title { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+  .login-subtitle { font-size: 13px; color: var(--text-light); margin-bottom: 32px; }
+  .form-group { margin-bottom: 18px; text-align: left; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-light); margin-bottom: 6px; }
+  .form-input {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--accent); }
+  .form-select {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 15px;
+    background: #fff;
+    outline: none;
+    cursor: pointer;
+  }
+  .btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #fff;
+    width: 100%;
+    justify-content: center;
+    padding: 14px;
+    font-size: 16px;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,168,157,0.3); }
+  .btn-sm { padding: 8px 16px; font-size: 13px; border-radius: 6px; }
+  .btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--text);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: var(--accent-dark); }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-danger:hover { background: #c82333; }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-icon {
+    width: 40px; height: 40px; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    background: transparent;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    color: var(--text-light);
+    font-size: 18px;
+  }
+  .btn-icon:hover { border-color: var(--accent); color: var(--accent); }
+  .forgot-link { display: block; margin-top: 16px; font-size: 13px; color: var(--accent); text-decoration: none; cursor: pointer; }
+  .forgot-link:hover { text-decoration: underline; }
+
+  /* ===== APP SHELL (Post-Login) ===== */
+  .app-shell { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 240px;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+  }
+  .sidebar-logo {
+    padding: 20px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .sidebar-logo-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .sidebar-logo-text { font-size: 16px; font-weight: 700; }
+  .sidebar-logo-text span { display: block; font-size: 11px; font-weight: 400; opacity: 0.6; }
+  .sidebar-nav { flex: 1; padding: 12px 0; overflow-y: auto; }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+  }
+  .nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  .nav-item.active {
+    color: #fff;
+    background: rgba(0,168,157,0.15);
+    border-left-color: var(--accent);
+  }
+  .nav-item .nav-icon { width: 20px; text-align: center; font-size: 16px; }
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer;
+  }
+  .sidebar-avatar {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+  }
+  .sidebar-user { font-size: 13px; }
+  .sidebar-user span { display: block; font-size: 11px; opacity: 0.5; }
+
+  .main-area {
+    flex: 1;
+    margin-left: 240px;
+    display: flex;
+    flex-direction: column;
+  }
+  .topbar {
+    height: 60px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .topbar-title { font-size: 18px; font-weight: 700; color: var(--primary); }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .content-area { flex: 1; padding: 24px 28px; }
+
+  /* ===== DASHBOARD ===== */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--accent);
+  }
+  .stat-card.live { border-left-color: var(--live-red); }
+  .stat-card.rec { border-left-color: var(--recording-orange); }
+  .stat-card.idle { border-left-color: var(--idle-grey); }
+  .stat-value { font-size: 28px; font-weight: 800; color: var(--primary); }
+  .stat-label { font-size: 12px; color: var(--text-light); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .card-body { padding: 20px; }
+
+  .ot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .ot-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .ot-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .ot-card-preview {
+    height: 160px;
+    background: #0a1929;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .ot-card-preview video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ot-card-preview .play-icon {
+    width: 56px; height: 56px;
+    background: rgba(0,168,157,0.9);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; color: #fff;
+  }
+  .ot-status-badge {
+    position: absolute;
+    top: 12px; left: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-live { background: var(--live-red); color: #fff; animation: pulse-live 1.5s infinite; }
+  .badge-idle { background: var(--idle-grey); color: #fff; }
+  .badge-recording { background: var(--recording-orange); color: #fff; animation: pulse-live 1.5s infinite; }
+  @keyframes pulse-live { 0%,100%{ opacity:1; } 50%{ opacity:0.7; } }
+  .ot-card-info { padding: 14px 16px; }
+  .ot-card-name { font-size: 16px; font-weight: 700; color: var(--primary); }
+  .ot-card-detail { font-size: 13px; color: var(--text-light); margin-top: 4px; }
+  .ot-card-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+  .recent-table { width: 100%; border-collapse: collapse; }
+  .recent-table th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    border-bottom: 2px solid var(--border);
+  }
+  .recent-table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .recent-table tr { cursor: pointer; transition: background 0.15s; }
+  .recent-table tbody tr:hover { background: rgba(0,168,157,0.04); }
+  .duration-badge { font-family: 'SF Mono', 'Consolas', monospace; font-size: 13px; color: var(--text-light); }
+
+  /* ===== LIVE OT SCREEN ===== */
+  .live-layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; height: calc(100vh - 108px); }
+  .video-container {
+    background: #0a0a0a;
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .video-container iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: none;
+  }
+  .video-placeholder {
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+  }
+  .video-placeholder .vp-icon { font-size: 64px; margin-bottom: 12px; }
+  .video-placeholder p { font-size: 14px; }
+  .video-overlay-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 16px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .live-badge-lg {
+    background: var(--live-red);
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: pulse-live 1.5s infinite;
+  }
+  .live-badge-lg::before { content: ''; width: 8px; height: 8px; background: #fff; border-radius: 50%; }
+  .video-time { color: rgba(255,255,255,0.8); font-family: monospace; font-size: 14px; background: rgba(0,0,0,0.5); padding: 6px 12px; border-radius: 6px; }
+  .video-controls {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 16px;
+    background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+  .vc-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    transition: transform 0.15s;
+  }
+  .vc-btn:hover { transform: scale(1.05); }
+  .vc-btn.rec-start { background: var(--danger); }
+  .vc-btn.rec-stop { background: var(--recording-orange); }
+  .vc-btn.snapshot { background: rgba(255,255,255,0.2); }
+  .vc-btn.source { background: rgba(255,255,255,0.15); }
+
+  .info-panel { display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+  .info-section {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .info-section-title {
+    padding: 14px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    border-bottom: 1px solid var(--border);
+  }
+  .info-section-body { padding: 16px; }
+  .info-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 14px; }
+  .info-label { color: var(--text-light); }
+  .info-value { font-weight: 600; color: var(--primary); }
+  .source-btns { display: flex; flex-direction: column; gap: 8px; }
+  .source-btn {
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s;
+  }
+  .source-btn:hover { border-color: var(--accent); }
+  .source-btn.active { border-color: var(--accent); background: rgba(0,168,157,0.06); color: var(--accent); }
+  .source-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--idle-grey); }
+  .source-btn.active .source-dot { background: var(--accent); }
+
+  /* ===== RECORDING CONTROL ===== */
+  .rec-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .rec-status-card {
+    text-align: center;
+    padding: 40px;
+  }
+  .rec-indicator {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+  }
+  .rec-indicator.on { background: rgba(229,57,53,0.1); color: var(--live-red); animation: pulse-live 1.5s infinite; }
+  .rec-indicator.off { background: rgba(144,164,174,0.15); color: var(--idle-grey); }
+  .rec-timer { font-size: 48px; font-weight: 800; font-family: 'SF Mono', 'Consolas', monospace; color: var(--primary); margin-bottom: 8px; }
+  .rec-filename { font-size: 13px; color: var(--text-light); margin-bottom: 24px; }
+  .rec-actions { display: flex; gap: 12px; justify-content: center; }
+
+  .tag-form .form-group { margin-bottom: 14px; }
+
+  /* ===== ARCHIVE ===== */
+  .archive-toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 10px 14px 10px 40px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+  }
+  .search-box input:focus { border-color: var(--accent); }
+  .search-box::before {
+    content: '\1F50D';
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+  }
+  .filter-group { display: flex; gap: 8px; }
+
+  .archive-table { width: 100%; border-collapse: collapse; }
+  .archive-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    background: #f8fafc;
+    border-bottom: 2px solid var(--border);
+  }
+  .archive-table td {
+    padding: 14px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .archive-table tbody tr { cursor: pointer; transition: background 0.15s; }
+  .archive-table tbody tr:hover { background: rgba(0,168,157,0.04); }
+  .procedure-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(0,168,157,0.1);
+    color: var(--accent-dark);
+  }
+
+  /* ===== PLAYBACK ===== */
+  .playback-layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; height: calc(100vh - 108px); }
+  .playback-video {
+    background: #0a0a0a;
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .playback-screen {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  .playback-screen iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .playback-screen .vp-icon { font-size: 64px; }
+  .playback-bar {
+    padding: 16px;
+    background: rgba(0,0,0,0.8);
+  }
+  .seek-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    margin-bottom: 12px;
+    position: relative;
+    cursor: pointer;
+  }
+  .seek-progress { width: 35%; height: 100%; background: var(--accent); border-radius: 2px; }
+  .seek-thumb {
+    width: 14px; height: 14px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: absolute;
+    top: -5px;
+    left: 35%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 6px rgba(0,168,157,0.5);
+  }
+  .playback-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .pb-left, .pb-right { display: flex; align-items: center; gap: 12px; }
+  .pb-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .pb-btn:hover { color: #fff; }
+  .pb-btn.play-btn { font-size: 28px; color: #fff; }
+  .pb-time { color: rgba(255,255,255,0.6); font-size: 13px; font-family: monospace; }
+
+  /* ===== REMOTE VIEWER ===== */
+  .remote-layout { height: calc(100vh - 108px); display: flex; flex-direction: column; }
+  .remote-video {
+    flex: 1;
+    background: #0a0a0a;
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .remote-video iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: none;
+  }
+  .remote-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 16px 20px;
+    background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .remote-info { color: rgba(255,255,255,0.8); font-size: 14px; }
+  .remote-info strong { display: block; font-size: 16px; color: #fff; margin-bottom: 2px; }
+  .remote-controls { display: flex; gap: 10px; }
+  .remote-notice {
+    text-align: center;
+    padding: 12px;
+    background: rgba(0,168,157,0.06);
+    border: 1px solid rgba(0,168,157,0.15);
+    border-radius: 8px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--accent-dark);
+  }
+
+  /* ===== USER MANAGEMENT ===== */
+  .user-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .user-table { width: 100%; border-collapse: collapse; }
+  .user-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    background: #f8fafc;
+    border-bottom: 2px solid var(--border);
+  }
+  .user-table td {
+    padding: 14px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .role-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .role-admin { background: rgba(0,51,102,0.1); color: var(--primary); }
+  .role-doctor { background: rgba(0,168,157,0.1); color: var(--accent-dark); }
+  .role-staff { background: rgba(144,164,174,0.15); color: var(--text-light); }
+  .user-actions { display: flex; gap: 6px; }
+
+  /* ===== SETTINGS ===== */
+  .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .settings-section { margin-bottom: 16px; }
+  .settings-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    margin-bottom: 12px;
+  }
+  .setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .setting-label { font-size: 14px; font-weight: 500; }
+  .setting-desc { font-size: 12px; color: var(--text-light); }
+  .toggle {
+    width: 44px; height: 24px;
+    background: var(--border);
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .toggle.on { background: var(--accent); }
+  .toggle::after {
+    content: '';
+    width: 20px; height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px; left: 2px;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+  .toggle.on::after { transform: translateX(20px); }
+
+  /* ===== NOTIFICATIONS ===== */
+  .notif-list { display: flex; flex-direction: column; gap: 8px; }
+  .notif-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: background 0.15s;
+  }
+  .notif-item:hover { background: #f8fafc; }
+  .notif-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .notif-icon.rec { background: rgba(229,57,53,0.1); color: var(--live-red); }
+  .notif-icon.stor { background: rgba(240,173,78,0.1); color: var(--warning); }
+  .notif-icon.info { background: rgba(0,168,157,0.1); color: var(--accent); }
+  .notif-body { flex: 1; }
+  .notif-body strong { display: block; font-size: 14px; margin-bottom: 2px; }
+  .notif-body span { font-size: 12px; color: var(--text-light); }
+  .notif-time { font-size: 12px; color: var(--text-light); white-space: nowrap; }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,20,40,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    width: 440px;
+    max-width: 90vw;
+    box-shadow: var(--shadow-lg);
+  }
+  .modal-title { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 20px; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+
+  /* ===== TOAST ===== */
+  .toast-container { position: fixed; top: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; }
+  .toast {
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    box-shadow: var(--shadow-lg);
+    animation: toast-in 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .toast.success { background: var(--success); }
+  .toast.error { background: var(--danger); }
+  .toast.info { background: var(--accent); }
+  @keyframes toast-in { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+</style>
+</head>
+<body>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div class="toast-container" id="toasts"></div>
+
+<!-- ===== SCREEN 1: LOGIN ===== -->
+<div class="screen active" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">&#9764;</div>
+    <div class="login-title">Virtual OT</div>
+    <div class="login-subtitle">Digital Operation Theatre &bull; Secure Login</div>
+    <div class="form-group">
+      <label>Email / Username</label>
+      <input type="text" class="form-input" placeholder="doctor@hospital.in" value="dr.sharma@apollo.in">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" class="form-input" placeholder="Enter password" value="password123">
+    </div>
+    <div class="form-group">
+      <label>Role</label>
+      <select class="form-select" id="login-role">
+        <option value="admin">Administrator</option>
+        <option value="doctor" selected>Doctor</option>
+        <option value="staff">OT Staff</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="doLogin()">Sign In</button>
+    <a class="forgot-link">Forgot Password?</a>
+  </div>
+</div>
+
+<!-- ===== APP SHELL (Screens 2-10) ===== -->
+<div class="screen" id="app-screen">
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">&#9764;</div>
+        <div class="sidebar-logo-text">Virtual OT<span>Digital Operation Theatre</span></div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-item active" onclick="showPage('dashboard')" data-page="dashboard">
+          <span class="nav-icon">&#9632;</span> Dashboard
+        </div>
+        <div class="nav-item" onclick="showPage('live')" data-page="live">
+          <span class="nav-icon">&#9673;</span> Live OT
+          <span style="margin-left:auto;background:var(--live-red);color:#fff;border-radius:10px;font-size:10px;padding:1px 7px;font-weight:700">3</span>
+        </div>
+        <div class="nav-item" onclick="showPage('recording')" data-page="recording">
+          <span class="nav-icon">&#9210;</span> Recording
+        </div>
+        <div class="nav-item" onclick="showPage('archive')" data-page="archive">
+          <span class="nav-icon">&#128194;</span> Archive
+        </div>
+        <div class="nav-item" onclick="showPage('playback')" data-page="playback">
+          <span class="nav-icon">&#9654;</span> Playback
+        </div>
+        <div class="nav-item" onclick="showPage('remote')" data-page="remote">
+          <span class="nav-icon">&#127760;</span> Remote View
+        </div>
+        <div class="nav-item" onclick="showPage('users')" data-page="users">
+          <span class="nav-icon">&#128101;</span> Users
+        </div>
+        <div class="nav-item" onclick="showPage('settings')" data-page="settings">
+          <span class="nav-icon">&#9881;</span> Settings
+        </div>
+        <div class="nav-item" onclick="showPage('notifications')" data-page="notifications">
+          <span class="nav-icon">&#128276;</span> Notifications
+        </div>
+      </nav>
+      <div class="sidebar-footer" onclick="doLogout()">
+        <div class="sidebar-avatar" id="user-avatar">DS</div>
+        <div class="sidebar-user" id="user-info">Dr. Sharma<span>Surgeon &bull; Logout</span></div>
+      </div>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="main-area">
+      <div class="topbar">
+        <div class="topbar-title" id="page-title">Dashboard</div>
+        <div class="topbar-right">
+          <span style="font-size:13px;color:var(--text-light)" id="clock">10:32 AM</span>
+          <button class="btn-icon" onclick="showPage('notifications')">&#128276;</button>
+        </div>
+      </div>
+      <div class="content-area" id="content-area">
+
+        <!-- ===== PAGE: DASHBOARD ===== -->
+        <div class="page active" id="page-dashboard">
+          <div class="stats-row">
+            <div class="stat-card live"><div class="stat-value">1</div><div class="stat-label">Live Now</div></div>
+            <div class="stat-card rec"><div class="stat-value">1</div><div class="stat-label">Recording</div></div>
+            <div class="stat-card idle"><div class="stat-value">1</div><div class="stat-label">Idle Rooms</div></div>
+            <div class="stat-card"><div class="stat-value">3</div><div class="stat-label">OT Rooms</div></div>
+          </div>
+
+          <div class="ot-grid">
+            <!-- OT 1 — LIVE -->
+            <div class="ot-card" onclick="openRoom(1)">
+              <div class="ot-card-preview">
+                <video autoplay muted loop playsinline poster="video/For_the_CCTV_202604152133%20(1).png">
+                  <source src="video/Flow_202604152218.mp4" type="video/mp4">
+                </video>
+                <span class="ot-status-badge badge-live">&#9679; Live</span>
+                <div class="play-icon" style="position:relative;z-index:2">&#9654;</div>
+              </div>
+              <div class="ot-card-info">
+                <div class="ot-card-name">OT Room 1 &mdash; General Surgery</div>
+                <div class="ot-card-detail">Dr. R. Sharma &bull; Lap. Cholecystectomy</div>
+                <div class="ot-card-actions">
+                  <button class="btn btn-sm btn-accent" onclick="event.stopPropagation();openRoom(1)">View Live</button>
+                  <button class="btn btn-sm btn-outline" onclick="event.stopPropagation();showPage('recording')">Recording</button>
+                </div>
+              </div>
+            </div>
+            <!-- OT 2 — RECORDING -->
+            <div class="ot-card" onclick="openRoom(2)">
+              <div class="ot-card-preview">
+                <video autoplay muted loop playsinline poster="video/For_the_CCTV_202604152133.png">
+                  <source src="video/Synchronized_OT_Video_Generation_Plan.mp4" type="video/mp4">
+                </video>
+                <span class="ot-status-badge badge-recording">&#9210; Rec</span>
+                <div class="play-icon" style="position:relative;z-index:2">&#9654;</div>
+              </div>
+              <div class="ot-card-info">
+                <div class="ot-card-name">OT Room 2 &mdash; Cardiology</div>
+                <div class="ot-card-detail">Dr. A. Patel &bull; Bypass Graft Surgery</div>
+                <div class="ot-card-actions">
+                  <button class="btn btn-sm btn-accent" onclick="event.stopPropagation();openRoom(2)">View Live</button>
+                  <button class="btn btn-sm btn-outline" onclick="event.stopPropagation();showPage('recording')">Recording</button>
+                </div>
+              </div>
+            </div>
+            <!-- OT 3 — IDLE -->
+            <div class="ot-card" onclick="openRoom(3)">
+              <div class="ot-card-preview">
+                <video autoplay muted loop playsinline poster="video/For_the_CCTV_202604152133.png">
+                  <source src="video/perfect_in_both_202604152216.mp4" type="video/mp4">
+                </video>
+                <span class="ot-status-badge badge-idle">Idle</span>
+                <div class="play-icon" style="position:relative;z-index:2;opacity:0.5">&#9654;</div>
+              </div>
+              <div class="ot-card-info">
+                <div class="ot-card-name">OT Room 3 &mdash; Orthopedics</div>
+                <div class="ot-card-detail">No active procedure</div>
+                <div class="ot-card-actions">
+                  <button class="btn btn-sm btn-outline" onclick="event.stopPropagation();openRoom(3)">View Live</button>
+                  <button class="btn btn-sm btn-outline" disabled>Recording</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Recent Recordings <button class="btn btn-sm btn-outline" onclick="showPage('archive')">View All</button></div>
+            <table class="recent-table">
+              <thead><tr><th>Date</th><th>OT</th><th>Doctor</th><th>Procedure</th><th>Duration</th></tr></thead>
+              <tbody>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:8px"><img src="video/For_the_CCTV_202604152133%20(1).png" style="width:56px;height:36px;border-radius:4px;object-fit:cover">06 Apr 2026</div></td>
+                  <td>OT-1</td><td>Dr. Sharma</td><td><span class="procedure-tag">Cholecystectomy</span></td><td class="duration-badge">01:42:15</td>
+                </tr>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:8px"><img src="video/For_the_Laparoscope_202604152029.png" style="width:56px;height:36px;border-radius:4px;object-fit:cover">05 Apr 2026</div></td>
+                  <td>OT-2</td><td>Dr. Patel</td><td><span class="procedure-tag">Knee Arthroscopy</span></td><td class="duration-badge">02:10:33</td>
+                </tr>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:8px"><img src="video/For_the_Laparoscope_202604152030.jpeg" style="width:56px;height:36px;border-radius:4px;object-fit:cover">05 Apr 2026</div></td>
+                  <td>OT-1</td><td>Dr. Sharma</td><td><span class="procedure-tag">Appendectomy</span></td><td class="duration-badge">00:58:47</td>
+                </tr>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:8px"><img src="video/For_the_CCTV_202604152133.png" style="width:56px;height:36px;border-radius:4px;object-fit:cover">04 Apr 2026</div></td>
+                  <td>OT-1</td><td>Dr. Iyer</td><td><span class="procedure-tag">Hernia Repair</span></td><td class="duration-badge">01:15:22</td>
+                </tr>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:8px"><img src="video/Surgeon_explaining_laparoscopic_202604152239.jpeg" style="width:56px;height:36px;border-radius:4px;object-fit:cover">03 Apr 2026</div></td>
+                  <td>OT-2</td><td>Dr. Patel</td><td><span class="procedure-tag">ACL Reconstruction</span></td><td class="duration-badge">02:45:08</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ===== PAGE: LIVE OT ===== -->
+        <div class="page" id="page-live">
+          <!-- Room Selector Tabs -->
+          <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+            <button class="room-tab active" id="tab-room-1" onclick="switchRoom(1)" style="padding:8px 18px;border-radius:8px;border:1.5px solid var(--accent);background:var(--accent);color:#fff;font-size:13px;font-weight:700;cursor:pointer">&#9673; OT Room 1 — General Surgery</button>
+            <button class="room-tab" id="tab-room-2" onclick="switchRoom(2)" style="padding:8px 18px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-size:13px;font-weight:600;cursor:pointer">&#9210; OT Room 2 — Cardiology</button>
+            <button class="room-tab" id="tab-room-3" onclick="switchRoom(3)" style="padding:8px 18px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-size:13px;font-weight:600;cursor:pointer">&#128274; OT Room 3 — Orthopedics</button>
+          </div>
+          <div class="live-layout">
+            <div class="video-container">
+              <div class="video-overlay-top">
+                <div class="live-badge-lg" id="live-status-badge">LIVE</div>
+                <div class="video-time" id="live-time">00:47:23</div>
+              </div>
+              <!-- Local OT video feed -->
+              <video id="live-video" autoplay muted loop playsinline
+                poster="video/For_the_CCTV_202604152133.png"
+                style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                <source src="video/Flow_202604152218.mp4" type="video/mp4">
+              </video>
+              <!-- Laparoscope source overlay (shown on source switch) -->
+              <img id="lap-overlay"
+                src="video/For_the_Laparoscope_202604152029.png"
+                style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+              <!-- Endoscope source overlay -->
+              <img id="endo-overlay"
+                src="video/For_the_Laparoscope_202604152030.jpeg"
+                style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+              <div class="video-controls">
+                <button class="vc-btn source" onclick="switchSource('ot')">&#128247; OT Camera</button>
+                <button class="vc-btn source" onclick="switchSource('lap')">&#128300; Laparoscope</button>
+                <button class="vc-btn rec-start" id="rec-toggle" onclick="toggleRec()">&#9679; Start Recording</button>
+                <button class="vc-btn snapshot" onclick="toast('Snapshot captured','success')">&#128248; Snapshot</button>
+              </div>
+            </div>
+            <div class="info-panel">
+              <div class="info-section">
+                <div class="info-section-title">Procedure Details</div>
+                <div class="info-section-body">
+                  <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:8px" id="room-name-display">OT Room 1 — General Surgery</div>
+                  <div class="info-row"><span class="info-label">Patient</span><span class="info-value" id="room-patient">Rajesh K.</span></div>
+                  <div class="info-row"><span class="info-label">MRN</span><span class="info-value" id="room-mrn">APL-20260406-0812</span></div>
+                  <div class="info-row"><span class="info-label">Surgeon</span><span class="info-value" id="room-doctor">Dr. R. Sharma</span></div>
+                  <div class="info-row"><span class="info-label">Procedure</span><span class="info-value" id="room-procedure">Lap. Cholecystectomy</span></div>
+                  <div class="info-row"><span class="info-label">Started</span><span class="info-value" id="room-started">09:45 AM</span></div>
+                </div>
+              </div>
+              <div class="info-section">
+                <div class="info-section-title">Video Source</div>
+                <div class="info-section-body">
+                  <div class="source-btns">
+                    <div class="source-btn active" onclick="selectSource(this);switchSource('ot')">
+                      <img src="video/For_the_CCTV_202604152133.png" style="width:32px;height:22px;border-radius:3px;object-fit:cover">
+                      <span class="source-dot"></span>OT Camera (Main)
+                    </div>
+                    <div class="source-btn" onclick="selectSource(this);switchSource('lap')">
+                      <img src="video/For_the_Laparoscope_202604152029.png" style="width:32px;height:22px;border-radius:3px;object-fit:cover">
+                      <span class="source-dot"></span>Laparoscope Feed
+                    </div>
+                    <div class="source-btn" onclick="selectSource(this);switchSource('endo')">
+                      <img src="video/For_the_Laparoscope_202604152030.jpeg" style="width:32px;height:22px;border-radius:3px;object-fit:cover">
+                      <span class="source-dot"></span>Endoscope (Aux)
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="info-section">
+                <div class="info-section-title">Team</div>
+                <div class="info-section-body" style="font-size:13px;color:var(--text-light);line-height:1.8" id="room-team">
+                  Dr. M. Gupta (Anesthetist) &bull; Sr. Lakshmi (Nurse)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== PAGE: RECORDING CONTROL ===== -->
+        <div class="page" id="page-recording">
+          <div class="rec-layout">
+            <div class="card rec-status-card" style="position:relative;overflow:hidden">
+              <video autoplay muted loop playsinline
+                style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.08;z-index:0">
+                <source src="video/Synchronized_OT_Video_Generation_Plan.mp4" type="video/mp4">
+              </video>
+              <div style="position:relative;z-index:1;width:100%">
+              <div class="rec-indicator on" id="rec-ind">&#9679;</div>
+              <div class="rec-timer" id="rec-timer">00:47:23</div>
+              <div class="rec-filename">OT1_20260406_Sharma_Cholecystectomy.mp4</div>
+              <div class="rec-actions">
+                <button class="btn btn-danger" id="rec-ctrl-btn" onclick="toggleRecCtrl()">&#9209; Stop Recording</button>
+                <button class="btn btn-outline" onclick="toast('Snapshot captured','success')">&#128248; Snapshot</button>
+              </div>
+              </div><!-- end z-index wrapper -->
+            </div>
+            <div class="card">
+              <div class="card-header">Recording Metadata</div>
+              <div class="card-body tag-form">
+                <div class="form-group">
+                  <label>Doctor / Surgeon</label>
+                  <input class="form-input" value="Dr. R. Sharma">
+                </div>
+                <div class="form-group">
+                  <label>Procedure</label>
+                  <input class="form-input" value="Laparoscopic Cholecystectomy">
+                </div>
+                <div class="form-group">
+                  <label>OT Room</label>
+                  <select class="form-select"><option>OT Room 1</option><option>OT Room 2</option></select>
+                </div>
+                <div class="form-group">
+                  <label>Notes</label>
+                  <textarea class="form-input" rows="3" placeholder="Additional notes..."></textarea>
+                </div>
+                <button class="btn btn-accent" onclick="toast('Metadata saved','success')">Save Metadata</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== PAGE: ARCHIVE ===== -->
+        <div class="page" id="page-archive">
+          <div class="archive-toolbar">
+            <div class="search-box"><input type="text" placeholder="Search recordings..."></div>
+            <div class="filter-group">
+              <select class="form-select" style="width:auto;padding:8px 12px;font-size:13px">
+                <option>All Doctors</option><option>Dr. Sharma</option><option>Dr. Patel</option><option>Dr. Iyer</option>
+              </select>
+              <select class="form-select" style="width:auto;padding:8px 12px;font-size:13px">
+                <option>All Procedures</option><option>Cholecystectomy</option><option>Arthroscopy</option><option>Appendectomy</option>
+              </select>
+              <input type="date" class="form-input" style="width:auto;padding:8px 12px;font-size:13px" value="2026-04-01">
+              <input type="date" class="form-input" style="width:auto;padding:8px 12px;font-size:13px" value="2026-04-06">
+            </div>
+          </div>
+          <div class="card">
+            <table class="archive-table">
+              <thead><tr><th>Date</th><th>OT</th><th>Doctor</th><th>Procedure</th><th>Duration</th><th>Size</th><th></th></tr></thead>
+              <tbody>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:10px"><img src="video/For_the_CCTV_202604152133%20(1).png" style="width:60px;height:40px;border-radius:4px;object-fit:cover">06 Apr 2026</div></td>
+                  <td>OT-1</td><td>Dr. Sharma</td><td><span class="procedure-tag">Cholecystectomy</span></td><td class="duration-badge">01:42:15</td><td>4.2 GB</td>
+                  <td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();toast('Download started','success')">&#128229;</button></td>
+                </tr>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:10px"><img src="video/For_the_Laparoscope_202604152029.png" style="width:60px;height:40px;border-radius:4px;object-fit:cover">05 Apr 2026</div></td>
+                  <td>OT-2</td><td>Dr. Patel</td><td><span class="procedure-tag">Knee Arthroscopy</span></td><td class="duration-badge">02:10:33</td><td>5.8 GB</td>
+                  <td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();toast('Download started','success')">&#128229;</button></td>
+                </tr>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:10px"><img src="video/For_the_Laparoscope_202604152030.jpeg" style="width:60px;height:40px;border-radius:4px;object-fit:cover">05 Apr 2026</div></td>
+                  <td>OT-1</td><td>Dr. Sharma</td><td><span class="procedure-tag">Appendectomy</span></td><td class="duration-badge">00:58:47</td><td>2.1 GB</td>
+                  <td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();toast('Download started','success')">&#128229;</button></td>
+                </tr>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:10px"><img src="video/For_the_CCTV_202604152133.png" style="width:60px;height:40px;border-radius:4px;object-fit:cover">04 Apr 2026</div></td>
+                  <td>OT-1</td><td>Dr. Iyer</td><td><span class="procedure-tag">Hernia Repair</span></td><td class="duration-badge">01:15:22</td><td>3.4 GB</td>
+                  <td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();toast('Download started','success')">&#128229;</button></td>
+                </tr>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:10px"><img src="video/Surgeon_explaining_laparoscopic_202604152239.jpeg" style="width:60px;height:40px;border-radius:4px;object-fit:cover">03 Apr 2026</div></td>
+                  <td>OT-2</td><td>Dr. Patel</td><td><span class="procedure-tag">ACL Reconstruction</span></td><td class="duration-badge">02:45:08</td><td>7.1 GB</td>
+                  <td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();toast('Download started','success')">&#128229;</button></td>
+                </tr>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:10px"><img src="video/create_a_video_202604152239.png" style="width:60px;height:40px;border-radius:4px;object-fit:cover">02 Apr 2026</div></td>
+                  <td>OT-1</td><td>Dr. Sharma</td><td><span class="procedure-tag">Thyroidectomy</span></td><td class="duration-badge">01:55:00</td><td>4.8 GB</td>
+                  <td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();toast('Download started','success')">&#128229;</button></td>
+                </tr>
+                <tr onclick="showPage('playback')">
+                  <td><div style="display:flex;align-items:center;gap:10px"><img src="video/For_the_CCTV_202604152133.png" style="width:60px;height:40px;border-radius:4px;object-fit:cover">01 Apr 2026</div></td>
+                  <td>OT-2</td><td>Dr. Iyer</td><td><span class="procedure-tag">Hip Replacement</span></td><td class="duration-badge">03:22:10</td><td>8.6 GB</td>
+                  <td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();toast('Download started','success')">&#128229;</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ===== PAGE: PLAYBACK ===== -->
+        <div class="page" id="page-playback">
+          <div class="playback-layout">
+            <div class="playback-video">
+              <div class="playback-screen">
+                <video controls
+                  poster="video/Surgeon_explaining_laparoscopic_202604152239.jpeg"
+                  style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                  <source src="video/perfect_in_both_202604152216.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="playback-bar">
+                <div class="seek-bar">
+                  <div class="seek-progress"></div>
+                  <div class="seek-thumb"></div>
+                </div>
+                <div class="playback-controls">
+                  <div class="pb-left">
+                    <button class="pb-btn">&#9198;</button>
+                    <button class="pb-btn play-btn">&#9654;</button>
+                    <button class="pb-btn">&#9197;</button>
+                    <span class="pb-time">00:35:42 / 01:42:15</span>
+                  </div>
+                  <div class="pb-right">
+                    <button class="pb-btn" onclick="toast('Volume adjusted','info')">&#128266;</button>
+                    <button class="pb-btn" onclick="toast('Fullscreen mode','info')">&#9974;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="info-panel">
+              <div class="info-section">
+                <div class="info-section-title">Recording Details</div>
+                <div class="info-section-body">
+                  <img src="video/create_a_video_202604152239.png" style="width:100%;border-radius:6px;margin-bottom:12px;object-fit:cover">
+                  <div class="info-row"><span class="info-label">Date</span><span class="info-value">06 Apr 2026</span></div>
+                  <div class="info-row"><span class="info-label">Surgeon</span><span class="info-value">Dr. R. Sharma</span></div>
+                  <div class="info-row"><span class="info-label">Procedure</span><span class="info-value">Lap. Cholecystectomy</span></div>
+                  <div class="info-row"><span class="info-label">OT Room</span><span class="info-value">OT-1</span></div>
+                  <div class="info-row"><span class="info-label">Duration</span><span class="info-value">01:42:15</span></div>
+                  <div class="info-row"><span class="info-label">File Size</span><span class="info-value">4.2 GB</span></div>
+                </div>
+              </div>
+              <div class="info-section">
+                <div class="info-section-title">Actions</div>
+                <div class="info-section-body" style="display:flex;flex-direction:column;gap:8px">
+                  <button class="btn btn-outline btn-sm" onclick="toast('Download started','success')" style="width:100%;justify-content:center">&#128229; Download</button>
+                  <button class="btn btn-outline btn-sm" onclick="copyShareLink()" style="width:100%;justify-content:center">&#128279; Copy Share Link</button>
+                  <button class="btn btn-outline btn-sm" onclick="toast('Clip captured','success')" style="width:100%;justify-content:center">&#9986; Capture Clip</button>
+                </div>
+              </div>
+              <div class="info-section">
+                <div class="info-section-title">Notes</div>
+                <div class="info-section-body">
+                  <textarea class="form-input" rows="3" placeholder="Add notes about this recording..." style="font-size:13px">Routine procedure. No complications. Gallbladder removed successfully.</textarea>
+                  <button class="btn btn-accent btn-sm" style="margin-top:10px" onclick="toast('Notes saved','success')">Save Notes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== PAGE: REMOTE VIEWER ===== -->
+        <div class="page" id="page-remote">
+          <div class="remote-layout">
+            <div class="remote-video">
+              <div class="video-overlay-top">
+                <div class="live-badge-lg">LIVE</div>
+                <div class="video-time">00:47:23</div>
+              </div>
+              <!-- Local remote viewer feed -->
+              <video autoplay muted loop playsinline
+                poster="video/For_the_CCTV_202604152133%20(1).png"
+                style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                <source src="video/i_want_the_202604152216.mp4" type="video/mp4">
+              </video>
+              <div class="remote-bar">
+                <div class="remote-info">
+                  <strong>OT Room 1 &mdash; Lap. Cholecystectomy</strong>
+                  Dr. R. Sharma &bull; In Progress
+                </div>
+                <div class="remote-controls">
+                  <button class="vc-btn snapshot" onclick="toast('Audio unmuted','info')">&#128266; Unmute</button>
+                  <button class="vc-btn snapshot" onclick="toast('Fullscreen mode','info')">&#9974; Fullscreen</button>
+                </div>
+              </div>
+            </div>
+            <div class="remote-notice">
+              &#128274; You are viewing this session via a secure link. Access expires in <strong>2h 15m</strong>. Contact admin to extend.
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== PAGE: USER MANAGEMENT ===== -->
+        <div class="page" id="page-users">
+          <div class="user-toolbar">
+            <div class="search-box" style="max-width:300px"><input type="text" placeholder="Search users..."></div>
+            <button class="btn btn-accent btn-sm" onclick="showModal()">+ Add User</button>
+          </div>
+          <div class="card">
+            <table class="user-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Dr. Rajesh Sharma</strong></td>
+                  <td>dr.sharma@apollo.in</td>
+                  <td><span class="role-badge role-doctor">Doctor</span></td>
+                  <td style="color:var(--success)">Active</td>
+                  <td class="user-actions"><button class="btn-icon" onclick="toast('Edit user','info')">&#9998;</button><button class="btn-icon" onclick="toast('User deleted','error')">&#128465;</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Dr. Anita Patel</strong></td>
+                  <td>dr.patel@apollo.in</td>
+                  <td><span class="role-badge role-doctor">Doctor</span></td>
+                  <td style="color:var(--success)">Active</td>
+                  <td class="user-actions"><button class="btn-icon" onclick="toast('Edit user','info')">&#9998;</button><button class="btn-icon" onclick="toast('User deleted','error')">&#128465;</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Dr. Suresh Iyer</strong></td>
+                  <td>dr.iyer@apollo.in</td>
+                  <td><span class="role-badge role-doctor">Doctor</span></td>
+                  <td style="color:var(--success)">Active</td>
+                  <td class="user-actions"><button class="btn-icon" onclick="toast('Edit user','info')">&#9998;</button><button class="btn-icon" onclick="toast('User deleted','error')">&#128465;</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Admin User</strong></td>
+                  <td>admin@apollo.in</td>
+                  <td><span class="role-badge role-admin">Admin</span></td>
+                  <td style="color:var(--success)">Active</td>
+                  <td class="user-actions"><button class="btn-icon" onclick="toast('Edit user','info')">&#9998;</button><button class="btn-icon" onclick="toast('User deleted','error')">&#128465;</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Sr. Lakshmi</strong></td>
+                  <td>lakshmi@apollo.in</td>
+                  <td><span class="role-badge role-staff">OT Staff</span></td>
+                  <td style="color:var(--success)">Active</td>
+                  <td class="user-actions"><button class="btn-icon" onclick="toast('Edit user','info')">&#9998;</button><button class="btn-icon" onclick="toast('User deleted','error')">&#128465;</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Arjun P.</strong></td>
+                  <td>arjun@apollo.in</td>
+                  <td><span class="role-badge role-staff">OT Staff</span></td>
+                  <td style="color:var(--text-light)">Inactive</td>
+                  <td class="user-actions"><button class="btn-icon" onclick="toast('Edit user','info')">&#9998;</button><button class="btn-icon" onclick="toast('User deleted','error')">&#128465;</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ===== PAGE: SETTINGS ===== -->
+        <div class="page" id="page-settings">
+          <div class="settings-grid">
+            <div class="card">
+              <div class="card-header">OT Room Setup</div>
+              <div class="card-body">
+                <div class="setting-row">
+                  <div><div class="setting-label">OT Room 1</div><div class="setting-desc">General Surgery &bull; 2 cameras</div></div>
+                  <button class="btn btn-sm btn-outline">Configure</button>
+                </div>
+                <div class="setting-row">
+                  <div><div class="setting-label">OT Room 2</div><div class="setting-desc">Orthopedics &bull; 1 camera</div></div>
+                  <button class="btn btn-sm btn-outline">Configure</button>
+                </div>
+                <button class="btn btn-sm btn-accent" style="margin-top:16px" onclick="toast('Add OT room','info')">+ Add OT Room</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">Storage</div>
+              <div class="card-body">
+                <div class="setting-row">
+                  <div><div class="setting-label">Retention Period</div><div class="setting-desc">Auto-delete after retention period</div></div>
+                  <select class="form-select" style="width:auto;padding:6px 10px;font-size:13px">
+                    <option>30 Days</option><option selected>60 Days</option><option>90 Days</option><option>1 Year</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <div><div class="setting-label">Storage Path</div><div class="setting-desc">/mnt/ot-recordings</div></div>
+                  <button class="btn btn-sm btn-outline">Change</button>
+                </div>
+                <div class="setting-row">
+                  <div><div class="setting-label">Used Space</div><div class="setting-desc">248 GB of 2 TB used</div></div>
+                  <div style="width:120px;height:6px;background:var(--border);border-radius:3px"><div style="width:12%;height:100%;background:var(--accent);border-radius:3px"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">Cloud Backup</div>
+              <div class="card-body">
+                <div class="setting-row">
+                  <div><div class="setting-label">Enable Cloud Sync</div><div class="setting-desc">Backup to cloud storage</div></div>
+                  <div class="toggle" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="setting-row">
+                  <div><div class="setting-label">Provider</div><div class="setting-desc">Cloud storage provider</div></div>
+                  <select class="form-select" style="width:auto;padding:6px 10px;font-size:13px">
+                    <option>AWS S3</option><option>Backblaze B2</option><option>Azure Blob</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <div><div class="setting-label">Bucket / Container</div><div class="setting-desc">Not configured</div></div>
+                  <button class="btn btn-sm btn-outline">Setup</button>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">General</div>
+              <div class="card-body">
+                <div class="setting-row">
+                  <div><div class="setting-label">Auto-record on OT Start</div><div class="setting-desc">Start recording when procedure begins</div></div>
+                  <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="setting-row">
+                  <div><div class="setting-label">Notifications</div><div class="setting-desc">Enable system notifications</div></div>
+                  <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="setting-row">
+                  <div><div class="setting-label">Remote Access</div><div class="setting-desc">Allow remote viewing via secure links</div></div>
+                  <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== PAGE: NOTIFICATIONS ===== -->
+        <div class="page" id="page-notifications">
+          <div class="notif-list">
+            <div class="notif-item"><div class="notif-icon rec">&#9679;</div><div class="notif-body"><strong>Recording Started</strong><span>OT Room 1 &mdash; Lap. Cholecystectomy by Dr. Sharma</span></div><div class="notif-time">2 min ago</div></div>
+            <div class="notif-item"><div class="notif-icon info">&#127760;</div><div class="notif-body"><strong>Remote Viewer Joined</strong><span>Dr. Mehta (Mumbai) joined OT-1 live session</span></div><div class="notif-time">15 min ago</div></div>
+            <div class="notif-item"><div class="notif-icon rec">&#9632;</div><div class="notif-body"><strong>Recording Stopped</strong><span>OT Room 2 &mdash; Knee Arthroscopy by Dr. Patel</span></div><div class="notif-time">1 hour ago</div></div>
+            <div class="notif-item"><div class="notif-icon stor">&#9888;</div><div class="notif-body"><strong>Storage Warning</strong><span>Storage usage at 85% &mdash; consider archiving or deleting old recordings</span></div><div class="notif-time">3 hours ago</div></div>
+            <div class="notif-item"><div class="notif-icon info">&#128101;</div><div class="notif-body"><strong>New User Added</strong><span>Dr. Suresh Iyer added as Doctor by Admin</span></div><div class="notif-time">Yesterday</div></div>
+            <div class="notif-item"><div class="notif-icon rec">&#9679;</div><div class="notif-body"><strong>Recording Started</strong><span>OT Room 1 &mdash; Appendectomy by Dr. Sharma</span></div><div class="notif-time">Yesterday</div></div>
+            <div class="notif-item"><div class="notif-icon info">&#9881;</div><div class="notif-body"><strong>Settings Updated</strong><span>Retention period changed to 60 days by Admin</span></div><div class="notif-time">2 days ago</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADD USER MODAL ===== -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)hideModal()">
+  <div class="modal">
+    <div class="modal-title">Add New User</div>
+    <div class="form-group"><label>Full Name</label><input class="form-input" placeholder="Enter full name"></div>
+    <div class="form-group"><label>Email</label><input class="form-input" placeholder="user@hospital.in"></div>
+    <div class="form-group"><label>Role</label>
+      <select class="form-select"><option>Doctor</option><option>OT Staff</option><option>Administrator</option></select>
+    </div>
+    <div class="form-group"><label>Temporary Password</label><input class="form-input" type="password" placeholder="Set password"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" onclick="hideModal()">Cancel</button>
+      <button class="btn btn-accent btn-sm" onclick="hideModal();toast('User created successfully','success')">Create User</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== PAGE NAVIGATION =====
+  const pageTitles = {
+    dashboard: 'Dashboard',
+    live: 'Live OT &mdash; Room 1',
+    recording: 'Recording Control',
+    archive: 'Archive',
+    playback: 'Playback',
+    remote: 'Remote Viewer',
+    users: 'User Management',
+    settings: 'Settings',
+    notifications: 'Notifications'
+  };
+
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    const el = document.getElementById('page-' + page);
+    if (el) { el.classList.add('active'); el.style.display = ''; }
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelector(`.nav-item[data-page="${page}"]`)?.classList.add('active');
+    document.getElementById('page-title').innerHTML = pageTitles[page] || page;
+  }
+  // Init: hide all pages except dashboard
+  document.querySelectorAll('.page').forEach(p => { if (!p.classList.contains('active')) p.style.display = 'none'; });
+
+  // ===== LOGIN =====
+  function doLogin() {
+    document.getElementById('login-screen').classList.remove('active');
+    document.getElementById('app-screen').classList.add('active');
+    toast('Welcome, Dr. Sharma', 'success');
+  }
+  function doLogout() {
+    document.getElementById('app-screen').classList.remove('active');
+    document.getElementById('login-screen').classList.add('active');
+    showPage('dashboard');
+  }
+
+  // ===== RECORDING TOGGLE =====
+  let isRecording = false;
+  function toggleRec() {
+    isRecording = !isRecording;
+    const btn = document.getElementById('rec-toggle');
+    if (isRecording) {
+      btn.className = 'vc-btn rec-stop';
+      btn.innerHTML = '&#9632; Stop Recording';
+      toast('Recording started', 'success');
+    } else {
+      btn.className = 'vc-btn rec-start';
+      btn.innerHTML = '&#9679; Start Recording';
+      toast('Recording stopped', 'info');
+    }
+  }
+  let isRecCtrl = true;
+  function toggleRecCtrl() {
+    isRecCtrl = !isRecCtrl;
+    const btn = document.getElementById('rec-ctrl-btn');
+    const ind = document.getElementById('rec-ind');
+    if (isRecCtrl) {
+      btn.innerHTML = '&#9209; Stop Recording';
+      btn.className = 'btn btn-danger';
+      ind.className = 'rec-indicator on';
+      toast('Recording resumed', 'success');
+    } else {
+      btn.innerHTML = '&#9654; Start Recording';
+      btn.className = 'btn btn-success';
+      ind.className = 'rec-indicator off';
+      toast('Recording stopped', 'info');
+    }
+  }
+
+  // ===== ROOM DATA =====
+  const rooms = {
+    1: {
+      name: 'OT Room 1 — General Surgery',
+      doctor: 'Dr. R. Sharma', procedure: 'Lap. Cholecystectomy',
+      patient: 'Rajesh K.', mrn: 'APL-20260406-0812', started: '09:45 AM',
+      status: 'live', statusLabel: 'LIVE',
+      video: 'video/Flow_202604152218.mp4',
+      poster: 'video/For_the_CCTV_202604152133%20(1).png',
+      team: 'Dr. M. Gupta (Anesthetist) &bull; Sr. Lakshmi (Nurse)'
+    },
+    2: {
+      name: 'OT Room 2 — Cardiology',
+      doctor: 'Dr. A. Patel', procedure: 'Bypass Graft Surgery',
+      patient: 'Suresh M.', mrn: 'APL-20260406-1134', started: '10:20 AM',
+      status: 'recording', statusLabel: '&#9210; REC',
+      video: 'video/Synchronized_OT_Video_Generation_Plan.mp4',
+      poster: 'video/For_the_CCTV_202604152133.png',
+      team: 'Dr. K. Nair (Anesthetist) &bull; Sr. Priya (Nurse)'
+    },
+    3: {
+      name: 'OT Room 3 — Orthopedics',
+      doctor: 'Dr. S. Iyer', procedure: 'Knee Arthroplasty',
+      patient: 'Meena R.', mrn: 'APL-20260406-0942', started: '11:05 AM',
+      status: 'idle', statusLabel: 'IDLE',
+      video: 'video/perfect_in_both_202604152216.mp4',
+      poster: 'video/For_the_CCTV_202604152133.png',
+      team: 'Dr. B. Singh (Anesthetist) &bull; Sr. Kavya (Nurse)'
+    }
+  };
+  let currentRoom = 1;
+
+  function openRoom(n) {
+    showPage('live');
+    switchRoom(n);
+  }
+
+  function switchRoom(n) {
+    currentRoom = n;
+    const r = rooms[n];
+    // Update video
+    const vid = document.getElementById('live-video');
+    vid.src = r.video;
+    vid.poster = r.poster;
+    vid.load(); vid.play();
+    // Reset overlays
+    document.getElementById('lap-overlay').style.display = 'none';
+    document.getElementById('endo-overlay').style.display = 'none';
+    vid.style.display = 'block';
+    // Update overlay info
+    const badge = document.getElementById('live-status-badge');
+    if (n === 1) { badge.className = 'live-badge-lg'; badge.innerHTML = 'LIVE'; }
+    else if (n === 2) { badge.style.cssText = 'background:var(--recording-orange);color:#fff;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px'; badge.innerHTML = '&#9210; REC'; }
+    else { badge.style.cssText = 'background:var(--idle-grey);color:#fff;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px'; badge.innerHTML = 'IDLE'; }
+    // Update info panel
+    document.getElementById('room-name-display').textContent = r.name;
+    document.getElementById('room-patient').textContent = r.patient;
+    document.getElementById('room-mrn').textContent = r.mrn;
+    document.getElementById('room-doctor').textContent = r.doctor;
+    document.getElementById('room-procedure').textContent = r.procedure;
+    document.getElementById('room-started').textContent = r.started;
+    document.getElementById('room-team').innerHTML = r.team;
+    // Update tabs
+    [1,2,3].forEach(i => {
+      const t = document.getElementById('tab-room-' + i);
+      if (i === n) { t.style.background = 'var(--accent)'; t.style.color = '#fff'; t.style.borderColor = 'var(--accent)'; }
+      else { t.style.background = '#fff'; t.style.color = 'var(--text)'; t.style.borderColor = 'var(--border)'; }
+    });
+    toast('Viewing ' + r.name, 'info');
+    // Reset source buttons
+    document.querySelectorAll('.source-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.source-btn')[0]?.classList.add('active');
+  }
+
+  // ===== SOURCE SELECT =====
+  function selectSource(el) {
+    el.parentElement.querySelectorAll('.source-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function switchSource(src) {
+    const vid = document.getElementById('live-video');
+    const lap = document.getElementById('lap-overlay');
+    const endo = document.getElementById('endo-overlay');
+    vid.style.display = 'none';
+    lap.style.display = 'none';
+    endo.style.display = 'none';
+    if (src === 'ot')   { vid.style.display = 'block';  toast('Switched to OT Camera', 'info'); }
+    if (src === 'lap')  { lap.style.display = 'block';  toast('Switched to Laparoscope Feed', 'info'); }
+    if (src === 'endo') { endo.style.display = 'block'; toast('Switched to Endoscope (Aux)', 'info'); }
+  }
+
+  // ===== MODAL =====
+  function showModal() { document.getElementById('modal-overlay').classList.add('show'); }
+  function hideModal() { document.getElementById('modal-overlay').classList.remove('show'); }
+
+  // ===== SHARE LINK =====
+  function copyShareLink() {
+    toast('Share link copied to clipboard', 'success');
+  }
+
+  // ===== TOAST =====
+  function toast(msg, type) {
+    const c = document.getElementById('toasts');
+    const t = document.createElement('div');
+    t.className = 'toast ' + (type || 'info');
+    t.textContent = msg;
+    c.appendChild(t);
+    setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(100%)'; t.style.transition = 'all 0.3s'; setTimeout(() => t.remove(), 300); }, 2500);
+  }
+
+  // ===== CLOCK =====
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+  }
+  setInterval(updateClock, 30000);
+  updateClock();
+
+  // ===== LIVE TIMER =====
+  let liveSeconds = 47 * 60 + 23;
+  function formatTime(s) {
+    const h = String(Math.floor(s / 3600)).padStart(2, '0');
+    const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+    const sec = String(s % 60).padStart(2, '0');
+    return h + ':' + m + ':' + sec;
+  }
+  setInterval(() => {
+    liveSeconds++;
+    const t = formatTime(liveSeconds);
+    const lt = document.getElementById('live-time');
+    if (lt) lt.textContent = t;
+    const rt = document.getElementById('rec-timer');
+    if (rt) rt.textContent = t;
+  }, 1000);
+</script>
+</body>
+</html>
