@@ -788,12 +788,151 @@
   .toast.error { background: var(--danger); }
   .toast.info { background: var(--accent); }
   @keyframes toast-in { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+  /* ===== RESPONSIVE ===== */
+
+  /* Hamburger button — hidden on desktop */
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  /* Sidebar overlay (mobile dark backdrop) */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,20,40,0.55);
+    z-index: 99;
+  }
+  .sidebar-overlay.show { display: block; }
+
+  /* ---- TABLET (≤ 1024px) ---- */
+  @media (max-width: 1024px) {
+    .sidebar { width: 200px; }
+    .main-area { margin-left: 200px; }
+    .ot-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .live-layout { grid-template-columns: 1fr; height: auto; }
+    .video-container { height: 50vw; min-height: 260px; }
+    .info-panel { flex-direction: row; flex-wrap: wrap; gap: 12px; }
+    .info-panel .info-section { flex: 1 1 200px; }
+    .playback-layout { grid-template-columns: 1fr; height: auto; }
+    .playback-video { height: 50vw; min-height: 260px; }
+    .settings-grid { grid-template-columns: 1fr; }
+    .rec-layout { grid-template-columns: 1fr; }
+  }
+
+  /* ---- MOBILE (≤ 767px) ---- */
+  @media (max-width: 767px) {
+    /* Sidebar: hidden, slides in as drawer */
+    .sidebar {
+      width: 260px;
+      transform: translateX(-100%);
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+      z-index: 200;
+    }
+    .sidebar.open { transform: translateX(0); }
+
+    /* Main area: full width */
+    .main-area { margin-left: 0; }
+
+    /* Topbar */
+    .topbar { padding: 0 16px; }
+    .hamburger { display: flex; }
+    .topbar-title { font-size: 15px; }
+
+    /* Content */
+    .content-area { padding: 14px 16px; }
+
+    /* Stats */
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+    .stat-value { font-size: 22px; }
+    .stat-card { padding: 14px; }
+
+    /* OT Cards */
+    .ot-grid { grid-template-columns: 1fr; gap: 12px; }
+    .ot-card-preview { height: 200px; }
+    .ot-card-actions { flex-wrap: wrap; }
+
+    /* Live OT */
+    .live-layout { grid-template-columns: 1fr; height: auto; gap: 12px; }
+    .video-container { height: 56vw; min-height: 220px; }
+    .video-controls { flex-wrap: wrap; gap: 8px; justify-content: center; padding: 10px; }
+    .vc-btn { font-size: 12px; padding: 8px 12px; }
+    .live-layout .info-panel { flex-direction: column; }
+
+    /* Room tabs */
+    .room-tabs-row { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .room-tabs-row button { white-space: nowrap; font-size: 12px; padding: 7px 12px; }
+
+    /* Recording */
+    .rec-layout { grid-template-columns: 1fr; }
+    .rec-timer { font-size: 36px; }
+
+    /* Archive / User tables */
+    .archive-table, .user-table, .recent-table { display: block; overflow-x: auto; white-space: nowrap; }
+    .archive-toolbar { flex-direction: column; gap: 8px; }
+    .filter-group { flex-wrap: wrap; gap: 6px; }
+    .search-box { min-width: 100%; }
+
+    /* Playback */
+    .playback-layout { grid-template-columns: 1fr; height: auto; }
+    .playback-video { height: 56vw; min-height: 200px; }
+    .playback-screen iframe,
+    .playback-screen video { border-radius: 0; }
+
+    /* Remote viewer */
+    .remote-layout { height: auto; }
+    .remote-video { height: 56vw; min-height: 220px; }
+
+    /* Settings */
+    .settings-grid { grid-template-columns: 1fr; gap: 12px; }
+
+    /* Card header */
+    .card-header { font-size: 14px; padding: 12px 14px; }
+
+    /* Modal */
+    .modal { padding: 24px 16px; width: 95vw; }
+
+    /* Login */
+    .login-card { padding: 32px 20px; }
+
+    /* Notifications */
+    .notif-item { padding: 10px 12px; gap: 10px; }
+    .notif-icon { width: 34px; height: 34px; font-size: 15px; }
+  }
+
+  /* ---- SMALL MOBILE (≤ 400px) ---- */
+  @media (max-width: 400px) {
+    .ot-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-value { font-size: 20px; }
+    .btn { font-size: 13px; padding: 10px 16px; }
+    .video-container { height: 60vw; }
+  }
 </style>
 </head>
 <body>
 
 <!-- ===== TOAST CONTAINER ===== -->
 <div class="toast-container" id="toasts"></div>
+
+<!-- ===== SIDEBAR OVERLAY (mobile) ===== -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <!-- ===== SCREEN 1: LOGIN ===== -->
 <div class="screen active" id="login-screen">
@@ -830,6 +969,7 @@
       <div class="sidebar-logo">
         <div class="sidebar-logo-icon">&#9764;</div>
         <div class="sidebar-logo-text">Virtual OT<span>Digital Operation Theatre</span></div>
+        <button onclick="closeSidebar()" style="display:none;margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.6);font-size:20px;cursor:pointer;padding:0 4px;line-height:1" id="sidebar-close">&#10005;</button>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-item active" onclick="showPage('dashboard')" data-page="dashboard">
@@ -870,7 +1010,12 @@
     <!-- Main Area -->
     <div class="main-area">
       <div class="topbar">
-        <div class="topbar-title" id="page-title">Dashboard</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="hamburger" id="hamburger-btn" onclick="openSidebar()" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="topbar-title" id="page-title">Dashboard</div>
+        </div>
         <div class="topbar-right">
           <span style="font-size:13px;color:var(--text-light)" id="clock">10:32 AM</span>
           <button class="btn-icon" onclick="showPage('notifications')">&#128276;</button>
@@ -977,7 +1122,7 @@
         <!-- ===== PAGE: LIVE OT ===== -->
         <div class="page" id="page-live">
           <!-- Room Selector Tabs -->
-          <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <div class="room-tabs-row" style="display:flex;gap:8px;margin-bottom:14px;padding-bottom:2px">
             <button class="room-tab active" id="tab-room-1" onclick="switchRoom(1)" style="padding:8px 18px;border-radius:8px;border:1.5px solid var(--accent);background:var(--accent);color:#fff;font-size:13px;font-weight:700;cursor:pointer">&#9673; OT Room 1 — General Surgery</button>
             <button class="room-tab" id="tab-room-2" onclick="switchRoom(2)" style="padding:8px 18px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-size:13px;font-weight:600;cursor:pointer">&#9210; OT Room 2 — Cardiology</button>
             <button class="room-tab" id="tab-room-3" onclick="switchRoom(3)" style="padding:8px 18px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-size:13px;font-weight:600;cursor:pointer">&#128274; OT Room 3 — Orthopedics</button>
@@ -1413,6 +1558,18 @@
 </div>
 
 <script>
+  // ===== SIDEBAR (MOBILE) =====
+  function openSidebar() {
+    document.querySelector('.sidebar').classList.add('open');
+    document.getElementById('sidebar-overlay').classList.add('show');
+    document.getElementById('sidebar-close').style.display = 'block';
+  }
+  function closeSidebar() {
+    document.querySelector('.sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('show');
+    document.getElementById('sidebar-close').style.display = 'none';
+  }
+
   // ===== PAGE NAVIGATION =====
   const pageTitles = {
     dashboard: 'Dashboard',
@@ -1434,6 +1591,8 @@
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.querySelector(`.nav-item[data-page="${page}"]`)?.classList.add('active');
     document.getElementById('page-title').innerHTML = pageTitles[page] || page;
+    closeSidebar();
+    window.scrollTo(0, 0);
   }
   // Init: hide all pages except dashboard
   document.querySelectorAll('.page').forEach(p => { if (!p.classList.contains('active')) p.style.display = 'none'; });
