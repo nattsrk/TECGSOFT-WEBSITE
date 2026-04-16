@@ -1240,11 +1240,11 @@
                 <span>Space ▶/⏸</span><span>M mute</span><span>S snapshot</span><span>R record</span><span>1 2 3 rooms</span>
               </div>
               <!-- Laparoscope video feed (loaded on demand) -->
-              <video id="lap-overlay" muted loop playsinline
+              <video id="lap-overlay" loop playsinline
                 style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
               </video>
               <!-- Endoscope video feed (loaded on demand) -->
-              <video id="endo-overlay" muted loop playsinline
+              <video id="endo-overlay" loop playsinline
                 style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
               </video>
               <div class="video-controls">
@@ -1773,9 +1773,11 @@
   // ===== AUDIO TOGGLE =====
   let isAudioOn = false;
   function toggleAudio() {
-    const vid = document.getElementById('live-video');
     isAudioOn = !isAudioOn;
-    vid.muted = !isAudioOn;
+    ['live-video','lap-overlay','endo-overlay'].forEach(id => {
+      const v = document.getElementById(id);
+      if (v) v.muted = !isAudioOn;
+    });
     const btn = document.getElementById('audio-btn');
     btn.innerHTML = isAudioOn ? '&#128266; Mute' : '&#128263; Unmute';
     toast(isAudioOn ? 'Audio on' : 'Audio muted', 'info');
@@ -2007,6 +2009,7 @@
         target.load();
         target.dataset.loaded = '1';
       }
+      target.muted = !isAudioOn;
       target.style.display = 'block';
       target.play().catch(() => {});
     }
