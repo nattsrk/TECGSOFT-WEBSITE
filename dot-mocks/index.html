@@ -1808,18 +1808,25 @@
     const gallery = document.getElementById('snapshot-gallery');
     const ts = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'position:relative;cursor:pointer';
+    wrapper.style.cssText = 'position:relative';
     const img = document.createElement('img');
     img.src = dataURL;
-    img.style.cssText = 'width:100%;border-radius:6px;display:block;border:1.5px solid var(--border)';
-    img.title = 'Click to download';
-    img.onclick = () => { const a = document.createElement('a'); a.href = dataURL; a.download = 'snapshot_' + ts.replace(/[: ]/g, '-') + '.jpg'; a.click(); };
-    const label = document.createElement('div');
-    label.style.cssText = 'font-size:10px;color:var(--text-light);text-align:center;margin-top:3px';
+    img.style.cssText = 'width:100%;border-radius:6px 6px 0 0;display:block;border:1.5px solid var(--border);border-bottom:none';
+    wrapper.appendChild(img);
+    // Bottom bar: timestamp + save button
+    const bar = document.createElement('div');
+    bar.style.cssText = 'display:flex;align-items:center;justify-content:space-between;background:#f8fafc;border:1.5px solid var(--border);border-top:none;border-radius:0 0 6px 6px;padding:3px 6px';
+    const label = document.createElement('span');
+    label.style.cssText = 'font-size:10px;color:var(--text-light)';
     label.textContent = ts;
-    wrapper.appendChild(img); wrapper.appendChild(label);
+    const saveBtn = document.createElement('button');
+    saveBtn.innerHTML = '&#128229; Save';
+    saveBtn.style.cssText = 'font-size:10px;padding:2px 7px;border:none;border-radius:4px;background:var(--accent);color:#fff;cursor:pointer;font-weight:600';
+    saveBtn.onclick = () => { const a = document.createElement('a'); a.href = dataURL; a.download = 'snapshot_' + ts.replace(/[: ]/g, '-') + '.jpg'; a.click(); };
+    bar.appendChild(label); bar.appendChild(saveBtn);
+    wrapper.appendChild(bar);
     gallery.prepend(wrapper);
-    toast('Snapshot saved — click image to download', 'success');
+    toast('Snapshot captured', 'success');
   }
   function clearSnapshots() {
     document.getElementById('snapshot-gallery').innerHTML = '';
