@@ -925,6 +925,7 @@
     .video-container { height: 60vw; }
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -1376,8 +1377,27 @@
               <div class="info-section">
                 <div class="info-section-title">Notes</div>
                 <div class="info-section-body">
-                  <textarea class="form-input" rows="3" placeholder="Add notes about this recording..." style="font-size:13px">Routine procedure. No complications. Gallbladder removed successfully.</textarea>
-                  <button class="btn btn-accent btn-sm" style="margin-top:10px" onclick="toast('Notes saved','success')">Save Notes</button>
+                  <textarea id="playback-notes" class="form-input" rows="3" placeholder="Add notes about this recording..." style="font-size:13px">Routine procedure. No complications. Gallbladder removed successfully.</textarea>
+                  <button class="btn btn-accent btn-sm" style="margin-top:10px;width:100%;justify-content:center" onclick="saveReport()">&#128196; Save Notes &amp; Generate Report</button>
+                </div>
+              </div>
+              <!-- Generated report panel — shown after Save -->
+              <div class="info-section" id="report-section" style="display:none">
+                <div class="info-section-title">&#128196; Surgery Report</div>
+                <div class="info-section-body">
+                  <div id="report-card" style="border:1.5px solid var(--border);border-radius:8px;overflow:hidden">
+                    <div style="background:#f8fafc;padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)">
+                      <span style="font-size:28px">&#128196;</span>
+                      <div>
+                        <div style="font-size:13px;font-weight:700;color:var(--primary)" id="report-filename">Surgery_Report.pdf</div>
+                        <div style="font-size:11px;color:var(--text-light)" id="report-meta">Generating…</div>
+                      </div>
+                    </div>
+                    <div style="padding:10px 14px;display:flex;gap:8px">
+                      <button class="btn btn-accent btn-sm" id="report-view-btn" style="flex:1;justify-content:center" onclick="viewReport()">&#128065; View</button>
+                      <button class="btn btn-outline btn-sm" id="report-dl-btn" style="flex:1;justify-content:center" onclick="downloadReport()">&#128229; Download</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1868,6 +1888,133 @@
     const v = pbVid(); if (!v) return;
     if (v.requestFullscreen) v.requestFullscreen();
     else if (v.webkitRequestFullscreen) v.webkitRequestFullscreen();
+  }
+
+  // ===== SURGERY REPORT PDF =====
+  let reportBlob = null;
+
+  function saveReport() {
+    const { jsPDF } = window.jspdf;
+    if (!jsPDF) { toast('PDF library not loaded', 'error'); return; }
+
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const pw = doc.internal.pageSize.getWidth();
+    const ph = doc.internal.pageSize.getHeight();
+    const margin = 18;
+    let y = margin;
+
+    // ── Header bar ──
+    doc.setFillColor(0, 51, 102);
+    doc.rect(0, 0, pw, 28, 'F');
+    doc.setFillColor(0, 168, 157);
+    doc.rect(0, 25, pw, 3, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(16); doc.setFont('helvetica', 'bold');
+    doc.text('Virtual OT — Surgery Report', margin, 17);
+    doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+    doc.text('Apollo Hospitals  |  Digital Operation Theatre', pw - margin, 17, { align: 'right' });
+    y = 38;
+
+    // ── Procedure Details ──
+    doc.setTextColor(0, 51, 102);
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+    doc.text('Procedure Details', margin, y); y += 6;
+    doc.setDrawColor(0, 168, 157);
+    doc.setLineWidth(0.4); doc.line(margin, y, pw - margin, y); y += 5;
+
+    const details = [
+      ['Date', '06 Apr 2026'],
+      ['OT Room', 'OT-1 — General Surgery'],
+      ['Surgeon', 'Dr. R. Sharma'],
+      ['Procedure', 'Laparoscopic Cholecystectomy'],
+      ['Anesthetist', 'Dr. M. Gupta'],
+      ['Duration', document.getElementById('pb-time')?.textContent?.split('/')[1]?.trim() || '01:42:15'],
+      ['File', 'OT1_20260406_Sharma_Cholecystectomy.mp4'],
+    ];
+    doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+    details.forEach(([label, val]) => {
+      doc.setTextColor(90, 106, 122); doc.text(label + ':', margin, y);
+      doc.setTextColor(26, 42, 58);  doc.text(val, margin + 32, y);
+      y += 6;
+    });
+    y += 4;
+
+    // ── Surgeon Notes ──
+    doc.setTextColor(0, 51, 102);
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+    doc.text('Surgeon Notes', margin, y); y += 6;
+    doc.setDrawColor(0, 168, 157);
+    doc.line(margin, y, pw - margin, y); y += 5;
+    doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(26, 42, 58);
+    const notes = document.getElementById('playback-notes')?.value || '';
+    const noteLines = doc.splitTextToSize(notes || 'No notes added.', pw - margin * 2);
+    doc.text(noteLines, margin, y); y += noteLines.length * 5 + 6;
+
+    // ── Captured Clips ──
+    const clipItems = document.querySelectorAll('#clip-gallery img');
+    if (clipItems.length > 0) {
+      // New page if not enough space
+      if (y > ph - 80) { doc.addPage(); y = margin; }
+      doc.setTextColor(0, 51, 102);
+      doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+      doc.text('Captured Clips (' + clipItems.length + ')', margin, y); y += 6;
+      doc.setDrawColor(0, 168, 157);
+      doc.line(margin, y, pw - margin, y); y += 5;
+      const imgW = (pw - margin * 2 - 8) / 2;
+      const imgH = imgW * 0.5625;
+      clipItems.forEach((img, i) => {
+        const col = i % 2;
+        const x = margin + col * (imgW + 8);
+        if (col === 0 && i > 0) y += imgH + 6;
+        if (y + imgH > ph - 20) { doc.addPage(); y = margin; }
+        try { doc.addImage(img.src, 'JPEG', x, y, imgW, imgH); } catch(e) {}
+        // Timestamp label
+        const ts = img.nextSibling?.textContent || '';
+        doc.setFontSize(7); doc.setTextColor(90, 106, 122);
+        doc.text(ts, x + imgW / 2, y + imgH + 3, { align: 'center' });
+      });
+      y += imgH + 10;
+    }
+
+    // ── Footer ──
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let p = 1; p <= totalPages; p++) {
+      doc.setPage(p);
+      doc.setFillColor(245, 248, 252);
+      doc.rect(0, ph - 12, pw, 12, 'F');
+      doc.setFontSize(7); doc.setTextColor(90, 106, 122); doc.setFont('helvetica', 'normal');
+      const now = new Date().toLocaleString('en-IN');
+      doc.text('Generated: ' + now + '  |  Virtual OT — Apollo Hospitals', margin, ph - 4);
+      doc.text('Page ' + p + ' of ' + totalPages, pw - margin, ph - 4, { align: 'right' });
+    }
+
+    // ── Save blob + show panel ──
+    const filename = 'Surgery_Report_OT1_20260406_Sharma.pdf';
+    reportBlob = doc.output('blob');
+    const url = URL.createObjectURL(reportBlob);
+    document.getElementById('report-view-btn').dataset.url = url;
+    document.getElementById('report-dl-btn').dataset.url = url;
+    document.getElementById('report-filename').textContent = filename;
+    document.getElementById('report-dl-btn').dataset.name = filename;
+    document.getElementById('report-meta').textContent =
+      'PDF • ' + (Math.round(reportBlob.size / 1024)) + ' KB  •  ' + (clipItems.length) + ' clip(s) attached  •  ' + new Date().toLocaleTimeString('en-IN');
+    document.getElementById('report-section').style.display = '';
+    toast('Report generated — click View or Download', 'success');
+  }
+
+  function viewReport() {
+    const url = document.getElementById('report-view-btn').dataset.url;
+    if (url) window.open(url, '_blank');
+  }
+  function downloadReport() {
+    const btn = document.getElementById('report-dl-btn');
+    const url = btn.dataset.url;
+    const name = btn.dataset.name || 'Surgery_Report.pdf';
+    if (!url) { toast('Generate report first', 'error'); return; }
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    a.click();
+    toast('Report downloaded', 'success');
   }
 
   // ===== DOWNLOAD PLAYBACK =====
