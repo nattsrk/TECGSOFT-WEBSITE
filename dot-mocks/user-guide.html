@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual OT — User Guide</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #003366;
+    --primary-light: #004a8f;
+    --accent: #00a89d;
+    --accent-light: #00c9bc;
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --border: #dce4ed;
+    --text: #1a2a3a;
+    --text-light: #5a6a7a;
+    --danger: #dc3545;
+    --success: #28a745;
+    --warning: #f0ad4e;
+    --shadow: 0 2px 12px rgba(0,51,102,0.08);
+    --radius: 10px;
+  }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+
+  /* ===== HEADER ===== */
+  .guide-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #001a33 60%, var(--accent-light) 100%);
+    color: #fff; padding: 48px 40px 40px;
+  }
+  .header-inner { max-width: 960px; margin: 0 auto; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; margin-bottom: 20px; transition: color 0.2s; }
+  .back-link:hover { color: #fff; }
+  .guide-title { font-size: 36px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .guide-subtitle { font-size: 16px; color: rgba(255,255,255,0.75); max-width: 600px; line-height: 1.6; }
+  .header-badges { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; }
+  .badge.accent { background: var(--accent); border-color: var(--accent); }
+
+  /* ===== LAYOUT ===== */
+  .guide-body { max-width: 960px; margin: 0 auto; padding: 40px 20px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
+  @media (max-width: 768px) { .guide-body { grid-template-columns: 1fr; } .toc { display: none; } .guide-header { padding: 32px 20px; } .guide-title { font-size: 26px; } }
+
+  /* ===== TOC (sticky sidebar) ===== */
+  .toc { position: sticky; top: 24px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; border: 1px solid var(--border); }
+  .toc-title { font-size: 11px; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .toc a { display: block; font-size: 13px; color: var(--text-light); text-decoration: none; padding: 5px 8px; border-radius: 6px; margin-bottom: 2px; transition: all 0.15s; border-left: 2px solid transparent; }
+  .toc a:hover { background: var(--bg); color: var(--accent); border-left-color: var(--accent); }
+  .toc a.sub { padding-left: 20px; font-size: 12px; }
+
+  /* ===== CONTENT ===== */
+  .content { display: flex; flex-direction: column; gap: 32px; }
+
+  /* Section */
+  .section { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; }
+  .section-header { background: var(--primary); color: #fff; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .section-icon { font-size: 20px; }
+  .section-title { font-size: 18px; font-weight: 700; }
+  .section-body { padding: 24px; }
+
+  /* Subsection */
+  .subsection { margin-bottom: 24px; }
+  .subsection:last-child { margin-bottom: 0; }
+  .subsection-title { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid var(--accent); display: inline-block; }
+
+  /* Steps */
+  .steps { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .steps li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; line-height: 1.6; }
+  .step-num { min-width: 26px; height: 26px; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* Key/value rows */
+  .kv-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .kv-table th { background: var(--bg); text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-light); font-weight: 700; border-bottom: 2px solid var(--border); }
+  .kv-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .kv-table tr:last-child td { border-bottom: none; }
+  .kv-table td:first-child { font-weight: 600; color: var(--primary); white-space: nowrap; }
+  .kv-table td code { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-family: monospace; font-size: 12px; color: var(--accent); }
+
+  /* Feature cards grid */
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  .feature-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .feature-card-icon { font-size: 22px; margin-bottom: 8px; }
+  .feature-card-title { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+  .feature-card-desc { font-size: 12px; color: var(--text-light); line-height: 1.5; }
+
+  /* Tip / note boxes */
+  .tip { background: rgba(0,168,157,0.08); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; color: var(--text); margin-top: 14px; line-height: 1.6; }
+  .tip strong { color: var(--accent); }
+  .warn { background: rgba(240,173,78,0.1); border-left: 4px solid var(--warning); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; margin-top: 14px; line-height: 1.6; }
+  .warn strong { color: #8a6200; }
+
+  /* Credentials box */
+  .creds { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 4px; }
+  .cred-box { background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 18px; }
+  .cred-label { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-light); font-weight: 700; margin-bottom: 4px; }
+  .cred-value { font-size: 14px; font-weight: 700; color: var(--primary); font-family: monospace; }
+
+  /* Kbd shortcut */
+  kbd { display: inline-block; background: #fff; border: 1.5px solid var(--border); border-bottom-width: 3px; border-radius: 5px; padding: 2px 8px; font-size: 12px; font-family: monospace; color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+
+  /* Tag pills */
+  .tag { display: inline-block; background: rgba(0,168,157,0.12); color: var(--accent); border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: 700; margin-right: 4px; }
+  .tag.new { background: rgba(40,167,69,0.12); color: var(--success); }
+  .tag.ai { background: linear-gradient(90deg, rgba(0,51,102,0.12), rgba(0,168,157,0.12)); color: var(--primary); }
+
+  /* CTA */
+  .cta-bar { background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: var(--radius); padding: 28px 32px; color: #fff; text-align: center; margin-top: 8px; }
+  .cta-bar h3 { font-size: 20px; margin-bottom: 8px; }
+  .cta-bar p { font-size: 14px; opacity: 0.85; margin-bottom: 20px; }
+  .cta-btn { display: inline-block; background: #fff; color: var(--primary); font-weight: 700; font-size: 14px; padding: 10px 28px; border-radius: 8px; text-decoration: none; transition: transform 0.15s; }
+  .cta-btn:hover { transform: scale(1.04); }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="guide-header">
+  <div class="header-inner">
+    <a href="index.html" class="back-link">&#8592; Back to Virtual OT</a>
+    <div class="guide-title">&#129657; Virtual OT — User Guide</div>
+    <div class="guide-subtitle">Complete reference for the Digital Operation Theatre platform. Learn how to monitor live feeds, manage recordings, use AI features, and navigate every screen.</div>
+    <div class="header-badges">
+      <span class="badge accent">v1.0 MVP</span>
+      <span class="badge">Apollo Theme</span>
+      <span class="badge">AI-Powered</span>
+      <span class="badge">Voice Control</span>
+      <span class="badge">Multi-Room</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BODY ===== -->
+<div class="guide-body">
+
+  <!-- TOC -->
+  <nav class="toc">
+    <div class="toc-title">Contents</div>
+    <a href="#overview">Overview</a>
+    <a href="#login">Login</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#live-ot">Live OT</a>
+    <a href="#sources" class="sub">&#8627; Video Sources</a>
+    <a href="#recording" class="sub">&#8627; Recording</a>
+    <a href="#snapshot" class="sub">&#8627; Snapshots</a>
+    <a href="#keyboard" class="sub">&#8627; Keyboard Shortcuts</a>
+    <a href="#voice" class="sub">&#8627; Voice Commands</a>
+    <a href="#copilot" class="sub">&#8627; AI Copilot</a>
+    <a href="#playback">Playback</a>
+    <a href="#archive">Archive</a>
+    <a href="#remote">Remote View</a>
+    <a href="#settings">Settings</a>
+    <a href="#features">All Features</a>
+    <a href="#devices">Device Tiers</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="section" id="overview">
+      <div class="section-header"><span class="section-icon">&#9878;</span><span class="section-title">What is Virtual OT?</span></div>
+      <div class="section-body">
+        <p style="font-size:14px;line-height:1.8;color:var(--text-light)">Virtual OT (Digital Operation Theatre) is a real-time surgical monitoring and management platform for hospitals. It lets surgical teams, administrators, and remote consultants view live video feeds from multiple operation theatres simultaneously, manage recordings, capture snapshots, generate PDF surgery reports, and use AI-powered tools including voice commands and an intelligent surgery copilot.</p>
+        <div class="divider"></div>
+        <div class="feature-grid">
+          <div class="feature-card"><div class="feature-card-icon">&#127909;</div><div class="feature-card-title">Multi-Camera Live Feeds</div><div class="feature-card-desc">OT ceiling camera, laparoscope, and endoscope feeds per room</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#9210;</div><div class="feature-card-title">Recording Management</div><div class="feature-card-desc">Start/stop recording independently from live feed</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#128248;</div><div class="feature-card-title">Snapshot Capture</div><div class="feature-card-desc">Freeze and save frames from any video source</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#127908;</div><div class="feature-card-title">Voice Commands</div><div class="feature-card-desc">Hands-free control using natural language</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#129504;</div><div class="feature-card-title">AI Surgery Copilot</div><div class="feature-card-desc">Real-time step tracking with confidence scores</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#128196;</div><div class="feature-card-title">PDF Surgery Reports</div><div class="feature-card-desc">Auto-generated reports with clips, notes and metadata</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="section" id="login">
+      <div class="section-header"><span class="section-icon">&#128274;</span><span class="section-title">Login</span></div>
+      <div class="section-body">
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px">Use the credentials below to access the mock. In a production environment these would be hospital-issued accounts with role-based access.</p>
+        <div class="creds">
+          <div class="cred-box"><div class="cred-label">Username</div><div class="cred-value">dr.sharma@apollo.in</div></div>
+          <div class="cred-box"><div class="cred-label">Password</div><div class="cred-value">Apollo@123</div></div>
+        </div>
+        <div class="tip"><strong>Tip:</strong> The field is pre-filled. Just click <strong>Sign In</strong>.</div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="section" id="dashboard">
+      <div class="section-header"><span class="section-icon">&#128202;</span><span class="section-title">Dashboard</span></div>
+      <div class="section-body">
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px">The dashboard gives a bird's-eye view of all active operation theatres and hospital statistics.</p>
+        <div class="subsection">
+          <div class="subsection-title">OT Room Cards</div>
+          <ul class="steps">
+            <li><span class="step-num">1</span>Each card shows a <strong>live video thumbnail</strong>, room name, surgeon, procedure, patient, and status badge (LIVE / REC / IDLE).</li>
+            <li><span class="step-num">2</span>Click <strong>View Live</strong> to open the full Live OT screen for that room.</li>
+            <li><span class="step-num">3</span>Click <strong>Recordings</strong> to jump directly to that room's archive.</li>
+          </ul>
+        </div>
+        <div class="subsection">
+          <div class="subsection-title">Status Badges</div>
+          <table class="kv-table">
+            <tr><th>Badge</th><th>Meaning</th></tr>
+            <tr><td>🔴 LIVE</td><td>Room is active, video feed streaming</td></tr>
+            <tr><td>🟠 REC</td><td>Room is actively recording</td></tr>
+            <tr><td>⚫ IDLE</td><td>Room is inactive / between cases</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE OT -->
+    <div class="section" id="live-ot">
+      <div class="section-header"><span class="section-icon">&#9673;</span><span class="section-title">Live OT</span></div>
+      <div class="section-body">
+
+        <!-- Room Tabs -->
+        <div class="subsection">
+          <div class="subsection-title">Switching Rooms</div>
+          <p style="font-size:13px;color:var(--text-light);margin-bottom:10px">Three OT rooms are available at the top of the Live OT screen.</p>
+          <table class="kv-table">
+            <tr><th>Room</th><th>Procedure</th><th>Surgeon</th></tr>
+            <tr><td>OT Room 1</td><td>Lap. Cholecystectomy</td><td>Dr. R. Sharma</td></tr>
+            <tr><td>OT Room 2</td><td>CABG (Bypass Surgery)</td><td>Dr. A. Nair</td></tr>
+            <tr><td>OT Room 3</td><td>Knee Arthroplasty</td><td>Dr. S. Iyer</td></tr>
+          </table>
+          <div class="tip"><strong>Tip:</strong> You can also switch rooms using keyboard shortcuts <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> or by saying <em>"Room one"</em>, <em>"Room two"</em>, <em>"Room three"</em> via voice.</div>
+        </div>
+
+        <!-- Sources -->
+        <div id="sources" class="subsection">
+          <div class="subsection-title">Video Sources</div>
+          <p style="font-size:13px;color:var(--text-light);margin-bottom:10px">Each room has three camera sources accessible from the bottom controls bar.</p>
+          <table class="kv-table">
+            <tr><th>Button</th><th>Source</th><th>Description</th></tr>
+            <tr><td>📷 OT Camera</td><td>Ceiling / overhead</td><td>Wide-angle view of the entire operating room</td></tr>
+            <tr><td>🔬 Laparoscope</td><td>Laproscopic Feed 01.mp4</td><td>Internal camera — inside the patient's body cavity</td></tr>
+            <tr><td>👁 Endoscope</td><td>Endoscopic Feed 01.mp4</td><td>Auxiliary endoscopic / second instrument camera</td></tr>
+          </table>
+          <div class="tip"><strong>Note:</strong> Clicking a source button immediately switches the feed and resumes the video. The previously active feed is paused and resumable.</div>
+        </div>
+
+        <!-- Recording -->
+        <div id="recording" class="subsection">
+          <div class="subsection-title">Recording</div>
+          <ul class="steps">
+            <li><span class="step-num">1</span>Click <strong>🔴 Start Recording</strong> — the button turns orange and shows <strong>⏹ Stop Recording</strong>.</li>
+            <li><span class="step-num">2</span>The recording timer starts counting in the top-right of the video.</li>
+            <li><span class="step-num">3</span>Click <strong>⏹ Stop Recording</strong> to stop. The live feed <strong>continues playing</strong> — stopping recording never interrupts the video.</li>
+          </ul>
+          <div class="warn"><strong>Important:</strong> Stop Recording only stops the recording session — it does NOT stop the live feed. The video keeps running so the team can continue monitoring.</div>
+        </div>
+
+        <!-- Audio -->
+        <div class="subsection">
+          <div class="subsection-title">Audio</div>
+          <ul class="steps">
+            <li><span class="step-num">1</span>All video feeds start <strong>muted by default</strong> (browser autoplay policy requires this).</li>
+            <li><span class="step-num">2</span>Click <strong>🔇 Unmute</strong> to enable audio. Button changes to <strong>🔊 Mute</strong>.</li>
+            <li><span class="step-num">3</span>Unmuting applies to all three sources simultaneously (OT, Laparoscope, Endoscope).</li>
+          </ul>
+          <div class="warn"><strong>Note:</strong> When you activate Voice Commands, the video is automatically muted to prevent the mic picking up speaker audio and misinterpreting surgical sounds as commands. Audio is restored when voice is turned off.</div>
+        </div>
+
+        <!-- Snapshot -->
+        <div id="snapshot" class="subsection">
+          <div class="subsection-title">Snapshots</div>
+          <ul class="steps">
+            <li><span class="step-num">1</span>Click <strong>📷 Snapshot</strong> in the controls bar (or press <kbd>S</kbd>).</li>
+            <li><span class="step-num">2</span>A frame is captured from whichever source is currently visible (OT Camera, Laparoscope, or Endoscope).</li>
+            <li><span class="step-num">3</span>The captured frame appears in the <strong>Snapshots panel</strong> on the right side of the screen with a timestamp.</li>
+            <li><span class="step-num">4</span>Click <strong>⬇ Save</strong> under any snapshot to download it as a <code>.jpg</code> file.</li>
+            <li><span class="step-num">5</span>Click <strong>Clear</strong> to remove all snapshots from the panel.</li>
+          </ul>
+          <div class="tip"><strong>Tip:</strong> Snapshots are also included in the PDF surgery report generated in the Playback screen.</div>
+        </div>
+
+        <!-- Play/Pause -->
+        <div class="subsection">
+          <div class="subsection-title">Play / Pause Video</div>
+          <ul class="steps">
+            <li><span class="step-num">1</span>Hover over the video to reveal a large circular <strong>▶/⏸ button</strong> in the centre.</li>
+            <li><span class="step-num">2</span>Click it to pause or resume. When paused, the button stays visible.</li>
+            <li><span class="step-num">3</span>Alternatively, press <kbd>Space</kbd> anywhere on the Live OT page.</li>
+          </ul>
+        </div>
+
+        <!-- Keyboard Shortcuts -->
+        <div id="keyboard" class="subsection">
+          <div class="subsection-title">Keyboard Shortcuts</div>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:10px">Active on the Live OT page. Shortcuts are ignored when typing in text fields.</p>
+          <table class="kv-table">
+            <tr><th>Key</th><th>Action</th></tr>
+            <tr><td><kbd>Space</kbd></td><td>Play / Pause live video</td></tr>
+            <tr><td><kbd>M</kbd></td><td>Toggle Mute / Unmute</td></tr>
+            <tr><td><kbd>S</kbd></td><td>Take Snapshot</td></tr>
+            <tr><td><kbd>R</kbd></td><td>Start / Stop Recording</td></tr>
+            <tr><td><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></td><td>Switch to OT Room 1, 2, or 3</td></tr>
+            <tr><td><kbd>V</kbd></td><td>Toggle Voice Commands on/off</td></tr>
+            <tr><td><kbd>?</kbd></td><td>Open Voice Commands help panel</td></tr>
+          </table>
+        </div>
+
+        <!-- Voice Commands -->
+        <div id="voice" class="subsection">
+          <div class="subsection-title">Voice Commands <span class="tag new">AI</span></div>
+          <ul class="steps">
+            <li><span class="step-num">1</span>Click <strong>🎙️ Voice</strong> in the controls bar (or press <kbd>V</kbd>).</li>
+            <li><span class="step-num">2</span>Allow microphone access when the browser asks.</li>
+            <li><span class="step-num">3</span>The button turns red and shows <strong>🔴 Listening…</strong> — the video is automatically muted.</li>
+            <li><span class="step-num">4</span>Speak a command clearly. A floating overlay shows what was heard and confirms the action.</li>
+            <li><span class="step-num">5</span>Click again or press <kbd>V</kbd> to stop listening.</li>
+          </ul>
+          <table class="kv-table" style="margin-top:14px">
+            <tr><th>Say…</th><th>Action</th></tr>
+            <tr><td>"Start recording"</td><td>Begins recording</td></tr>
+            <tr><td>"Stop recording"</td><td>Stops recording</td></tr>
+            <tr><td>"Take snapshot"</td><td>Captures current frame</td></tr>
+            <tr><td>"Laparoscope"</td><td>Switches to laparoscope feed</td></tr>
+            <tr><td>"OT camera"</td><td>Switches to overhead camera</td></tr>
+            <tr><td>"Room one / two / three"</td><td>Switches OT room</td></tr>
+            <tr><td>"Mute" / "Unmute"</td><td>Toggles audio</td></tr>
+            <tr><td>"Go to archive"</td><td>Navigates to Archive screen</td></tr>
+          </table>
+          <div class="warn"><strong>Browser requirement:</strong> Voice commands require <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong>. They also require HTTPS — works on <code>tecgs.com/dot-mocks</code> but not on <code>file://</code> paths.</div>
+        </div>
+
+        <!-- AI Copilot -->
+        <div id="copilot" class="subsection">
+          <div class="subsection-title">AI Surgery Copilot <span class="tag ai">AI</span></div>
+          <p style="font-size:13px;color:var(--text-light);margin-bottom:12px">The AI Copilot panel appears on the right side of the Live OT screen and tracks the current surgical step in real time.</p>
+          <table class="kv-table">
+            <tr><th>Element</th><th>Description</th></tr>
+            <tr><td>Current Step</td><td>The detected phase of the surgery (e.g. "Cystic Duct Dissection")</td></tr>
+            <tr><td>Confidence Bar</td><td>AI confidence score for the current step (green = high)</td></tr>
+            <tr><td>Event Feed</td><td>Last 3 confirmed intraoperative events logged by AI</td></tr>
+            <tr><td>Risk Level</td><td>Low / Moderate / High — updates dynamically during procedure</td></tr>
+          </table>
+          <div class="tip"><strong>Note:</strong> Steps advance automatically every 18 seconds in the mock. In production, this would be driven by real-time computer vision on the video feed. The AI Copilot resets when you switch rooms.</div>
+          <table class="kv-table" style="margin-top:14px">
+            <tr><th>Room</th><th>Procedure</th><th>Steps Tracked</th></tr>
+            <tr><td>Room 1</td><td>Lap. Cholecystectomy</td><td>Port placement → Port closure (10 steps)</td></tr>
+            <tr><td>Room 2</td><td>CABG — Bypass</td><td>Sternotomy → Sternal closure (10 steps)</td></tr>
+            <tr><td>Room 3</td><td>Knee Arthroplasty</td><td>Skin incision → Final ROM check (10 steps)</td></tr>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PLAYBACK -->
+    <div class="section" id="playback">
+      <div class="section-header"><span class="section-icon">&#9654;</span><span class="section-title">Playback</span></div>
+      <div class="section-body">
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px">The Playback screen lets you review recorded surgeries, capture clips, add notes, and generate a PDF report.</p>
+
+        <div class="subsection">
+          <div class="subsection-title">Video Controls</div>
+          <table class="kv-table">
+            <tr><th>Control</th><th>Description</th></tr>
+            <tr><td>▶ / ⏸</td><td>Play or pause the recording</td></tr>
+            <tr><td>Seek bar</td><td>Click anywhere on the progress bar to jump to that position</td></tr>
+            <tr><td>⏮ / ⏭ (±10s)</td><td>Skip backward or forward 10 seconds</td></tr>
+            <tr><td>🔊 Volume</td><td>Adjust playback audio level</td></tr>
+            <tr><td>⛶ Fullscreen</td><td>Enter fullscreen mode</td></tr>
+          </table>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Capturing Clips</div>
+          <ul class="steps">
+            <li><span class="step-num">1</span>Click <strong>✂ Capture Clip</strong> to grab the current frame as a clip thumbnail.</li>
+            <li><span class="step-num">2</span>Captured clips appear in the <strong>Captured Clips</strong> panel on the right.</li>
+            <li><span class="step-num">3</span>Clips are automatically included in the PDF surgery report.</li>
+          </ul>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Download & Share</div>
+          <table class="kv-table">
+            <tr><th>Button</th><th>Action</th></tr>
+            <tr><td>⬇ Download</td><td>Downloads the full recording video file to your device</td></tr>
+            <tr><td>🔗 Copy Share Link</td><td>Copies a shareable URL to clipboard for remote consultation</td></tr>
+          </table>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Surgery Report (PDF)</div>
+          <ul class="steps">
+            <li><span class="step-num">1</span>Add notes in the <strong>Notes</strong> text box (pre-filled with defaults).</li>
+            <li><span class="step-num">2</span>Click <strong>📄 Save Notes &amp; Generate Report</strong>.</li>
+            <li><span class="step-num">3</span>A PDF is generated with: header, procedure details table, surgeon notes, captured clip thumbnails, and a footer.</li>
+            <li><span class="step-num">4</span>A <strong>Surgery Report</strong> panel appears — click <strong>View PDF</strong> to open it in a new tab, or <strong>Download PDF</strong> to save it.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCHIVE -->
+    <div class="section" id="archive">
+      <div class="section-header"><span class="section-icon">&#128452;</span><span class="section-title">Archive</span></div>
+      <div class="section-body">
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px">The Archive screen lists all past recordings with metadata, filterable by room, date, and procedure type.</p>
+        <table class="kv-table">
+          <tr><th>Column</th><th>Description</th></tr>
+          <tr><td>Room</td><td>Which OT room the recording is from</td></tr>
+          <tr><td>Procedure</td><td>Surgery type performed</td></tr>
+          <tr><td>Surgeon</td><td>Operating surgeon name</td></tr>
+          <tr><td>Duration</td><td>Total length of the recording</td></tr>
+          <tr><td>Date</td><td>Date and time of the surgery</td></tr>
+          <tr><td>Actions</td><td>Play, Download, Share buttons per recording</td></tr>
+        </table>
+        <div class="tip"><strong>Tip:</strong> Click any row to open that recording in Playback. Use the search bar and filters to find specific cases quickly.</div>
+      </div>
+    </div>
+
+    <!-- REMOTE VIEW -->
+    <div class="section" id="remote">
+      <div class="section-header"><span class="section-icon">&#127760;</span><span class="section-title">Remote View</span></div>
+      <div class="section-body">
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px">Remote View allows consultants, specialists, or senior surgeons to observe the procedure from outside the hospital.</p>
+        <ul class="steps">
+          <li><span class="step-num">1</span>Select the room to view remotely from the dropdown.</li>
+          <li><span class="step-num">2</span>The live feed streams with a <strong>REMOTE</strong> watermark to distinguish from the in-room view.</li>
+          <li><span class="step-num">3</span>Use <strong>Unmute</strong> to hear the OT audio remotely.</li>
+          <li><span class="step-num">4</span>Click <strong>Fullscreen</strong> for an immersive consultation view.</li>
+        </ul>
+        <div class="tip"><strong>Enterprise feature:</strong> Remote two-way audio and annotation tools are available in the Enterprise tier.</div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="section" id="settings">
+      <div class="section-header"><span class="section-icon">&#9881;</span><span class="section-title">Settings</span></div>
+      <div class="section-body">
+        <table class="kv-table">
+          <tr><th>Setting</th><th>Description</th></tr>
+          <tr><td>Hospital Name</td><td>Display name shown in reports and headers</td></tr>
+          <tr><td>Default Room</td><td>Which OT room opens by default on login</td></tr>
+          <tr><td>Video Quality</td><td>Auto / HD 1080p / SD 720p / Low 480p</td></tr>
+          <tr><td>Auto-Record</td><td>Automatically start recording when a room goes LIVE</td></tr>
+          <tr><td>Storage Limit</td><td>Maximum storage allocated for recordings</td></tr>
+          <tr><td>Notifications</td><td>Alerts for recording start/stop, room status changes</td></tr>
+          <tr><td>User Management</td><td>Add/remove staff accounts, assign roles</td></tr>
+          <tr><td>PACS Integration</td><td>Connect to hospital imaging/records system</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ALL FEATURES -->
+    <div class="section" id="features">
+      <div class="section-header"><span class="section-icon">&#10024;</span><span class="section-title">Complete Feature List</span></div>
+      <div class="section-body">
+        <div class="feature-grid">
+          <div class="feature-card"><div class="feature-card-icon">&#127909;</div><div class="feature-card-title">3 Live OT Rooms</div><div class="feature-card-desc">Monitor up to 3 operation theatres simultaneously from one screen</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#128247;</div><div class="feature-card-title">Multi-Camera Sources</div><div class="feature-card-desc">Switch between OT Camera, Laparoscope, and Endoscope per room</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#9210;</div><div class="feature-card-title">Independent Recording</div><div class="feature-card-desc">Record without interrupting the live feed</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#128248;</div><div class="feature-card-title">Snapshot Capture</div><div class="feature-card-desc">Save frames from any source with one click or keystroke</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#9654;</div><div class="feature-card-title">Playback Controls</div><div class="feature-card-desc">Full custom player — seek, skip, volume, fullscreen</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#9986;</div><div class="feature-card-title">Clip Capture</div><div class="feature-card-desc">Extract moments from recordings as thumbnail clips</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#128196;</div><div class="feature-card-title">PDF Surgery Report</div><div class="feature-card-desc">Auto-generate reports with procedure details, clips, and notes</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#128279;</div><div class="feature-card-title">Share Link</div><div class="feature-card-desc">Copy a shareable link for any recording to clipboard</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#127760;</div><div class="feature-card-title">Remote View</div><div class="feature-card-desc">Consultants can observe live procedures from anywhere</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#127908;</div><div class="feature-card-title">Voice Commands</div><div class="feature-card-desc">8 hands-free commands via Web Speech API (Chrome/Edge)</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#129504;</div><div class="feature-card-title">AI Surgery Copilot</div><div class="feature-card-desc">Step-by-step surgical tracking with confidence and risk indicators</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#9000;</div><div class="feature-card-title">Keyboard Shortcuts</div><div class="feature-card-desc">7 shortcuts for power users: Space, M, S, R, 1/2/3, V, ?</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#128452;</div><div class="feature-card-title">Recording Archive</div><div class="feature-card-desc">Searchable and filterable list of all past recordings</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#128203;</div><div class="feature-card-title">Procedure Details</div><div class="feature-card-desc">Patient, MRN, surgeon, procedure, team info per room</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#128241;</div><div class="feature-card-title">Mobile Responsive</div><div class="feature-card-desc">Full functionality on tablets and smartphones</div></div>
+          <div class="feature-card"><div class="feature-card-icon">&#128276;</div><div class="feature-card-title">Notifications</div><div class="feature-card-desc">Alerts for critical events, recording status and room changes</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEVICE TIERS -->
+    <div class="section" id="devices">
+      <div class="section-header"><span class="section-icon">&#128268;</span><span class="section-title">Device Tiers</span></div>
+      <div class="section-body">
+        <table class="kv-table">
+          <tr><th>Feature</th><th>Basic</th><th>Advanced</th><th>Enterprise</th></tr>
+          <tr><td>OT ceiling camera</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Live video streaming</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Recording + Archive</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Snapshot capture</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Laparoscope feed</td><td>—</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Endoscope feed</td><td>—</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Remote View</td><td>—</td><td>✅</td><td>✅</td></tr>
+          <tr><td>PDF Surgery Reports</td><td>—</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Voice Commands</td><td>—</td><td>—</td><td>✅</td></tr>
+          <tr><td>AI Surgery Copilot</td><td>—</td><td>—</td><td>✅</td></tr>
+          <tr><td>PACS Integration</td><td>—</td><td>—</td><td>✅</td></tr>
+          <tr><td>Multi-hospital dashboard</td><td>—</td><td>—</td><td>✅</td></tr>
+          <tr><td>Two-way remote audio</td><td>—</td><td>—</td><td>✅</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section" id="faq">
+      <div class="section-header"><span class="section-icon">&#10067;</span><span class="section-title">FAQ</span></div>
+      <div class="section-body">
+        <table class="kv-table">
+          <tr><th>Question</th><th>Answer</th></tr>
+          <tr><td>Why is the video muted by default?</td><td>Browsers require user interaction before playing audio. Click Unmute after the page loads.</td></tr>
+          <tr><td>Voice commands aren't working</td><td>Voice requires Chrome or Edge browser and HTTPS. It will not work on <code>file://</code> paths. Check microphone permissions.</td></tr>
+          <tr><td>Laparoscope/Endoscope shows black screen</td><td>The video loads on first click — give it 1–2 seconds to buffer after switching source.</td></tr>
+          <tr><td>Why does the video mute when I click Voice?</td><td>To prevent the mic picking up speaker audio (surgical sounds) and misinterpreting them as commands.</td></tr>
+          <tr><td>Stop Recording stopped my video!</td><td>It shouldn't — Stop Recording only stops the recording session. The live feed always continues. Try refreshing.</td></tr>
+          <tr><td>Where is the Snapshot Save button?</td><td>Take a snapshot first (📷 Snapshot button or S key). A Snapshots panel appears on the right with a ⬇ Save button per frame.</td></tr>
+          <tr><td>How do I generate a PDF report?</td><td>Go to Playback → add notes → click "Save Notes &amp; Generate Report". The report panel appears with View and Download options.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-bar">
+      <h3>Ready to explore?</h3>
+      <p>Open the Virtual OT mock and try it out with the credentials above.</p>
+      <a href="index.html" class="cta-btn">&#9673; Open Virtual OT</a>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /guide-body -->
+
+</body>
+</html>
