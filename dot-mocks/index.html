@@ -1151,7 +1151,8 @@
                 <button class="vc-btn source" onclick="switchSource('ot')">&#128247; OT Camera</button>
                 <button class="vc-btn source" onclick="switchSource('lap')">&#128300; Laparoscope</button>
                 <button class="vc-btn rec-start" id="rec-toggle" onclick="toggleRec()">&#9679; Start Recording</button>
-                <button class="vc-btn snapshot" onclick="toast('Snapshot captured','success')">&#128248; Snapshot</button>
+                <button class="vc-btn snapshot" id="audio-btn" onclick="toggleAudio()">&#128263; Unmute</button>
+                <button class="vc-btn snapshot" onclick="takeSnapshot()">&#128248; Snapshot</button>
               </div>
             </div>
             <div class="info-panel">
@@ -1189,6 +1190,16 @@
                 <div class="info-section-title">Team</div>
                 <div class="info-section-body" style="font-size:13px;color:var(--text-light);line-height:1.8" id="room-team">
                   Dr. M. Gupta (Anesthetist) &bull; Sr. Lakshmi (Nurse)
+                </div>
+              </div>
+              <!-- Snapshots panel — appears after first snapshot -->
+              <div class="info-section" id="snapshot-section" style="display:none">
+                <div class="info-section-title" style="display:flex;justify-content:space-between;align-items:center">
+                  <span>Snapshots (<span id="snap-count">0</span>)</span>
+                  <button class="btn btn-sm btn-outline" onclick="clearSnapshots()" style="font-size:11px;padding:3px 8px">Clear</button>
+                </div>
+                <div class="info-section-body">
+                  <div id="snapshot-gallery" style="display:grid;grid-template-columns:1fr 1fr;gap:6px"></div>
                 </div>
               </div>
             </div>
@@ -1302,7 +1313,7 @@
           <div class="playback-layout">
             <div class="playback-video">
               <div class="playback-screen">
-                <video controls
+                <video id="playback-video" controls
                   poster="video/Surgeon_explaining_laparoscopic_202604152239.jpeg"
                   style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
                   <source src="video/perfect_in_both_202604152216.mp4" type="video/mp4">
@@ -1343,9 +1354,19 @@
               <div class="info-section">
                 <div class="info-section-title">Actions</div>
                 <div class="info-section-body" style="display:flex;flex-direction:column;gap:8px">
-                  <button class="btn btn-outline btn-sm" onclick="toast('Download started','success')" style="width:100%;justify-content:center">&#128229; Download</button>
+                  <button class="btn btn-outline btn-sm" onclick="downloadPlayback()" style="width:100%;justify-content:center">&#128229; Download</button>
                   <button class="btn btn-outline btn-sm" onclick="copyShareLink()" style="width:100%;justify-content:center">&#128279; Copy Share Link</button>
-                  <button class="btn btn-outline btn-sm" onclick="toast('Clip captured','success')" style="width:100%;justify-content:center">&#9986; Capture Clip</button>
+                  <button class="btn btn-outline btn-sm" onclick="captureClip()" style="width:100%;justify-content:center">&#9986; Capture Clip</button>
+                </div>
+              </div>
+              <!-- Captured clips panel -->
+              <div class="info-section" id="clip-section" style="display:none">
+                <div class="info-section-title" style="display:flex;justify-content:space-between;align-items:center">
+                  <span>Captured Clips (<span id="clip-count">0</span>)</span>
+                  <button class="btn btn-sm btn-outline" onclick="clearClips()" style="font-size:11px;padding:3px 8px">Clear</button>
+                </div>
+                <div class="info-section-body">
+                  <div id="clip-gallery" style="display:flex;flex-direction:column;gap:8px"></div>
                 </div>
               </div>
               <div class="info-section">
@@ -1609,6 +1630,62 @@
     showPage('dashboard');
   }
 
+  // ===== AUDIO TOGGLE =====
+  let isAudioOn = false;
+  function toggleAudio() {
+    const vid = document.getElementById('live-video');
+    isAudioOn = !isAudioOn;
+    vid.muted = !isAudioOn;
+    const btn = document.getElementById('audio-btn');
+    btn.innerHTML = isAudioOn ? '&#128266; Mute' : '&#128263; Unmute';
+    toast(isAudioOn ? 'Audio on' : 'Audio muted', 'info');
+  }
+
+  // ===== SNAPSHOT =====
+  let snapCount = 0;
+  function takeSnapshot() {
+    const vid = document.getElementById('live-video');
+    const lapVis = document.getElementById('lap-overlay').style.display !== 'none';
+    const endoVis = document.getElementById('endo-overlay').style.display !== 'none';
+    const canvas = document.createElement('canvas');
+    canvas.width = 640; canvas.height = 360;
+    const ctx = canvas.getContext('2d');
+    if (lapVis) {
+      const img = document.getElementById('lap-overlay');
+      ctx.drawImage(img, 0, 0, 640, 360);
+    } else if (endoVis) {
+      const img = document.getElementById('endo-overlay');
+      ctx.drawImage(img, 0, 0, 640, 360);
+    } else {
+      ctx.drawImage(vid, 0, 0, 640, 360);
+    }
+    const dataURL = canvas.toDataURL('image/jpeg', 0.85);
+    snapCount++;
+    document.getElementById('snap-count').textContent = snapCount;
+    document.getElementById('snapshot-section').style.display = '';
+    const gallery = document.getElementById('snapshot-gallery');
+    const ts = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'position:relative;cursor:pointer';
+    const img = document.createElement('img');
+    img.src = dataURL;
+    img.style.cssText = 'width:100%;border-radius:6px;display:block;border:1.5px solid var(--border)';
+    img.title = 'Click to download';
+    img.onclick = () => { const a = document.createElement('a'); a.href = dataURL; a.download = 'snapshot_' + ts.replace(/[: ]/g, '-') + '.jpg'; a.click(); };
+    const label = document.createElement('div');
+    label.style.cssText = 'font-size:10px;color:var(--text-light);text-align:center;margin-top:3px';
+    label.textContent = ts;
+    wrapper.appendChild(img); wrapper.appendChild(label);
+    gallery.prepend(wrapper);
+    toast('Snapshot saved — click image to download', 'success');
+  }
+  function clearSnapshots() {
+    document.getElementById('snapshot-gallery').innerHTML = '';
+    snapCount = 0;
+    document.getElementById('snap-count').textContent = '0';
+    document.getElementById('snapshot-section').style.display = 'none';
+  }
+
   // ===== RECORDING TOGGLE =====
   let isRecording = false;
   function toggleRec() {
@@ -1617,12 +1694,14 @@
     if (isRecording) {
       btn.className = 'vc-btn rec-stop';
       btn.innerHTML = '&#9632; Stop Recording';
-      toast('Recording started', 'success');
+      recSeconds = 0;
+      toast('Recording started — feed continues', 'success');
     } else {
       btn.className = 'vc-btn rec-start';
       btn.innerHTML = '&#9679; Start Recording';
-      toast('Recording stopped', 'info');
+      toast('Recording stopped — feed still live', 'info');
     }
+    // Feed keeps playing — do NOT touch live-video element
   }
   let isRecCtrl = true;
   function toggleRecCtrl() {
@@ -1638,7 +1717,7 @@
       btn.innerHTML = '&#9654; Start Recording';
       btn.className = 'btn btn-success';
       ind.className = 'rec-indicator off';
-      toast('Recording stopped', 'info');
+      toast('Recording stopped — feed continues', 'info');
     }
   }
 
@@ -1737,9 +1816,75 @@
   function showModal() { document.getElementById('modal-overlay').classList.add('show'); }
   function hideModal() { document.getElementById('modal-overlay').classList.remove('show'); }
 
-  // ===== SHARE LINK =====
+  // ===== DOWNLOAD PLAYBACK =====
+  function downloadPlayback() {
+    const a = document.createElement('a');
+    a.href = 'video/perfect_in_both_202604152216.mp4';
+    a.download = 'OT1_20260406_Sharma_Cholecystectomy.mp4';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    toast('Download started', 'success');
+  }
+
+  // ===== COPY SHARE LINK =====
   function copyShareLink() {
-    toast('Share link copied to clipboard', 'success');
+    const base = window.location.href.split('?')[0];
+    const link = base + '?view=playback&id=OT1_20260406_Sharma';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(() => toast('Share link copied to clipboard', 'success'));
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = link; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      toast('Share link copied to clipboard', 'success');
+    }
+  }
+
+  // ===== CAPTURE CLIP =====
+  let clipCount = 0;
+  function captureClip() {
+    const vid = document.getElementById('playback-video');
+    if (!vid) { toast('No video loaded', 'error'); return; }
+    const canvas = document.createElement('canvas');
+    canvas.width = 640; canvas.height = 360;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(vid, 0, 0, 640, 360);
+    const dataURL = canvas.toDataURL('image/jpeg', 0.85);
+    const ts = vid.currentTime;
+    const start = formatTime(Math.max(0, Math.floor(ts)));
+    const end   = formatTime(Math.min(Math.floor(vid.duration || ts + 10), Math.floor(ts) + 10));
+    clipCount++;
+    document.getElementById('clip-count').textContent = clipCount;
+    document.getElementById('clip-section').style.display = '';
+    const gallery = document.getElementById('clip-gallery');
+    const item = document.createElement('div');
+    item.style.cssText = 'background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;overflow:hidden';
+    item.innerHTML = `
+      <img src="${dataURL}" style="width:100%;display:block;max-height:110px;object-fit:cover">
+      <div style="padding:8px 10px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;color:var(--text-light);font-family:monospace">${start} → ${end}</span>
+        <button onclick="downloadClip('${dataURL}','clip_${start.replace(/:/g,'-')}to${end.replace(/:/g,'-')}')"
+          style="background:var(--accent);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-weight:600">
+          &#128229; Save
+        </button>
+      </div>`;
+    gallery.prepend(item);
+    toast('Clip captured — click Save to download', 'success');
+  }
+  function downloadClip(dataURL, name) {
+    const a = document.createElement('a');
+    a.href = dataURL; a.download = name + '.jpg';
+    a.click();
+    toast('Clip saved', 'success');
+  }
+  function clearClips() {
+    document.getElementById('clip-gallery').innerHTML = '';
+    clipCount = 0;
+    document.getElementById('clip-count').textContent = '0';
+    document.getElementById('clip-section').style.display = 'none';
   }
 
   // ===== TOAST =====
@@ -1760,21 +1905,28 @@
   setInterval(updateClock, 30000);
   updateClock();
 
-  // ===== LIVE TIMER =====
-  let liveSeconds = 47 * 60 + 23;
+  // ===== TIMERS =====
   function formatTime(s) {
     const h = String(Math.floor(s / 3600)).padStart(2, '0');
     const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
     const sec = String(s % 60).padStart(2, '0');
     return h + ':' + m + ':' + sec;
   }
+  // Live feed timer — always runs regardless of recording state
+  let liveSeconds = 47 * 60 + 23;
   setInterval(() => {
     liveSeconds++;
-    const t = formatTime(liveSeconds);
     const lt = document.getElementById('live-time');
-    if (lt) lt.textContent = t;
-    const rt = document.getElementById('rec-timer');
-    if (rt) rt.textContent = t;
+    if (lt) lt.textContent = formatTime(liveSeconds);
+  }, 1000);
+  // Recording timer — only increments when recording is active
+  let recSeconds = 47 * 60 + 23;
+  setInterval(() => {
+    if (isRecording || isRecCtrl) {
+      recSeconds++;
+      const rt = document.getElementById('rec-timer');
+      if (rt) rt.textContent = formatTime(recSeconds);
+    }
   }, 1000);
 </script>
 </body>
