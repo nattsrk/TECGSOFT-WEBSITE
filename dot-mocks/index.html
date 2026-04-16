@@ -413,24 +413,26 @@
   .video-controls {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    padding: 16px;
+    padding: 10px 12px;
     background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%);
     display: flex;
     justify-content: center;
-    gap: 12px;
+    flex-wrap: wrap;
+    gap: 6px;
   }
   .vc-btn {
-    padding: 10px 20px;
+    padding: 7px 13px;
     border: none;
-    border-radius: 8px;
-    font-size: 14px;
+    border-radius: 7px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
     color: #fff;
     transition: transform 0.15s;
+    white-space: nowrap;
   }
   .vc-btn:hover { transform: scale(1.05); }
   .vc-btn.rec-start { background: var(--danger); }
@@ -1237,17 +1239,13 @@
               <div class="kb-hints">
                 <span>Space ▶/⏸</span><span>M mute</span><span>S snapshot</span><span>R record</span><span>1 2 3 rooms</span>
               </div>
-              <!-- Laparoscope video feed -->
-              <video id="lap-overlay" autoplay muted loop playsinline
-                poster="video/For_the_Laparoscope_202604152029.png"
+              <!-- Laparoscope video feed (loaded on demand) -->
+              <video id="lap-overlay" muted loop playsinline
                 style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-                <source src="video/Laproscopic%20Feed%2001.mp4" type="video/mp4">
               </video>
-              <!-- Endoscope video feed -->
-              <video id="endo-overlay" autoplay muted loop playsinline
-                poster="video/For_the_Laparoscope_202604152030.jpeg"
+              <!-- Endoscope video feed (loaded on demand) -->
+              <video id="endo-overlay" muted loop playsinline
                 style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-                <source src="video/Endoscopic%20Feed%2001.mp4" type="video/mp4">
               </video>
               <div class="video-controls">
                 <button class="vc-btn source" id="src-ot" onclick="switchSource('ot')">&#128247; OT Camera</button>
@@ -1985,19 +1983,33 @@
     el.parentElement.querySelectorAll('.source-btn').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
   }
+  const sourceFiles = {
+    lap:  'video/Laproscopic%20Feed%2001.mp4',
+    endo: 'video/Endoscopic%20Feed%2001.mp4'
+  };
+
   function switchSource(src) {
     const vid  = document.getElementById('live-video');
     const lap  = document.getElementById('lap-overlay');
     const endo = document.getElementById('endo-overlay');
 
     // Hide & pause all
-    [vid, lap, endo].forEach(v => { v.style.display = 'none'; if (v.pause) v.pause(); });
+    [vid, lap, endo].forEach(v => { v.style.display = 'none'; v.pause(); });
 
-    // Show & play selected
     const labels = { ot: 'OT Camera (Wide Angle)', lap: 'Laparoscope Feed', endo: 'Endoscope Feed' };
     const map = { ot: vid, lap: lap, endo: endo };
     const target = map[src];
-    if (target) { target.style.display = 'block'; if (target.play) target.play(); }
+
+    if (target) {
+      // For lap/endo: assign src on first use, then load & play
+      if (src !== 'ot' && !target.dataset.loaded) {
+        target.src = sourceFiles[src];
+        target.load();
+        target.dataset.loaded = '1';
+      }
+      target.style.display = 'block';
+      target.play().catch(() => {});
+    }
 
     // Highlight active source button
     ['src-ot','src-lap','src-endo'].forEach(id => {
