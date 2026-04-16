@@ -1312,28 +1312,32 @@
         <div class="page" id="page-playback">
           <div class="playback-layout">
             <div class="playback-video">
-              <div class="playback-screen">
-                <video id="playback-video" controls
+              <div class="playback-screen" onclick="pbTogglePlay()">
+                <video id="playback-video"
                   poster="video/Surgeon_explaining_laparoscopic_202604152239.jpeg"
-                  style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                  style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"
+                  ontimeupdate="pbTimeUpdate()"
+                  onloadedmetadata="pbMetaLoaded()"
+                  onended="pbEnded()">
                   <source src="video/perfect_in_both_202604152216.mp4" type="video/mp4">
                 </video>
               </div>
               <div class="playback-bar">
-                <div class="seek-bar">
-                  <div class="seek-progress"></div>
-                  <div class="seek-thumb"></div>
+                <!-- Seek bar -->
+                <div class="seek-bar" id="pb-seek-bar" onclick="pbSeek(event)" style="cursor:pointer">
+                  <div class="seek-progress" id="pb-progress"></div>
+                  <div class="seek-thumb" id="pb-thumb"></div>
                 </div>
                 <div class="playback-controls">
                   <div class="pb-left">
-                    <button class="pb-btn">&#9198;</button>
-                    <button class="pb-btn play-btn">&#9654;</button>
-                    <button class="pb-btn">&#9197;</button>
-                    <span class="pb-time">00:35:42 / 01:42:15</span>
+                    <button class="pb-btn" onclick="pbSkip(-10)" title="Back 10s">&#9198;</button>
+                    <button class="pb-btn play-btn" id="pb-play-btn" onclick="pbTogglePlay()">&#9654;</button>
+                    <button class="pb-btn" onclick="pbSkip(10)" title="Forward 10s">&#9197;</button>
+                    <span class="pb-time" id="pb-time">00:00:00 / 00:00:00</span>
                   </div>
                   <div class="pb-right">
-                    <button class="pb-btn" onclick="toast('Volume adjusted','info')">&#128266;</button>
-                    <button class="pb-btn" onclick="toast('Fullscreen mode','info')">&#9974;</button>
+                    <button class="pb-btn" id="pb-vol-btn" onclick="pbToggleVol()" title="Mute/Unmute">&#128266;</button>
+                    <button class="pb-btn" onclick="pbFullscreen()" title="Fullscreen">&#9974;</button>
                   </div>
                 </div>
               </div>
@@ -1815,6 +1819,56 @@
   // ===== MODAL =====
   function showModal() { document.getElementById('modal-overlay').classList.add('show'); }
   function hideModal() { document.getElementById('modal-overlay').classList.remove('show'); }
+
+  // ===== PLAYBACK CONTROLS =====
+  function pbVid() { return document.getElementById('playback-video'); }
+  function formatPbTime(s) {
+    if (isNaN(s)) s = 0;
+    const h = String(Math.floor(s / 3600)).padStart(2,'0');
+    const m = String(Math.floor((s % 3600) / 60)).padStart(2,'0');
+    const sec = String(Math.floor(s % 60)).padStart(2,'0');
+    return h + ':' + m + ':' + sec;
+  }
+  function pbTogglePlay() {
+    const v = pbVid(); if (!v) return;
+    if (v.paused) { v.play(); document.getElementById('pb-play-btn').innerHTML = '&#9646;&#9646;'; }
+    else { v.pause(); document.getElementById('pb-play-btn').innerHTML = '&#9654;'; }
+  }
+  function pbSkip(sec) {
+    const v = pbVid(); if (!v) return;
+    v.currentTime = Math.max(0, Math.min(v.duration || 0, v.currentTime + sec));
+  }
+  function pbTimeUpdate() {
+    const v = pbVid(); if (!v || !v.duration) return;
+    const pct = (v.currentTime / v.duration) * 100;
+    document.getElementById('pb-progress').style.width = pct + '%';
+    document.getElementById('pb-thumb').style.left = pct + '%';
+    document.getElementById('pb-time').textContent = formatPbTime(v.currentTime) + ' / ' + formatPbTime(v.duration);
+  }
+  function pbMetaLoaded() {
+    const v = pbVid();
+    document.getElementById('pb-time').textContent = '00:00:00 / ' + formatPbTime(v.duration);
+  }
+  function pbEnded() {
+    document.getElementById('pb-play-btn').innerHTML = '&#9654;';
+  }
+  function pbSeek(e) {
+    const v = pbVid(); if (!v || !v.duration) return;
+    const bar = document.getElementById('pb-seek-bar');
+    const rect = bar.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    v.currentTime = pct * v.duration;
+  }
+  function pbToggleVol() {
+    const v = pbVid(); if (!v) return;
+    v.muted = !v.muted;
+    document.getElementById('pb-vol-btn').innerHTML = v.muted ? '&#128263;' : '&#128266;';
+  }
+  function pbFullscreen() {
+    const v = pbVid(); if (!v) return;
+    if (v.requestFullscreen) v.requestFullscreen();
+    else if (v.webkitRequestFullscreen) v.webkitRequestFullscreen();
+  }
 
   // ===== DOWNLOAD PLAYBACK =====
   function downloadPlayback() {
