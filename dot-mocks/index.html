@@ -1995,23 +1995,25 @@
     const lap  = document.getElementById('lap-overlay');
     const endo = document.getElementById('endo-overlay');
 
-    // Hide & pause all
-    [vid, lap, endo].forEach(v => { v.style.display = 'none'; v.pause(); });
+    // Hide all feeds, pause safely
+    [vid, lap, endo].forEach(v => { v.style.display = 'none'; try { v.pause(); } catch(e){} });
 
     const labels = { ot: 'OT Camera (Wide Angle)', lap: 'Laparoscope Feed', endo: 'Endoscope Feed' };
-    const map = { ot: vid, lap: lap, endo: endo };
-    const target = map[src];
+    const target = { ot: vid, lap: lap, endo: endo }[src];
 
     if (target) {
-      // For lap/endo: assign src on first use, then load & play
-      if (src !== 'ot' && !target.dataset.loaded) {
-        target.src = sourceFiles[src];
-        target.load();
-        target.dataset.loaded = '1';
-      }
+      // Assign src only if not yet set (getAttribute avoids full-URL comparison)
+      if (src === 'lap'  && !lap.getAttribute('src'))  lap.src  = sourceFiles.lap;
+      if (src === 'endo' && !endo.getAttribute('src')) endo.src = sourceFiles.endo;
       target.muted = !isAudioOn;
       target.style.display = 'block';
-      target.play().catch(() => {});
+      // Delay avoids AbortError race between pause() and play()
+      setTimeout(() => {
+        target.play().catch(() => {
+          target.load();
+          setTimeout(() => target.play().catch(() => {}), 200);
+        });
+      }, 80);
     }
 
     // Highlight active source button
@@ -2320,19 +2322,28 @@
     if (voiceActive) { stopVoice(); return; }
     if (!recognition && !initVoice()) return;
     voiceActive = true;
+    // Mute all video feeds — prevents mic picking up speaker audio
+    ['live-video','lap-overlay','endo-overlay'].forEach(id => {
+      const v = document.getElementById(id); if (v) v.muted = true;
+    });
+    document.getElementById('audio-btn').innerHTML = '&#128263; Unmute';
     recognition.start();
     document.getElementById('voice-btn').classList.add('voice-active');
     document.getElementById('voice-btn').innerHTML = '&#128308; Listening…';
-    toast('Voice commands active — speak a command', 'success');
+    toast('Voice active — video muted to avoid interference', 'info');
   }
 
   function stopVoice() {
     voiceActive = false;
     if (recognition) { try { recognition.stop(); } catch(e){} }
+    // Restore audio to whatever state it was in
+    ['live-video','lap-overlay','endo-overlay'].forEach(id => {
+      const v = document.getElementById(id); if (v) v.muted = !isAudioOn;
+    });
+    if (isAudioOn) document.getElementById('audio-btn').innerHTML = '&#128266; Mute';
     document.getElementById('voice-btn').classList.remove('voice-active');
     document.getElementById('voice-btn').innerHTML = '&#127908; Voice';
-    const ov = document.getElementById('voice-cmd-display');
-    ov.style.display = 'none';
+    document.getElementById('voice-cmd-display').style.display = 'none';
   }
 
   function showVoiceCommand(text, isFinal) {
