@@ -127,6 +127,39 @@
   .risk-med  { color: #9a6500; font-weight: 700; }
   .risk-low  { color: var(--success); font-weight: 700; }
 
+  /* Package cards */
+  .pkg-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+  .pkg-card { border-radius: 12px; overflow: hidden; border: 2px solid var(--border); }
+  .pkg-card.starter  { border-color: var(--success); }
+  .pkg-card.pro      { border-color: var(--accent); }
+  .pkg-card.ent      { border-color: var(--primary); }
+  .pkg-hdr { padding: 18px 20px 14px; }
+  .pkg-card.starter .pkg-hdr  { background: linear-gradient(135deg,rgba(40,167,69,0.12),rgba(40,167,69,0.04)); }
+  .pkg-card.pro .pkg-hdr      { background: linear-gradient(135deg,rgba(0,168,157,0.12),rgba(0,168,157,0.04)); }
+  .pkg-card.ent .pkg-hdr      { background: linear-gradient(135deg,rgba(0,51,102,0.1),rgba(0,51,102,0.03)); }
+  .pkg-tag  { font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px; }
+  .pkg-card.starter .pkg-tag { color:var(--success); }
+  .pkg-card.pro .pkg-tag      { color:var(--accent-dark); }
+  .pkg-card.ent .pkg-tag      { color:var(--primary); }
+  .pkg-name { font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px; }
+  .pkg-sub  { font-size:12px;color:var(--text-light);line-height:1.5; }
+  .pkg-price { font-size:22px;font-weight:800;margin-top:12px; }
+  .pkg-card.starter .pkg-price { color:var(--success); }
+  .pkg-card.pro .pkg-price     { color:var(--accent-dark); }
+  .pkg-card.ent .pkg-price     { color:var(--primary); }
+  .pkg-price-note { font-size:11px;color:var(--text-light);font-weight:400;margin-left:4px; }
+  .pkg-body { padding: 16px 20px 20px; background: var(--card); display:flex;flex-direction:column;gap:12px; }
+  .pkg-stat-row { display:grid;grid-template-columns:repeat(3,1fr);gap:8px; }
+  .pkg-stat { background:var(--bg);border-radius:8px;padding:8px 10px;text-align:center; }
+  .pkg-stat-val { font-size:14px;font-weight:800;color:var(--primary); }
+  .pkg-stat-lbl { font-size:10px;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.3px; }
+  .pkg-feat-list { list-style:none;display:flex;flex-direction:column;gap:4px; }
+  .pkg-feat-list li { font-size:12px;color:var(--text-light);padding-left:16px;position:relative;line-height:1.6; }
+  .pkg-feat-list li::before { content:'✓';position:absolute;left:0;color:var(--success);font-weight:700;font-size:11px; }
+  .pkg-feat-list li.no::before { content:'—';color:var(--border); }
+  .pkg-feat-list li.no { color:var(--border); }
+  .pkg-cc { background:rgba(111,66,193,0.07);border:1px solid rgba(111,66,193,0.2);border-radius:8px;padding:8px 12px;font-size:11px;color:#5b21b6;display:flex;align-items:center;gap:6px; }
+
   /* Gantt bar */
   .gantt-bar { height: 14px; border-radius: 7px; display: inline-block; vertical-align: middle; }
 
@@ -145,11 +178,17 @@
   <div class="header-inner">
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase">Central Hospital · Confidential</div>
     <h1>&#128200; Virtual OT — Project Estimation Report</h1>
-    <p>Full effort, timeline, team, technology stack, and hardware procurement guide for production deployment of the Digital Operation Theatre platform.</p>
+    <p>Effort, timeline, team, technology stack, and hardware procurement guide — across 3 commercial packages (Starter / Professional / Enterprise) powered by Claude Code for accelerated development.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+      <span style="background:rgba(40,167,69,0.25);border:1px solid rgba(40,167,69,0.5);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#a8ffbe">&#9632; Starter — Small Hospital</span>
+      <span style="background:rgba(0,168,157,0.25);border:1px solid rgba(0,168,157,0.5);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#a0ffe0">&#9632; Professional — Medium Hospital</span>
+      <span style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700">&#9632; Enterprise — Large Hospital / Chain</span>
+      <span style="background:rgba(111,66,193,0.3);border:1px solid rgba(111,66,193,0.5);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#ddd6fe">&#9889; Powered by Claude Code</span>
+    </div>
     <div class="header-meta">
       <span>&#128197; April 2026</span>
-      <span>&#128196; v1.0 Estimation</span>
-      <span>&#127970; Central Hospital, India</span>
+      <span>&#128196; v2.0 — 3 Packages</span>
+      <span>&#127970; India Market</span>
       <span>&#128274; Confidential</span>
     </div>
     <button class="dl-btn" onclick="generatePDF()">&#11015; Download PDF Report</button>
@@ -163,17 +202,203 @@
     <div class="card-header">&#128203; Executive Summary</div>
     <div class="card-body" style="display:flex;flex-direction:column;gap:20px">
       <p style="font-size:13px;color:var(--text-light);line-height:1.8">
-        Virtual OT is a web-based Digital Operation Theatre platform for Central Hospital. It delivers live multi-camera surgical feeds, AES-256 encrypted recording, AI surgery assistance, voice control, live annotation for remote consultation, role-based access control, and HIPAA/DPDP Act 2023 compliance — all in a single browser-based application requiring no client installation.
+        Virtual OT is a browser-based Digital Operation Theatre platform delivering live multi-camera surgical feeds, AES-256 encrypted recording, AI surgery assistance, voice control, live annotation, role-based access control, and HIPAA/DPDP Act 2023 compliance. Available in three packages sized to hospital scale — with development accelerated by <strong style="color:#5b21b6">Claude Code</strong>.
       </p>
-      <div class="kpi-grid">
-        <div class="kpi"><div class="kpi-val">~610</div><div class="kpi-lbl">Person-Days</div></div>
-        <div class="kpi"><div class="kpi-val accent">12</div><div class="kpi-lbl">Months Total</div></div>
-        <div class="kpi"><div class="kpi-val">18</div><div class="kpi-lbl">Modules</div></div>
-        <div class="kpi"><div class="kpi-val">10</div><div class="kpi-lbl">Team Size</div></div>
-        <div class="kpi"><div class="kpi-val">4</div><div class="kpi-lbl">Phases</div></div>
+
+      <!-- Claude Code savings banner -->
+      <div style="background:linear-gradient(135deg,rgba(111,66,193,0.08),rgba(0,168,157,0.06));border:1px solid rgba(111,66,193,0.2);border-radius:10px;padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;text-align:center">
+        <div>
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:#5b21b6;letter-spacing:.5px;margin-bottom:4px">Without Claude Code</div>
+          <div style="font-size:20px;font-weight:800;color:var(--danger);text-decoration:line-through">610 PD</div>
+          <div style="font-size:11px;color:var(--text-light)">12 months · 12 team</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;font-size:22px">&#9889;</div>
+        <div>
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:#5b21b6;letter-spacing:.5px;margin-bottom:4px">With Claude Code</div>
+          <div style="font-size:20px;font-weight:800;color:var(--success)">~220 PD</div>
+          <div style="font-size:11px;color:var(--text-light)">Full enterprise scope</div>
+        </div>
+        <div style="background:rgba(111,66,193,0.08);border-radius:8px;padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <div style="font-size:22px;font-weight:800;color:#5b21b6">64%</div>
+          <div style="font-size:11px;font-weight:700;color:#5b21b6">Cost Reduction</div>
+          <div style="font-size:10px;color:var(--text-light)">via AI-assisted dev</div>
+        </div>
       </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div class="kpi"><div class="kpi-val" style="color:var(--success)">80</div><div class="kpi-lbl">Starter PD</div></div>
+        <div class="kpi"><div class="kpi-val" style="color:var(--accent-dark)">155</div><div class="kpi-lbl">Professional PD</div></div>
+        <div class="kpi"><div class="kpi-val">220</div><div class="kpi-lbl">Enterprise PD</div></div>
+        <div class="kpi"><div class="kpi-val accent">18</div><div class="kpi-lbl">Total Modules</div></div>
+      </div>
+
       <div style="background:rgba(0,168,157,0.07);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:14px 18px;font-size:13px;color:var(--text-light);line-height:1.7">
-        <strong style="color:var(--accent-dark)">Scope:</strong> This estimate covers production development only. The existing HTML mock (v1.1) serves as a fully validated UX prototype, eliminating discovery and UI design iterations. Net saving vs. a greenfield project: <strong style="color:var(--text)">~80 person-days</strong>.
+        <strong style="color:var(--accent-dark)">Claude Code advantage:</strong> AI-assisted development accelerates boilerplate generation, test writing, code review, and documentation by ~3×. The v1.1 UX prototype also eliminates design discovery — saving a further <strong style="color:var(--text)">~80 PD</strong> vs. greenfield.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 3 PACKAGES ===== -->
+  <div class="card">
+    <div class="card-header">&#128230; Commercial Packages — Starter / Professional / Enterprise</div>
+    <div class="card-body">
+      <div class="pkg-grid">
+
+        <!-- STARTER -->
+        <div class="pkg-card starter">
+          <div class="pkg-hdr">
+            <div class="pkg-tag">Package 1 · Small Hospital</div>
+            <div class="pkg-name">Starter</div>
+            <div class="pkg-sub">1–2 OT rooms · core live video + recording + basic access control</div>
+            <div class="pkg-price">₹48–55L <span class="pkg-price-note">turnkey (2 OT rooms)</span></div>
+            <div style="font-size:11px;color:var(--text-light);margin-top:4px">Software ₹18L &nbsp;+&nbsp; Hardware ₹30L (Good tier)</div>
+          </div>
+          <div class="pkg-body">
+            <div class="pkg-stat-row">
+              <div class="pkg-stat"><div class="pkg-stat-val">~80</div><div class="pkg-stat-lbl">Person-Days</div></div>
+              <div class="pkg-stat"><div class="pkg-stat-val">14 wk</div><div class="pkg-stat-lbl">Timeline</div></div>
+              <div class="pkg-stat"><div class="pkg-stat-val">4</div><div class="pkg-stat-lbl">Team</div></div>
+            </div>
+            <div class="pkg-cc">&#9889; Claude Code saves ~120 PD vs traditional dev (200 PD → 80 PD)</div>
+            <div style="font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.4px">Includes</div>
+            <ul class="pkg-feat-list">
+              <li>Live video feed (2 cameras per room)</li>
+              <li>Multi-room switching (1–2 OT rooms)</li>
+              <li>Video recording + basic archive</li>
+              <li>2-role RBAC (Admin / Doctor)</li>
+              <li>Snapshot capture</li>
+              <li>TLS 1.3 + basic security</li>
+              <li>Custom video player (keyboard shortcuts)</li>
+              <li class="no">AI Surgery Copilot</li>
+              <li class="no">Voice commands</li>
+              <li class="no">Live annotation overlay</li>
+              <li class="no">Remote / telemedicine view</li>
+              <li class="no">AES-256 encryption</li>
+              <li class="no">EMR / HIS integration</li>
+            </ul>
+            <div style="background:rgba(40,167,69,0.07);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text-light)">
+              <strong style="color:var(--success)">Best for:</strong> Single-speciality hospitals, nursing homes, day-care surgery centres needing a digital OT system for the first time.
+            </div>
+          </div>
+        </div>
+
+        <!-- PROFESSIONAL -->
+        <div class="pkg-card pro">
+          <div class="pkg-hdr">
+            <div class="pkg-tag">Package 2 · Medium Hospital</div>
+            <div class="pkg-name">Professional</div>
+            <div class="pkg-sub">3–5 OT rooms · full clinical features + AI + annotation + compliance</div>
+            <div class="pkg-price">₹1.3–1.6 Cr <span class="pkg-price-note">turnkey (4 OT rooms)</span></div>
+            <div style="font-size:11px;color:var(--text-light);margin-top:4px">Software ₹45L &nbsp;+&nbsp; Hardware ₹85L (Better tier)</div>
+          </div>
+          <div class="pkg-body">
+            <div class="pkg-stat-row">
+              <div class="pkg-stat"><div class="pkg-stat-val">~155</div><div class="pkg-stat-lbl">Person-Days</div></div>
+              <div class="pkg-stat"><div class="pkg-stat-val">24 wk</div><div class="pkg-stat-lbl">Timeline</div></div>
+              <div class="pkg-stat"><div class="pkg-stat-val">7</div><div class="pkg-stat-lbl">Team</div></div>
+            </div>
+            <div class="pkg-cc">&#9889; Claude Code saves ~225 PD vs traditional dev (380 PD → 155 PD)</div>
+            <div style="font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.4px">All Starter features, plus</div>
+            <ul class="pkg-feat-list">
+              <li>3-role RBAC (Admin / Doctor / OT Staff)</li>
+              <li>AES-256 encrypted recording</li>
+              <li>HIPAA compliance bar + audit log</li>
+              <li>AI Surgery Copilot (Claude API)</li>
+              <li>Voice command system</li>
+              <li>Live annotation overlay (pen/arrow/circle)</li>
+              <li>Archive search &amp; filter (doctor/date/procedure)</li>
+              <li>Remote / telemedicine viewer</li>
+              <li>All-monitors grid view</li>
+              <li>Up to 5 OT rooms</li>
+              <li class="no">OR analytics dashboard</li>
+              <li class="no">EMR / HIS integration</li>
+              <li class="no">Multi-site management</li>
+            </ul>
+            <div style="background:rgba(0,168,157,0.07);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text-light)">
+              <strong style="color:var(--accent-dark)">Best for:</strong> Multi-speciality hospitals (100–300 beds) running 3–5 simultaneous OT rooms with telemedicine and clinical AI requirements.
+            </div>
+          </div>
+        </div>
+
+        <!-- ENTERPRISE -->
+        <div class="pkg-card ent">
+          <div class="pkg-hdr">
+            <div class="pkg-tag">Package 3 · Large Hospital / Chain</div>
+            <div class="pkg-name">Enterprise</div>
+            <div class="pkg-sub">5+ OT rooms · multi-site · EMR integration · full compliance + SLA</div>
+            <div class="pkg-price">₹3.5–4.5 Cr <span class="pkg-price-note">turnkey (6 OT rooms)</span></div>
+            <div style="font-size:11px;color:var(--text-light);margin-top:4px">Software ₹1.2 Cr &nbsp;+&nbsp; Hardware ₹2.5 Cr (Best tier)</div>
+          </div>
+          <div class="pkg-body">
+            <div class="pkg-stat-row">
+              <div class="pkg-stat"><div class="pkg-stat-val">~220</div><div class="pkg-stat-lbl">Person-Days</div></div>
+              <div class="pkg-stat"><div class="pkg-stat-val">36 wk</div><div class="pkg-stat-lbl">Timeline</div></div>
+              <div class="pkg-stat"><div class="pkg-stat-val">10</div><div class="pkg-stat-lbl">Team</div></div>
+            </div>
+            <div class="pkg-cc">&#9889; Claude Code saves ~390 PD vs traditional dev (610 PD → 220 PD)</div>
+            <div style="font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.4px">All Professional features, plus</div>
+            <ul class="pkg-feat-list">
+              <li>OR analytics dashboard (utilisation, case times)</li>
+              <li>EMR / HIS integration (HL7 FHIR R4)</li>
+              <li>Multi-site management (hospital chain)</li>
+              <li>DPDP Act 2023 full compliance</li>
+              <li>Auto PHI / face blurring before storage</li>
+              <li>Custom integrations &amp; API access</li>
+              <li>99.9% SLA uptime guarantee</li>
+              <li>Dedicated support engineer</li>
+              <li>Kubernetes HA deployment</li>
+              <li>Unlimited OT rooms (site licence)</li>
+            </ul>
+            <div style="background:rgba(0,51,102,0.05);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text-light)">
+              <strong style="color:var(--primary)">Best for:</strong> Large tertiary hospitals (300+ beds), hospital chains with multiple campuses, and medical universities requiring full EMR integration and analytics.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Package comparison mini-table -->
+      <div style="margin-top:20px;overflow-x:auto">
+        <table class="data-table" style="font-size:12px">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="c" style="color:var(--success)">Starter</th>
+              <th class="c" style="color:var(--accent-dark)">Professional</th>
+              <th class="c" style="color:var(--primary)">Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Live video feed (multi-camera)</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td></tr>
+            <tr><td>Recording &amp; archive</td><td class="c">Basic</td><td class="c">AES-256</td><td class="c">AES-256 + PHI blur</td></tr>
+            <tr><td>RBAC</td><td class="c">2 roles</td><td class="c">3 roles</td><td class="c">3 roles + custom</td></tr>
+            <tr><td>AI Surgery Copilot</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td><td class="c">✓</td></tr>
+            <tr><td>Voice commands</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td><td class="c">✓</td></tr>
+            <tr><td>Live annotation overlay</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td><td class="c">✓</td></tr>
+            <tr><td>Remote / telemedicine view</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td><td class="c">✓</td></tr>
+            <tr><td>Archive search &amp; filter</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td><td class="c">✓</td></tr>
+            <tr><td>HIPAA compliance bar</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td><td class="c">✓</td></tr>
+            <tr><td>OR analytics dashboard</td><td class="c" style="color:var(--border)">—</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td></tr>
+            <tr><td>EMR / HIS integration</td><td class="c" style="color:var(--border)">—</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td></tr>
+            <tr><td>Multi-site / hospital chain</td><td class="c" style="color:var(--border)">—</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td></tr>
+            <tr><td>SLA (99.9% uptime)</td><td class="c" style="color:var(--border)">—</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td></tr>
+            <tr style="background:rgba(0,51,102,0.03)">
+              <td><strong>OT Rooms</strong></td><td class="c"><strong>1–2</strong></td><td class="c"><strong>3–5</strong></td><td class="c"><strong>5+ (unlimited)</strong></td>
+            </tr>
+            <tr style="background:rgba(0,51,102,0.03)">
+              <td><strong>Dev Effort (Claude Code)</strong></td><td class="c"><strong style="color:var(--success)">~80 PD</strong></td><td class="c"><strong style="color:var(--accent-dark)">~155 PD</strong></td><td class="c"><strong style="color:var(--primary)">~220 PD</strong></td>
+            </tr>
+            <tr style="background:rgba(0,51,102,0.03)">
+              <td><strong>Timeline</strong></td><td class="c"><strong>14 weeks</strong></td><td class="c"><strong>24 weeks</strong></td><td class="c"><strong>36 weeks</strong></td>
+            </tr>
+            <tr style="background:rgba(0,51,102,0.03)">
+              <td><strong>Indicative Turnkey Price</strong></td>
+              <td class="c"><strong style="color:var(--success)">₹48–55L</strong></td>
+              <td class="c"><strong style="color:var(--accent-dark)">₹1.3–1.6 Cr</strong></td>
+              <td class="c"><strong style="color:var(--primary)">₹3.5–4.5 Cr</strong></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -191,11 +416,11 @@
             <th>Type</th>
             <th class="c">Effort (PD)</th>
             <th class="c">Weeks</th>
-            <th class="c">Priority</th>
+            <th class="c">Package</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="sec-row"><td colspan="7">Phase 1 — Core Infrastructure</td></tr>
+          <tr class="sec-row"><td colspan="7">Phase 1 — Core Infrastructure (All Packages)</td></tr>
           <tr>
             <td>1</td>
             <td><strong>Architecture &amp; Project Setup</strong></td>
@@ -203,16 +428,16 @@
             <td><span class="badge b-do">DevOps</span></td>
             <td class="c"><strong>10</strong></td>
             <td class="c">2</td>
-            <td><span class="badge b-p1">Critical</span></td>
+            <td><span class="badge b-p3">All Pkgs</span></td>
           </tr>
           <tr>
             <td>2</td>
             <td><strong>Authentication &amp; RBAC</strong></td>
-            <td>JWT-based auth, 3-tier role system (Admin/Doctor/OT Staff), session management, audit log</td>
+            <td>JWT-based auth, 2-role (Starter) / 3-role (Pro+Ent) system, session management, audit log</td>
             <td><span class="badge b-be">Backend</span></td>
             <td class="c"><strong>25</strong></td>
             <td class="c">4</td>
-            <td><span class="badge b-p1">Critical</span></td>
+            <td><span class="badge b-p3">All Pkgs</span></td>
           </tr>
           <tr>
             <td>3</td>
@@ -221,7 +446,7 @@
             <td><span class="badge b-be">Backend</span></td>
             <td class="c"><strong>60</strong></td>
             <td class="c">8</td>
-            <td><span class="badge b-p1">Critical</span></td>
+            <td><span class="badge b-p3">All Pkgs</span></td>
           </tr>
           <tr>
             <td>4</td>
@@ -230,7 +455,7 @@
             <td><span class="badge b-be">Backend</span></td>
             <td class="c"><strong>30</strong></td>
             <td class="c">4</td>
-            <td><span class="badge b-p1">Critical</span></td>
+            <td><span class="badge b-p3">All Pkgs</span></td>
           </tr>
           <tr>
             <td>5</td>
@@ -239,18 +464,18 @@
             <td><span class="badge b-fe">Frontend</span></td>
             <td class="c"><strong>20</strong></td>
             <td class="c">3</td>
-            <td><span class="badge b-p1">Critical</span></td>
+            <td><span class="badge b-p3">All Pkgs</span></td>
           </tr>
 
           <tr class="sec-row"><td colspan="7">Phase 2 — Recording, Archive &amp; Compliance</td></tr>
           <tr>
             <td>6</td>
             <td><strong>Recording Engine</strong></td>
-            <td>Start/stop recording, AES-256 server-side encryption, metadata tagging (doctor, procedure, room, date)</td>
+            <td>Start/stop recording; basic storage (Starter) / AES-256 encryption (Pro+Ent); metadata tagging</td>
             <td><span class="badge b-be">Backend</span></td>
             <td class="c"><strong>40</strong></td>
             <td class="c">5</td>
-            <td><span class="badge b-p1">Critical</span></td>
+            <td><span class="badge b-p3">All Pkgs</span></td>
           </tr>
           <tr>
             <td>7</td>
@@ -259,16 +484,16 @@
             <td><span class="badge b-fe">Frontend</span> <span class="badge b-be">Backend</span></td>
             <td class="c"><strong>20</strong></td>
             <td class="c">3</td>
-            <td><span class="badge b-p1">Critical</span></td>
+            <td><span class="badge b-fe">Pro + Ent</span></td>
           </tr>
           <tr>
             <td>8</td>
             <td><strong>Security &amp; Compliance</strong></td>
-            <td>HIPAA audit log, DPDP Act 2023, TLS 1.3 enforcement, key management, compliance dashboard</td>
+            <td>HIPAA audit log, DPDP Act 2023, TLS 1.3 enforcement, AES-256 key management, compliance dashboard</td>
             <td><span class="badge b-sec">Security</span></td>
             <td class="c"><strong>35</strong></td>
             <td class="c">5</td>
-            <td><span class="badge b-p1">Critical</span></td>
+            <td><span class="badge b-fe">Pro + Ent</span></td>
           </tr>
           <tr>
             <td>9</td>
@@ -277,18 +502,18 @@
             <td><span class="badge b-fe">Frontend</span> <span class="badge b-be">Backend</span></td>
             <td class="c"><strong>20</strong></td>
             <td class="c">3</td>
-            <td><span class="badge b-p2">High</span></td>
+            <td><span class="badge b-p3">All Pkgs</span></td>
           </tr>
 
-          <tr class="sec-row"><td colspan="7">Phase 3 — Advanced Clinical Features</td></tr>
+          <tr class="sec-row"><td colspan="7">Phase 3 — Advanced Clinical Features (Pro + Enterprise)</td></tr>
           <tr>
             <td>10</td>
             <td><strong>AI Surgery Copilot</strong></td>
-            <td>LLM-backed chat panel, context-aware surgical Q&A, procedure checklists, drug references, real-time alerts</td>
+            <td>Claude API-backed chat, context-aware surgical Q&amp;A, procedure checklists, drug references</td>
             <td><span class="badge b-ai">AI/ML</span></td>
             <td class="c"><strong>45</strong></td>
             <td class="c">6</td>
-            <td><span class="badge b-p2">High</span></td>
+            <td><span class="badge b-fe">Pro + Ent</span></td>
           </tr>
           <tr>
             <td>11</td>
@@ -297,7 +522,7 @@
             <td><span class="badge b-fe">Frontend</span></td>
             <td class="c"><strong>20</strong></td>
             <td class="c">3</td>
-            <td><span class="badge b-p2">High</span></td>
+            <td><span class="badge b-fe">Pro + Ent</span></td>
           </tr>
           <tr>
             <td>12</td>
@@ -306,7 +531,7 @@
             <td><span class="badge b-fe">Frontend</span></td>
             <td class="c"><strong>30</strong></td>
             <td class="c">4</td>
-            <td><span class="badge b-p2">High</span></td>
+            <td><span class="badge b-fe">Pro + Ent</span></td>
           </tr>
           <tr>
             <td>13</td>
@@ -315,7 +540,7 @@
             <td><span class="badge b-be">Backend</span> <span class="badge b-fe">Frontend</span></td>
             <td class="c"><strong>45</strong></td>
             <td class="c">6</td>
-            <td><span class="badge b-p2">High</span></td>
+            <td><span class="badge b-fe">Pro + Ent</span></td>
           </tr>
           <tr>
             <td>14</td>
@@ -324,10 +549,10 @@
             <td><span class="badge b-fe">Frontend</span></td>
             <td class="c"><strong>10</strong></td>
             <td class="c">2</td>
-            <td><span class="badge b-p2">High</span></td>
+            <td><span class="badge b-p3">All Pkgs</span></td>
           </tr>
 
-          <tr class="sec-row"><td colspan="7">Phase 4 — Integration, Analytics &amp; Hardening</td></tr>
+          <tr class="sec-row"><td colspan="7">Phase 4 — Integration, Analytics &amp; Hardening (Enterprise only)</td></tr>
           <tr>
             <td>15</td>
             <td><strong>OR Analytics Dashboard</strong></td>
@@ -335,7 +560,7 @@
             <td><span class="badge b-fe">Frontend</span> <span class="badge b-be">Backend</span></td>
             <td class="c"><strong>30</strong></td>
             <td class="c">4</td>
-            <td><span class="badge b-p3">Medium</span></td>
+            <td><span class="badge b-be">Enterprise</span></td>
           </tr>
           <tr>
             <td>16</td>
@@ -344,16 +569,16 @@
             <td><span class="badge b-be">Backend</span></td>
             <td class="c"><strong>50</strong></td>
             <td class="c">6</td>
-            <td><span class="badge b-p3">Medium</span></td>
+            <td><span class="badge b-be">Enterprise</span></td>
           </tr>
           <tr>
             <td>17</td>
             <td><strong>Infrastructure &amp; DevOps</strong></td>
-            <td>Docker/Kubernetes deployment, on-prem + cloud hybrid, monitoring (Prometheus/Grafana), backup, DR</td>
+            <td>Docker/K8s deployment, on-prem + cloud hybrid, monitoring (Prometheus/Grafana), backup, DR</td>
             <td><span class="badge b-do">DevOps</span></td>
             <td class="c"><strong>40</strong></td>
             <td class="c">5</td>
-            <td><span class="badge b-p1">Critical</span></td>
+            <td><span class="badge b-p3">All Pkgs</span></td>
           </tr>
           <tr>
             <td>18</td>
@@ -362,15 +587,15 @@
             <td><span class="badge b-qa">QA</span></td>
             <td class="c"><strong>60</strong></td>
             <td class="c">8</td>
-            <td><span class="badge b-p1">Critical</span></td>
+            <td><span class="badge b-p3">All Pkgs</span></td>
           </tr>
         </tbody>
         <tfoot>
           <tr style="background:rgba(0,51,102,0.04)">
-            <td colspan="4" style="padding:12px 14px;font-weight:800;color:var(--primary);font-size:13px">TOTAL</td>
+            <td colspan="4" style="padding:12px 14px;font-weight:800;color:var(--primary);font-size:13px">TOTAL (full enterprise scope)</td>
             <td class="c" style="padding:12px 14px;font-weight:800;color:var(--primary);font-size:15px">610 PD</td>
             <td class="c" style="padding:12px 14px;font-weight:800;color:var(--primary)">~48 wk</td>
-            <td></td>
+            <td style="padding:12px 14px;font-size:11px;color:var(--text-light)">With Claude Code: ~220 PD</td>
           </tr>
         </tfoot>
       </table>
@@ -754,35 +979,98 @@
 
   <!-- ===== BUDGET SUMMARY ===== -->
   <div class="card">
-    <div class="card-header">&#128176; Indicative Budget Summary</div>
+    <div class="card-header">&#128176; Indicative Budget — 3 Packages (Claude Code pricing)</div>
     <div class="card-body" style="padding:0">
       <table class="data-table">
         <thead>
-          <tr><th>Category</th><th>Item</th><th class="c">Good Tier (₹)</th><th class="c">Better Tier (₹)</th><th class="c">Best Tier (₹)</th></tr>
+          <tr>
+            <th>Cost Component</th>
+            <th>Item</th>
+            <th class="c" style="color:var(--success)">Starter<br><span style="font-size:10px;font-weight:400">Small Hospital · 2 OT rooms</span></th>
+            <th class="c" style="color:var(--accent-dark)">Professional<br><span style="font-size:10px;font-weight:400">Medium Hospital · 4 OT rooms</span></th>
+            <th class="c" style="color:var(--primary)">Enterprise<br><span style="font-size:10px;font-weight:400">Large Hospital · 6 OT rooms</span></th>
+          </tr>
         </thead>
         <tbody>
-          <tr class="sec-row"><td colspan="5">Software Development</td></tr>
-          <tr><td>Development</td><td>610 person-days × blended day rate</td><td class="c">₹1.2 Cr</td><td class="c">₹1.8 Cr</td><td class="c">₹2.8 Cr</td></tr>
-          <tr><td>3rd Party Licences</td><td>Claude API, Whisper, monitoring tools (annual)</td><td class="c">₹4L / yr</td><td class="c">₹8L / yr</td><td class="c">₹15L / yr</td></tr>
-          <tr class="sec-row"><td colspan="5">Hardware (per OT room)</td></tr>
-          <tr><td>Compute &amp; Storage</td><td>Video server + app server + NAS</td><td class="c">₹6.8L</td><td class="c">₹11.8L</td><td class="c">₹38L</td></tr>
-          <tr><td>Cameras, Encoders &amp; Displays</td><td>Laparoscope camera + room camera + video encoders (×3) + surgical display</td><td class="c">₹6.7L</td><td class="c">₹12.2L</td><td class="c">₹30L</td></tr>
-          <tr><td>Networking &amp; Power</td><td>Switch + AP + UPS + workstation + tablet</td><td class="c">₹2.6L</td><td class="c">₹4.6L</td><td class="c">₹10.2L</td></tr>
+          <tr class="sec-row"><td colspan="5">Software Development (Claude Code accelerated)</td></tr>
+          <tr>
+            <td>Development Cost</td>
+            <td>Claude Code-assisted · ~80 / 155 / 220 PD × blended rate</td>
+            <td class="c"><strong>₹16L</strong><br><span style="font-size:10px;color:var(--text-light)">vs ₹40L traditional</span></td>
+            <td class="c"><strong>₹31L</strong><br><span style="font-size:10px;color:var(--text-light)">vs ₹76L traditional</span></td>
+            <td class="c"><strong>₹44L</strong><br><span style="font-size:10px;color:var(--text-light)">vs ₹1.22 Cr traditional</span></td>
+          </tr>
+          <tr>
+            <td>3rd Party Licences</td>
+            <td>Claude API, monitoring tools (annual)</td>
+            <td class="c">₹2L / yr</td>
+            <td class="c">₹5L / yr</td>
+            <td class="c">₹12L / yr</td>
+          </tr>
+          <tr class="sec-row"><td colspan="5">Hardware (Good tier → Better tier → Best tier)</td></tr>
+          <tr>
+            <td>Compute &amp; Storage</td>
+            <td>Video server + app server + NAS (per room × rooms)</td>
+            <td class="c">₹13.6L<br><span style="font-size:10px;color:var(--text-light)">Good × 2 rooms</span></td>
+            <td class="c">₹47.2L<br><span style="font-size:10px;color:var(--text-light)">Better × 4 rooms</span></td>
+            <td class="c">₹2.28 Cr<br><span style="font-size:10px;color:var(--text-light)">Best × 6 rooms</span></td>
+          </tr>
+          <tr>
+            <td>Cameras, Encoders &amp; Displays</td>
+            <td>Laparoscope + room cam + encoders (×3/room) + display</td>
+            <td class="c">₹13.4L<br><span style="font-size:10px;color:var(--text-light)">Good × 2 rooms</span></td>
+            <td class="c">₹48.8L<br><span style="font-size:10px;color:var(--text-light)">Better × 4 rooms</span></td>
+            <td class="c">₹1.8 Cr<br><span style="font-size:10px;color:var(--text-light)">Best × 6 rooms</span></td>
+          </tr>
+          <tr>
+            <td>Networking &amp; Power</td>
+            <td>Switch + AP + UPS + workstation + tablet</td>
+            <td class="c">₹5.2L</td>
+            <td class="c">₹9.2L</td>
+            <td class="c">₹20.4L</td>
+          </tr>
           <tr class="sec-row"><td colspan="5">Implementation</td></tr>
-          <tr><td>Installation &amp; Integration</td><td>On-site setup, commissioning, cabling (per OT room)</td><td class="c">₹1.5L</td><td class="c">₹2L</td><td class="c">₹3L</td></tr>
-          <tr><td>Training</td><td>Clinical staff training, admin training (2 days on-site)</td><td class="c">₹50K</td><td class="c">₹80K</td><td class="c">₹1.5L</td></tr>
-          <tr><td>Annual Maintenance</td><td>AMC — hardware + software support (10% of capex)</td><td class="c">~₹1.7L / yr</td><td class="c">~₹3L / yr</td><td class="c">~₹7.6L / yr</td></tr>
+          <tr>
+            <td>Installation &amp; Commissioning</td>
+            <td>On-site setup, cabling, integration per OT room</td>
+            <td class="c">₹3L</td>
+            <td class="c">₹8L</td>
+            <td class="c">₹18L</td>
+          </tr>
+          <tr>
+            <td>Training</td>
+            <td>Clinical staff + admin training (2 days on-site)</td>
+            <td class="c">₹50K</td>
+            <td class="c">₹80K</td>
+            <td class="c">₹2L</td>
+          </tr>
+          <tr>
+            <td>Annual Maintenance (AMC)</td>
+            <td>Hardware + software support (~10% of capex)</td>
+            <td class="c">~₹3.5L / yr</td>
+            <td class="c">~₹11.4L / yr</td>
+            <td class="c">~₹43L / yr</td>
+          </tr>
         </tbody>
         <tfoot>
-          <tr style="background:rgba(0,51,102,0.05)">
-            <td colspan="2" style="padding:12px 14px;font-weight:800;color:var(--primary);font-size:13px">TOTAL PROJECT COST (3 OT Rooms)</td>
-            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--success);font-size:13px">~₹2.1 Cr</td>
-            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--accent-dark);font-size:13px">~₹3.2 Cr</td>
-            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--primary);font-size:13px">~₹6.5 Cr</td>
+          <tr style="background:rgba(40,167,69,0.07);border-top:2px solid rgba(40,167,69,0.2)">
+            <td colspan="2" style="padding:14px;font-weight:800;color:var(--success);font-size:13px">STARTER — Turnkey (2 OT rooms)</td>
+            <td colspan="3" style="padding:14px;font-weight:800;color:var(--success);font-size:18px">₹48–55 Lakhs</td>
+          </tr>
+          <tr style="background:rgba(0,168,157,0.07);border-top:2px solid rgba(0,168,157,0.2)">
+            <td colspan="2" style="padding:14px;font-weight:800;color:var(--accent-dark);font-size:13px">PROFESSIONAL — Turnkey (4 OT rooms)</td>
+            <td colspan="3" style="padding:14px;font-weight:800;color:var(--accent-dark);font-size:18px">₹1.3–1.6 Crore</td>
+          </tr>
+          <tr style="background:rgba(0,51,102,0.06);border-top:2px solid rgba(0,51,102,0.15)">
+            <td colspan="2" style="padding:14px;font-weight:800;color:var(--primary);font-size:13px">ENTERPRISE — Turnkey (6 OT rooms)</td>
+            <td colspan="3" style="padding:14px;font-weight:800;color:var(--primary);font-size:18px">₹3.5–4.5 Crore</td>
           </tr>
         </tfoot>
       </table>
-      <div style="padding:12px 22px;font-size:11px;color:var(--text-light)">All costs are indicative and exclusive of GST. Development rates assume India-based team. Hardware costs are per OT room × 3 rooms. Budget to be refined after hardware vendor RFQ and team structure confirmation.</div>
+      <div style="padding:14px 22px;background:rgba(111,66,193,0.05);border-top:1px solid rgba(111,66,193,0.15);font-size:12px;color:#5b21b6;display:flex;align-items:center;gap:8px">
+        <span style="font-size:16px">&#9889;</span>
+        <span><strong>Claude Code saves 60–64% on development cost</strong> across all packages (80 PD vs 200 PD for Starter · 155 PD vs 380 PD for Professional · 220 PD vs 610 PD for Enterprise). Rates are India-based blended team at ₹20K/PD. Costs exclude GST and are indicative — refine after hardware RFQ.</span>
+      </div>
     </div>
   </div>
 
