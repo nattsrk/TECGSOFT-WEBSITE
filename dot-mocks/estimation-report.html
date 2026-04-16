@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual OT — Project Estimation Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #003366; --accent: #00a89d; --accent-dark: #007b74;
+    --bg: #f0f4f8; --card: #fff; --border: #dce4ed;
+    --text: #1a2a3a; --text-light: #5a6a7a;
+    --success: #28a745; --danger: #dc3545; --warning: #f0ad4e;
+    --radius: 12px;
+  }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, var(--primary) 0%, #001a33 60%, #00796b 100%); color: #fff; padding: 40px; }
+  .header-inner { max-width: 1060px; margin: 0 auto; }
+  .header h1 { font-size: 30px; font-weight: 800; margin-bottom: 6px; }
+  .header p { font-size: 14px; color: rgba(255,255,255,0.75); max-width: 600px; line-height: 1.7; margin-bottom: 20px; }
+  .header-meta { display: flex; gap: 16px; font-size: 12px; color: rgba(255,255,255,0.6); flex-wrap: wrap; }
+  .header-meta span { display: flex; align-items: center; gap: 5px; }
+  .dl-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; border: none; padding: 12px 28px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: transform 0.15s; }
+  .dl-btn:hover { transform: scale(1.03); }
+
+  /* Body */
+  .body { max-width: 1060px; margin: 32px auto; padding: 0 20px 60px; display: flex; flex-direction: column; gap: 28px; }
+
+  /* Card */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 2px 12px rgba(0,51,102,0.06); }
+  .card-header { background: var(--primary); color: #fff; padding: 14px 22px; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .card-body { padding: 24px; }
+
+  /* Summary KPIs */
+  .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .kpi { background: var(--bg); border-radius: 10px; padding: 18px 14px; text-align: center; border: 1px solid var(--border); }
+  .kpi-val { font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 4px; }
+  .kpi-val.accent { color: var(--accent-dark); }
+  .kpi-lbl { font-size: 11px; color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+
+  /* Tables */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { background: var(--bg); padding: 9px 14px; text-align: left; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--text-light); border-bottom: 2px solid var(--border); }
+  .data-table th.c { text-align: center; }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .data-table td.c { text-align: center; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover { background: rgba(0,51,102,0.02); }
+
+  /* Section header row inside table */
+  .sec-row td { background: rgba(0,51,102,0.04); font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--primary); letter-spacing: .5px; padding: 6px 14px; }
+
+  /* Badges */
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+  .b-p1 { background: rgba(220,53,69,0.1); color: var(--danger); }
+  .b-p2 { background: rgba(240,173,78,0.13); color: #9a6500; }
+  .b-p3 { background: rgba(40,167,69,0.1); color: var(--success); }
+  .b-fe { background: rgba(0,168,157,0.1); color: var(--accent-dark); }
+  .b-be { background: rgba(0,51,102,0.1); color: var(--primary); }
+  .b-ai { background: rgba(111,66,193,0.1); color: #5b21b6; }
+  .b-do { background: rgba(23,162,184,0.1); color: #0c6674; }
+  .b-qa { background: rgba(240,173,78,0.12); color: #9a6500; }
+  .b-sec { background: rgba(220,53,69,0.08); color: var(--danger); }
+
+  /* Tier cells */
+  .tier-good  { background: rgba(40,167,69,0.05); }
+  .tier-better { background: rgba(0,168,157,0.06); }
+  .tier-best  { background: rgba(0,51,102,0.05); }
+  .tier-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .4px; }
+  .tl-good  { color: var(--success); }
+  .tl-better { color: var(--accent-dark); }
+  .tl-best  { color: var(--primary); }
+
+  /* Timeline phases */
+  .timeline { display: flex; flex-direction: column; gap: 14px; }
+  .phase { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .phase-hdr { padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .phase-hdr h3 { font-size: 14px; font-weight: 700; margin: 0; }
+  .phase-hdr .dur { font-size: 12px; font-weight: 700; border-radius: 20px; padding: 3px 12px; white-space: nowrap; }
+  .phase-body { padding: 14px 18px; background: var(--card); display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; font-size: 12px; color: var(--text-light); }
+  .phase-body li { list-style: none; padding-left: 14px; position: relative; line-height: 1.7; }
+  .phase-body li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+  .ph-1 .phase-hdr { background: linear-gradient(90deg, rgba(220,53,69,0.12), rgba(220,53,69,0.04)); border-bottom: 1px solid rgba(220,53,69,0.15); }
+  .ph-1 .phase-hdr h3 { color: #c0392b; }
+  .ph-1 .dur { background: rgba(220,53,69,0.1); color: var(--danger); }
+
+  .ph-2 .phase-hdr { background: linear-gradient(90deg, rgba(0,168,157,0.12), rgba(0,168,157,0.04)); border-bottom: 1px solid rgba(0,168,157,0.15); }
+  .ph-2 .phase-hdr h3 { color: var(--accent-dark); }
+  .ph-2 .dur { background: rgba(0,168,157,0.1); color: var(--accent-dark); }
+
+  .ph-3 .phase-hdr { background: linear-gradient(90deg, rgba(0,51,102,0.1), rgba(0,51,102,0.03)); border-bottom: 1px solid rgba(0,51,102,0.12); }
+  .ph-3 .phase-hdr h3 { color: var(--primary); }
+  .ph-3 .dur { background: rgba(0,51,102,0.1); color: var(--primary); }
+
+  .ph-4 .phase-hdr { background: linear-gradient(90deg, rgba(40,167,69,0.1), rgba(40,167,69,0.03)); border-bottom: 1px solid rgba(40,167,69,0.15); }
+  .ph-4 .phase-hdr h3 { color: #1e7e34; }
+  .ph-4 .dur { background: rgba(40,167,69,0.1); color: var(--success); }
+
+  /* Team grid */
+  .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .team-card { border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
+  .team-icon { font-size: 24px; margin-bottom: 6px; }
+  .team-role { font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 3px; }
+  .team-count { font-size: 22px; font-weight: 800; color: var(--accent-dark); }
+  .team-note { font-size: 10px; color: var(--text-light); margin-top: 3px; line-height: 1.4; }
+
+  /* Software stack */
+  .stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .stack-card { border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .stack-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--text-light); margin-bottom: 10px; }
+  .stack-item { font-size: 12px; color: var(--text); padding: 4px 0; border-bottom: 1px dashed var(--border); line-height: 1.5; }
+  .stack-item:last-child { border-bottom: none; }
+  .stack-item strong { color: var(--primary); }
+
+  /* Assumptions */
+  .assump-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .assump-list li { padding: 10px 14px 10px 40px; background: var(--bg); border-radius: 8px; font-size: 13px; color: var(--text-light); position: relative; line-height: 1.6; }
+  .assump-list li::before { content: attr(data-icon); position: absolute; left: 12px; top: 10px; font-size: 15px; }
+
+  /* Risk table */
+  .risk-high { color: var(--danger); font-weight: 700; }
+  .risk-med  { color: #9a6500; font-weight: 700; }
+  .risk-low  { color: var(--success); font-weight: 700; }
+
+  /* Gantt bar */
+  .gantt-bar { height: 14px; border-radius: 7px; display: inline-block; vertical-align: middle; }
+
+  @media (max-width: 700px) {
+    .kpi-grid { grid-template-columns: repeat(3,1fr); }
+    .team-grid { grid-template-columns: repeat(2,1fr); }
+    .stack-grid { grid-template-columns: 1fr; }
+    .phase-body { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="header-inner">
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase">Central Hospital · Confidential</div>
+    <h1>&#128200; Virtual OT — Project Estimation Report</h1>
+    <p>Full effort, timeline, team, technology stack, and hardware procurement guide for production deployment of the Digital Operation Theatre platform.</p>
+    <div class="header-meta">
+      <span>&#128197; April 2026</span>
+      <span>&#128196; v1.0 Estimation</span>
+      <span>&#127970; Central Hospital, India</span>
+      <span>&#128274; Confidential</span>
+    </div>
+    <button class="dl-btn" onclick="generatePDF()">&#11015; Download PDF Report</button>
+  </div>
+</div>
+
+<div class="body">
+
+  <!-- ===== EXECUTIVE SUMMARY ===== -->
+  <div class="card">
+    <div class="card-header">&#128203; Executive Summary</div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:20px">
+      <p style="font-size:13px;color:var(--text-light);line-height:1.8">
+        Virtual OT is a web-based Digital Operation Theatre platform for Central Hospital. It delivers live multi-camera surgical feeds, AES-256 encrypted recording, AI surgery assistance, voice control, live annotation for remote consultation, role-based access control, and HIPAA/DPDP Act 2023 compliance — all in a single browser-based application requiring no client installation.
+      </p>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">~610</div><div class="kpi-lbl">Person-Days</div></div>
+        <div class="kpi"><div class="kpi-val accent">12</div><div class="kpi-lbl">Months Total</div></div>
+        <div class="kpi"><div class="kpi-val">18</div><div class="kpi-lbl">Modules</div></div>
+        <div class="kpi"><div class="kpi-val">10</div><div class="kpi-lbl">Team Size</div></div>
+        <div class="kpi"><div class="kpi-val">4</div><div class="kpi-lbl">Phases</div></div>
+      </div>
+      <div style="background:rgba(0,168,157,0.07);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:14px 18px;font-size:13px;color:var(--text-light);line-height:1.7">
+        <strong style="color:var(--accent-dark)">Scope:</strong> This estimate covers production development only. The existing HTML mock (v1.1) serves as a fully validated UX prototype, eliminating discovery and UI design iterations. Net saving vs. a greenfield project: <strong style="color:var(--text)">~80 person-days</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FEATURE MODULES & EFFORT ===== -->
+  <div class="card">
+    <div class="card-header">&#9881; Feature Modules &amp; Effort Estimate</div>
+    <div class="card-body" style="padding:0">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Module</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th class="c">Effort (PD)</th>
+            <th class="c">Weeks</th>
+            <th class="c">Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="sec-row"><td colspan="7">Phase 1 — Core Infrastructure</td></tr>
+          <tr>
+            <td>1</td>
+            <td><strong>Architecture &amp; Project Setup</strong></td>
+            <td>Tech stack finalisation, repo setup, CI/CD pipeline, environment provisioning</td>
+            <td><span class="badge b-do">DevOps</span></td>
+            <td class="c"><strong>10</strong></td>
+            <td class="c">2</td>
+            <td><span class="badge b-p1">Critical</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><strong>Authentication &amp; RBAC</strong></td>
+            <td>JWT-based auth, 3-tier role system (Admin/Doctor/OT Staff), session management, audit log</td>
+            <td><span class="badge b-be">Backend</span></td>
+            <td class="c"><strong>25</strong></td>
+            <td class="c">4</td>
+            <td><span class="badge b-p1">Critical</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><strong>Live Video Streaming</strong></td>
+            <td>WebRTC / RTSP ingest, adaptive bitrate, low-latency HLS, multi-camera source switching</td>
+            <td><span class="badge b-be">Backend</span></td>
+            <td class="c"><strong>60</strong></td>
+            <td class="c">8</td>
+            <td><span class="badge b-p1">Critical</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>Multi-Room Management</strong></td>
+            <td>Concurrent OT room feeds, room context switching, per-room state isolation</td>
+            <td><span class="badge b-be">Backend</span></td>
+            <td class="c"><strong>30</strong></td>
+            <td class="c">4</td>
+            <td><span class="badge b-p1">Critical</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>Video Player UI</strong></td>
+            <td>Custom player controls, play/pause overlay, fullscreen, PiP, keyboard shortcuts, responsive layout</td>
+            <td><span class="badge b-fe">Frontend</span></td>
+            <td class="c"><strong>20</strong></td>
+            <td class="c">3</td>
+            <td><span class="badge b-p1">Critical</span></td>
+          </tr>
+
+          <tr class="sec-row"><td colspan="7">Phase 2 — Recording, Archive &amp; Compliance</td></tr>
+          <tr>
+            <td>6</td>
+            <td><strong>Recording Engine</strong></td>
+            <td>Start/stop recording, AES-256 server-side encryption, metadata tagging (doctor, procedure, room, date)</td>
+            <td><span class="badge b-be">Backend</span></td>
+            <td class="c"><strong>40</strong></td>
+            <td class="c">5</td>
+            <td><span class="badge b-p1">Critical</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><strong>Archive &amp; Search</strong></td>
+            <td>Paginated archive listing, real-time filter by doctor/procedure/date range, download with access control</td>
+            <td><span class="badge b-fe">Frontend</span> <span class="badge b-be">Backend</span></td>
+            <td class="c"><strong>20</strong></td>
+            <td class="c">3</td>
+            <td><span class="badge b-p1">Critical</span></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td><strong>Security &amp; Compliance</strong></td>
+            <td>HIPAA audit log, DPDP Act 2023, TLS 1.3 enforcement, key management, compliance dashboard</td>
+            <td><span class="badge b-sec">Security</span></td>
+            <td class="c"><strong>35</strong></td>
+            <td class="c">5</td>
+            <td><span class="badge b-p1">Critical</span></td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td><strong>User Management</strong></td>
+            <td>Admin CRUD for users, role assignment, deactivation, password reset, activity log</td>
+            <td><span class="badge b-fe">Frontend</span> <span class="badge b-be">Backend</span></td>
+            <td class="c"><strong>20</strong></td>
+            <td class="c">3</td>
+            <td><span class="badge b-p2">High</span></td>
+          </tr>
+
+          <tr class="sec-row"><td colspan="7">Phase 3 — Advanced Clinical Features</td></tr>
+          <tr>
+            <td>10</td>
+            <td><strong>AI Surgery Copilot</strong></td>
+            <td>LLM-backed chat panel, context-aware surgical Q&A, procedure checklists, drug references, real-time alerts</td>
+            <td><span class="badge b-ai">AI/ML</span></td>
+            <td class="c"><strong>45</strong></td>
+            <td class="c">6</td>
+            <td><span class="badge b-p2">High</span></td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td><strong>Voice Command System</strong></td>
+            <td>Browser Speech API / Whisper integration, command vocabulary, feedback toasts, noise tolerance</td>
+            <td><span class="badge b-fe">Frontend</span></td>
+            <td class="c"><strong>20</strong></td>
+            <td class="c">3</td>
+            <td><span class="badge b-p2">High</span></td>
+          </tr>
+          <tr>
+            <td>12</td>
+            <td><strong>Live Annotation Overlay</strong></td>
+            <td>Canvas-based pen/arrow/circle tools, colour picker, save frame as snapshot, real-time broadcast to remote</td>
+            <td><span class="badge b-fe">Frontend</span></td>
+            <td class="c"><strong>30</strong></td>
+            <td class="c">4</td>
+            <td><span class="badge b-p2">High</span></td>
+          </tr>
+          <tr>
+            <td>13</td>
+            <td><strong>Remote &amp; Telemedicine View</strong></td>
+            <td>Secure WebRTC viewer link, annotation stream sync, multi-monitor grid (all-OT view), remote access RBAC</td>
+            <td><span class="badge b-be">Backend</span> <span class="badge b-fe">Frontend</span></td>
+            <td class="c"><strong>45</strong></td>
+            <td class="c">6</td>
+            <td><span class="badge b-p2">High</span></td>
+          </tr>
+          <tr>
+            <td>14</td>
+            <td><strong>Snapshot Capture</strong></td>
+            <td>Frame grab from live / annotated canvas, DICOM-compatible export, secure download</td>
+            <td><span class="badge b-fe">Frontend</span></td>
+            <td class="c"><strong>10</strong></td>
+            <td class="c">2</td>
+            <td><span class="badge b-p2">High</span></td>
+          </tr>
+
+          <tr class="sec-row"><td colspan="7">Phase 4 — Integration, Analytics &amp; Hardening</td></tr>
+          <tr>
+            <td>15</td>
+            <td><strong>OR Analytics Dashboard</strong></td>
+            <td>Case duration, room utilisation, surgeon frequency, procedure trends, exportable reports</td>
+            <td><span class="badge b-fe">Frontend</span> <span class="badge b-be">Backend</span></td>
+            <td class="c"><strong>30</strong></td>
+            <td class="c">4</td>
+            <td><span class="badge b-p3">Medium</span></td>
+          </tr>
+          <tr>
+            <td>16</td>
+            <td><strong>EMR / HIS Integration</strong></td>
+            <td>HL7 FHIR R4 API connectors, patient context pull, auto-tag recordings to patient record</td>
+            <td><span class="badge b-be">Backend</span></td>
+            <td class="c"><strong>50</strong></td>
+            <td class="c">6</td>
+            <td><span class="badge b-p3">Medium</span></td>
+          </tr>
+          <tr>
+            <td>17</td>
+            <td><strong>Infrastructure &amp; DevOps</strong></td>
+            <td>Docker/Kubernetes deployment, on-prem + cloud hybrid, monitoring (Prometheus/Grafana), backup, DR</td>
+            <td><span class="badge b-do">DevOps</span></td>
+            <td class="c"><strong>40</strong></td>
+            <td class="c">5</td>
+            <td><span class="badge b-p1">Critical</span></td>
+          </tr>
+          <tr>
+            <td>18</td>
+            <td><strong>QA, Testing &amp; Documentation</strong></td>
+            <td>Unit tests, integration tests, security pen-test, UAT with clinical staff, user guide, admin manual</td>
+            <td><span class="badge b-qa">QA</span></td>
+            <td class="c"><strong>60</strong></td>
+            <td class="c">8</td>
+            <td><span class="badge b-p1">Critical</span></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr style="background:rgba(0,51,102,0.04)">
+            <td colspan="4" style="padding:12px 14px;font-weight:800;color:var(--primary);font-size:13px">TOTAL</td>
+            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--primary);font-size:15px">610 PD</td>
+            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--primary)">~48 wk</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+      <div style="padding:14px 22px;font-size:11px;color:var(--text-light)">PD = Person-Day (1 PD = 8 hours). Estimates include development, code review, and unit testing. System testing and UAT are captured separately in Module 18.</div>
+    </div>
+  </div>
+
+  <!-- ===== TEAM COMPOSITION ===== -->
+  <div class="card">
+    <div class="card-header">&#128101; Recommended Team Composition</div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:20px">
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-icon">&#128203;</div>
+          <div class="team-role">Project Manager</div>
+          <div class="team-count">1</div>
+          <div class="team-note">Delivery, stakeholder communication, sprint planning</div>
+        </div>
+        <div class="team-card">
+          <div class="team-icon">&#9881;</div>
+          <div class="team-role">Backend Engineers</div>
+          <div class="team-count">3</div>
+          <div class="team-note">Video streaming, APIs, auth, recording, EMR integration</div>
+        </div>
+        <div class="team-card">
+          <div class="team-icon">&#128187;</div>
+          <div class="team-role">Frontend Engineers</div>
+          <div class="team-count">2</div>
+          <div class="team-note">UI, video player, annotation canvas, voice, RBAC UI</div>
+        </div>
+        <div class="team-card">
+          <div class="team-icon">&#129504;</div>
+          <div class="team-role">AI/ML Engineer</div>
+          <div class="team-count">1</div>
+          <div class="team-note">LLM integration, prompt engineering, speech recognition</div>
+        </div>
+        <div class="team-card">
+          <div class="team-icon">&#128290;</div>
+          <div class="team-role">DevOps Engineer</div>
+          <div class="team-count">1</div>
+          <div class="team-note">Infrastructure, CI/CD, Docker/K8s, monitoring, backup</div>
+        </div>
+        <div class="team-card">
+          <div class="team-icon">&#128274;</div>
+          <div class="team-role">Security Engineer</div>
+          <div class="team-count">1</div>
+          <div class="team-note">AES-256, TLS, HIPAA/DPDP compliance, pen-testing</div>
+        </div>
+        <div class="team-card">
+          <div class="team-icon">&#9989;</div>
+          <div class="team-role">QA Engineers</div>
+          <div class="team-count">2</div>
+          <div class="team-note">Test automation, UAT coordination, regression, clinical scenarios</div>
+        </div>
+        <div class="team-card">
+          <div class="team-icon">&#128218;</div>
+          <div class="team-role">Business Analyst</div>
+          <div class="team-count">1</div>
+          <div class="team-note">Requirements, user guide, training material, change management</div>
+        </div>
+      </div>
+      <div style="background:var(--bg);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--text-light);line-height:1.7">
+        <strong style="color:var(--text)">Total team: 12 people</strong> &nbsp;|&nbsp; 10 full-time + BA &amp; PM. Backend team leads video streaming and security. Frontend team leads annotation and RBAC UI. All roles are parallel from Week 3 onwards.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PROJECT TIMELINE ===== -->
+  <div class="card">
+    <div class="card-header">&#128197; Project Timeline — 4 Phases</div>
+    <div class="card-body">
+      <div class="timeline">
+
+        <div class="phase ph-1">
+          <div class="phase-hdr">
+            <div>
+              <div style="font-size:10px;text-transform:uppercase;color:var(--danger);font-weight:800;letter-spacing:.5px;margin-bottom:3px">Phase 1 · Weeks 1–20</div>
+              <h3>Core Infrastructure &amp; MVP</h3>
+            </div>
+            <span class="dur">20 Weeks &nbsp;·&nbsp; ~185 PD</span>
+          </div>
+          <ul class="phase-body">
+            <li>Architecture design &amp; stack setup</li>
+            <li>CI/CD pipeline &amp; environments</li>
+            <li>JWT auth + 3-tier RBAC</li>
+            <li>WebRTC / RTSP live streaming engine</li>
+            <li>Multi-camera &amp; multi-room support</li>
+            <li>Custom video player UI</li>
+            <li>AES-256 recording engine</li>
+            <li>Archive search &amp; filter</li>
+            <li>User management module</li>
+            <li>HIPAA / DPDP compliance bar</li>
+          </ul>
+        </div>
+
+        <div class="phase ph-2">
+          <div class="phase-hdr">
+            <div>
+              <div style="font-size:10px;text-transform:uppercase;color:var(--accent-dark);font-weight:800;letter-spacing:.5px;margin-bottom:3px">Phase 2 · Weeks 21–36</div>
+              <h3>Advanced Clinical Features</h3>
+            </div>
+            <span class="dur">16 Weeks &nbsp;·&nbsp; ~150 PD</span>
+          </div>
+          <ul class="phase-body">
+            <li>AI Surgery Copilot (LLM integration)</li>
+            <li>Context-aware procedure Q&amp;A</li>
+            <li>Voice command system</li>
+            <li>Speech recognition &amp; noise tolerance</li>
+            <li>Canvas annotation overlay (pen/arrow/circle)</li>
+            <li>Remote annotation broadcast</li>
+            <li>Telemedicine / remote viewer</li>
+            <li>Snapshot &amp; DICOM export</li>
+            <li>All-monitors grid view</li>
+            <li>Multi-monitor display support</li>
+          </ul>
+        </div>
+
+        <div class="phase ph-3">
+          <div class="phase-hdr">
+            <div>
+              <div style="font-size:10px;text-transform:uppercase;color:var(--primary);font-weight:800;letter-spacing:.5px;margin-bottom:3px">Phase 3 · Weeks 37–44</div>
+              <h3>Integrations &amp; Analytics</h3>
+            </div>
+            <span class="dur">8 Weeks &nbsp;·&nbsp; ~80 PD</span>
+          </div>
+          <ul class="phase-body">
+            <li>OR Analytics dashboard (utilisation, case times)</li>
+            <li>Surgeon &amp; procedure trend reports</li>
+            <li>HL7 FHIR R4 EMR/HIS connectors</li>
+            <li>Patient context auto-tagging</li>
+            <li>Exportable PDF reports</li>
+            <li>Notification &amp; alert engine</li>
+            <li>Infrastructure hardening (K8s, DR, backup)</li>
+            <li>Monitoring &amp; alerting (Prometheus + Grafana)</li>
+          </ul>
+        </div>
+
+        <div class="phase ph-4">
+          <div class="phase-hdr">
+            <div>
+              <div style="font-size:10px;text-transform:uppercase;color:#1e7e34;font-weight:800;letter-spacing:.5px;margin-bottom:3px">Phase 4 · Weeks 45–48</div>
+              <h3>QA, UAT &amp; Go-Live</h3>
+            </div>
+            <span class="dur">4 Weeks &nbsp;·&nbsp; ~60 PD</span>
+          </div>
+          <ul class="phase-body">
+            <li>Full regression test suite</li>
+            <li>Security penetration testing</li>
+            <li>Clinical UAT with surgeons &amp; OT staff</li>
+            <li>Performance &amp; load testing</li>
+            <li>User training &amp; in-app guide review</li>
+            <li>Admin manual &amp; runbook finalisation</li>
+            <li>Soft launch (OT-1 pilot)</li>
+            <li>Full rollout &amp; hypercare support</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Summary bar -->
+      <div style="margin-top:20px;background:var(--bg);border-radius:10px;padding:16px 18px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;font-size:13px">
+        <div><span style="display:inline-block;width:14px;height:14px;background:rgba(220,53,69,0.4);border-radius:3px;margin-right:6px;vertical-align:middle"></span>Phase 1 · Wk 1–20</div>
+        <div><span style="display:inline-block;width:14px;height:14px;background:rgba(0,168,157,0.5);border-radius:3px;margin-right:6px;vertical-align:middle"></span>Phase 2 · Wk 21–36</div>
+        <div><span style="display:inline-block;width:14px;height:14px;background:rgba(0,51,102,0.35);border-radius:3px;margin-right:6px;vertical-align:middle"></span>Phase 3 · Wk 37–44</div>
+        <div><span style="display:inline-block;width:14px;height:14px;background:rgba(40,167,69,0.45);border-radius:3px;margin-right:6px;vertical-align:middle"></span>Phase 4 · Wk 45–48</div>
+        <div style="margin-left:auto;font-weight:700;color:var(--primary)">Total: 48 weeks (~12 months)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SOFTWARE REQUIREMENTS ===== -->
+  <div class="card">
+    <div class="card-header">&#128187; Software &amp; Technology Stack Requirements</div>
+    <div class="card-body">
+      <div class="stack-grid">
+        <div class="stack-card">
+          <div class="stack-title">&#127760; Frontend</div>
+          <div class="stack-item"><strong>React 18</strong> — UI framework (or Vue 3)</div>
+          <div class="stack-item"><strong>WebRTC API</strong> — live video streaming</div>
+          <div class="stack-item"><strong>Canvas API</strong> — annotation overlay</div>
+          <div class="stack-item"><strong>Web Speech API / Whisper.js</strong> — voice commands</div>
+          <div class="stack-item"><strong>Chart.js / Recharts</strong> — analytics charts</div>
+          <div class="stack-item"><strong>TailwindCSS</strong> — styling</div>
+          <div class="stack-item"><strong>Vite</strong> — build tooling</div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-title">&#9881; Backend</div>
+          <div class="stack-item"><strong>Node.js 20 / Python 3.11</strong> — API server</div>
+          <div class="stack-item"><strong>MediaMTX / Kurento</strong> — WebRTC media server</div>
+          <div class="stack-item"><strong>FFmpeg</strong> — video transcode &amp; recording</div>
+          <div class="stack-item"><strong>Redis</strong> — session, pub/sub, room state</div>
+          <div class="stack-item"><strong>PostgreSQL 16</strong> — relational data store</div>
+          <div class="stack-item"><strong>MinIO / S3</strong> — encrypted video storage</div>
+          <div class="stack-item"><strong>HL7 FHIR R4</strong> — EMR/HIS integration</div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-title">&#129504; AI &amp; Voice</div>
+          <div class="stack-item"><strong>Claude API (Anthropic)</strong> — AI surgery copilot</div>
+          <div class="stack-item"><strong>Whisper (OpenAI)</strong> — voice recognition</div>
+          <div class="stack-item"><strong>LangChain</strong> — prompt orchestration</div>
+          <div class="stack-item"><strong>Vector DB (Qdrant)</strong> — procedure knowledge base</div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-title">&#128274; Security</div>
+          <div class="stack-item"><strong>AES-256-GCM</strong> — video encryption at rest</div>
+          <div class="stack-item"><strong>TLS 1.3</strong> — transport encryption</div>
+          <div class="stack-item"><strong>JWT + Refresh Tokens</strong> — auth</div>
+          <div class="stack-item"><strong>OWASP ZAP</strong> — penetration testing</div>
+          <div class="stack-item"><strong>HashiCorp Vault</strong> — key management</div>
+          <div class="stack-item"><strong>Syslog / Graylog</strong> — audit logging</div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-title">&#128290; DevOps &amp; Infra</div>
+          <div class="stack-item"><strong>Docker + Kubernetes</strong> — containerisation</div>
+          <div class="stack-item"><strong>GitHub Actions</strong> — CI/CD pipeline</div>
+          <div class="stack-item"><strong>Nginx</strong> — reverse proxy / load balancer</div>
+          <div class="stack-item"><strong>Prometheus + Grafana</strong> — monitoring</div>
+          <div class="stack-item"><strong>Velero</strong> — Kubernetes backup</div>
+          <div class="stack-item"><strong>Ubuntu Server 22.04 LTS</strong> — OS</div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-title">&#127775; Dev Tools &amp; Standards</div>
+          <div class="stack-item"><strong>GitHub</strong> — source control</div>
+          <div class="stack-item"><strong>Jest / Vitest</strong> — unit testing</div>
+          <div class="stack-item"><strong>Playwright</strong> — E2E testing</div>
+          <div class="stack-item"><strong>Swagger / OpenAPI 3</strong> — API documentation</div>
+          <div class="stack-item"><strong>DICOM 3.0</strong> — medical imaging standard</div>
+          <div class="stack-item"><strong>HL7 FHIR R4</strong> — clinical data standard</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HARDWARE REQUIREMENTS — SPECS ===== -->
+  <div class="card">
+    <div class="card-header">&#128421; Hardware Requirements — Specifications</div>
+    <div class="card-body" style="padding:0">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:18%">Component</th>
+            <th style="width:22%">Minimum Specification</th>
+            <th class="tier-good" style="width:20%;text-align:center"><span class="tier-label tl-good">&#9632; Good</span></th>
+            <th class="tier-better" style="width:20%;text-align:center"><span class="tier-label tl-better">&#9632; Better</span></th>
+            <th class="tier-best" style="width:20%;text-align:center"><span class="tier-label tl-best">&#9632; Best</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="sec-row"><td colspan="5">Server / Compute</td></tr>
+          <tr>
+            <td><strong>OT Video Server</strong><br><span style="font-size:11px;color:var(--text-light)">Media processing &amp; streaming</span></td>
+            <td style="font-size:12px">CPU: 8-core, RAM: 32 GB, SSD: 1 TB, 10 GbE NIC</td>
+            <td class="tier-good" style="font-size:12px"><strong>Dell PowerEdge R350</strong><br><span style="color:var(--text-light)">Xeon E-2300, 32 GB ECC, 1 TB SSD</span><br><span style="font-size:10px;color:var(--success)">~₹2.8L</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>Dell PowerEdge R550</strong><br><span style="color:var(--text-light)">Xeon Silver 4314, 64 GB ECC, 2×1 TB NVMe</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹5.5L</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>HP ProLiant DL380 Gen10 Plus</strong><br><span style="color:var(--text-light)">Xeon Gold 6330, 128 GB ECC, 4×960 GB NVMe</span><br><span style="font-size:10px;color:var(--primary)">~₹12L</span></td>
+          </tr>
+          <tr>
+            <td><strong>Application Server</strong><br><span style="font-size:11px;color:var(--text-light)">API, auth, AI services</span></td>
+            <td style="font-size:12px">CPU: 4-core, RAM: 16 GB, SSD: 500 GB</td>
+            <td class="tier-good" style="font-size:12px"><strong>HP ProLiant DL20 Gen10</strong><br><span style="color:var(--text-light)">Xeon E-2300, 16 GB ECC, 480 GB SSD</span><br><span style="font-size:10px;color:var(--success)">~₹1.8L</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>Dell PowerEdge R350</strong><br><span style="color:var(--text-light)">Xeon E-2300, 32 GB ECC, 2×480 GB SSD</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹2.8L</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>Dell PowerEdge R450</strong><br><span style="color:var(--text-light)">Xeon Silver 4309Y, 64 GB ECC, 2×960 GB NVMe</span><br><span style="font-size:10px;color:var(--primary)">~₹6L</span></td>
+          </tr>
+
+          <tr class="sec-row"><td colspan="5">Storage</td></tr>
+          <tr>
+            <td><strong>NAS / Recording Storage</strong><br><span style="font-size:11px;color:var(--text-light)">AES-256 encrypted video archive</span></td>
+            <td style="font-size:12px">RAID-6, 40 TB raw, 10 GbE, hot-swap drives</td>
+            <td class="tier-good" style="font-size:12px"><strong>Synology DS1823xs+</strong><br><span style="color:var(--text-light)">8-bay NAS, 10 GbE, 48 TB raw with Seagate Exos</span><br><span style="font-size:10px;color:var(--success)">~₹2.2L</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>QNAP TS-873A</strong><br><span style="color:var(--text-light)">8-bay, 10 GbE ×2, 80 TB raw, SSD cache</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹3.5L</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>NetApp FAS2750 / Pure Storage FlashArray//C</strong><br><span style="color:var(--text-light)">Enterprise all-flash, inline encryption, HA</span><br><span style="font-size:10px;color:var(--primary)">~₹20L+</span></td>
+          </tr>
+
+          <tr class="sec-row"><td colspan="5">Networking</td></tr>
+          <tr>
+            <td><strong>Core Network Switch</strong><br><span style="font-size:11px;color:var(--text-light)">OT LAN — low latency, VLAN</span></td>
+            <td style="font-size:12px">Managed L2/L3, 10 GbE uplinks, VLAN, QoS, PoE+</td>
+            <td class="tier-good" style="font-size:12px"><strong>TP-Link TL-SG3452XP</strong><br><span style="color:var(--text-light)">48-port PoE+, 4× 10G SFP+, L2+ managed</span><br><span style="font-size:10px;color:var(--success)">~₹55K</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>Cisco SG350-28P</strong><br><span style="color:var(--text-light)">28-port PoE+, 2× 10G combo, VLAN, QoS</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹90K</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>Cisco Catalyst 9300-48P</strong><br><span style="color:var(--text-light)">48-port PoE+, modular 10G/40G uplinks, SD-Access</span><br><span style="font-size:10px;color:var(--primary)">~₹3.5L</span></td>
+          </tr>
+          <tr>
+            <td><strong>Wireless Access Point</strong><br><span style="font-size:11px;color:var(--text-light)">Tablet &amp; mobile access in OT</span></td>
+            <td style="font-size:12px">Wi-Fi 6, WPA3, PoE, medical-grade shielded</td>
+            <td class="tier-good" style="font-size:12px"><strong>TP-Link EAP670</strong><br><span style="color:var(--text-light)">Wi-Fi 6, 2.4+5 GHz, PoE, ceiling mount</span><br><span style="font-size:10px;color:var(--success)">~₹8K</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>Ubiquiti UniFi U6 Pro</strong><br><span style="color:var(--text-light)">Wi-Fi 6, 4×4 MIMO, 300+ clients, PoE+</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹18K</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>Cisco Catalyst CW9166I</strong><br><span style="color:var(--text-light)">Wi-Fi 6E, tri-band, IoT &amp; medical VLAN isolation</span><br><span style="font-size:10px;color:var(--primary)">~₹55K</span></td>
+          </tr>
+
+          <tr class="sec-row"><td colspan="5">Display &amp; Control</td></tr>
+          <tr>
+            <td><strong>Surgical Display Monitor</strong><br><span style="font-size:11px;color:var(--text-light)">Primary OT video display</span></td>
+            <td style="font-size:12px">27"+, 4K UHD, IPS, ≥400 nit, HDMI 2.0</td>
+            <td class="tier-good" style="font-size:12px"><strong>LG 27UK650-W</strong><br><span style="color:var(--text-light)">27" 4K IPS, HDR400, USB-C, HDMI ×2</span><br><span style="font-size:10px;color:var(--success)">~₹35K</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>Dell UltraSharp U2723QE</strong><br><span style="color:var(--text-light)">27" 4K IPS Black, USB-C 90W, KVM, 2000:1</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹65K</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>NEC MultiSync MD211C2</strong><br><span style="color:var(--text-light)">21.3" medical-grade, DICOM preset, IEC 60601-1</span><br><span style="font-size:10px;color:var(--primary)">~₹3.8L</span></td>
+          </tr>
+          <tr>
+            <td><strong>Control Workstation</strong><br><span style="font-size:11px;color:var(--text-light)">OT desk / scrub nurse station</span></td>
+            <td style="font-size:12px">CPU: i7/Ryzen 7, RAM: 16 GB, GPU: discrete, SSD: 512 GB</td>
+            <td class="tier-good" style="font-size:12px"><strong>HP EliteDesk 800 G9</strong><br><span style="color:var(--text-light)">Core i7-12700, 16 GB DDR5, 512 GB NVMe, Intel Arc</span><br><span style="font-size:10px;color:var(--success)">~₹75K</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>Dell Precision 3660 Tower</strong><br><span style="color:var(--text-light)">Core i9-12900, 32 GB ECC, 1 TB NVMe, NVIDIA T1000</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹1.4L</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>HP Z4 G5 Workstation</strong><br><span style="color:var(--text-light)">Xeon W 3400, 64 GB ECC, 2 TB NVMe, NVIDIA RTX 4000</span><br><span style="font-size:10px;color:var(--primary)">~₹3.2L</span></td>
+          </tr>
+
+          <tr class="sec-row"><td colspan="5">Camera Equipment</td></tr>
+          <tr>
+            <td><strong>Laparoscope Camera</strong><br><span style="font-size:11px;color:var(--text-light)">Primary surgical feed</span></td>
+            <td style="font-size:12px">Full HD 1080p, HDMI/SDI out, &lt;1 frame latency</td>
+            <td class="tier-good" style="font-size:12px"><strong>Storz IMAGE1 S</strong><br><span style="color:var(--text-light)">Full HD, SCB interface, 3-chip CCD</span><br><span style="font-size:10px;color:var(--success)">~₹5L</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>Olympus VISERA Elite II</strong><br><span style="color:var(--text-light)">Full HD, 3-CCD, NBI &amp; fluorescence, SDI out</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹9L</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>Stryker 1688 AIM 4K</strong><br><span style="color:var(--text-light)">4K, Spy Elite fluorescence, 3-chip CMOS, integrated recorder</span><br><span style="font-size:10px;color:var(--primary)">~₹18L</span></td>
+          </tr>
+          <tr>
+            <td><strong>Overhead / Room Camera</strong><br><span style="font-size:11px;color:var(--text-light)">Wide-angle OT room view</span></td>
+            <td style="font-size:12px">Full HD, PTZ, PoE, RTSP, low-light</td>
+            <td class="tier-good" style="font-size:12px"><strong>Hikvision DS-2DE4425IWG-E</strong><br><span style="color:var(--text-light)">4MP PTZ, 25× optical zoom, PoE, RTSP H.265</span><br><span style="font-size:10px;color:var(--success)">~₹28K</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>Axis P3245-V</strong><br><span style="color:var(--text-light)">2MP fixed dome, WDR, PoE, Lightfinder 2.0, RTSP</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹55K</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>Sony SRG-A40</strong><br><span style="color:var(--text-light)">4K PTZ, 20× optical, USB/IP/SDI, AI auto-framing</span><br><span style="font-size:10px;color:var(--primary)">~₹2.8L</span></td>
+          </tr>
+
+          <tr class="sec-row"><td colspan="5">Power &amp; Tablet</td></tr>
+          <tr>
+            <td><strong>UPS (Uninterruptible Power)</strong><br><span style="font-size:11px;color:var(--text-light)">Server &amp; OT equipment protection</span></td>
+            <td style="font-size:12px">Online double-conversion, 3000 VA, medical-grade</td>
+            <td class="tier-good" style="font-size:12px"><strong>APC Smart-UPS SRT 3000VA</strong><br><span style="color:var(--text-light)">3000 VA, online, pure sine, 8 outlets</span><br><span style="font-size:10px;color:var(--success)">~₹65K</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>Eaton 5PX 3000i RT2U</strong><br><span style="color:var(--text-light)">3000 VA, 2U rack, online interactive, LCD, NMC</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹90K</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>Eaton 9PX 6000i RT6U</strong><br><span style="color:var(--text-light)">6000 VA, true online double-conversion, HA-bypass</span><br><span style="font-size:10px;color:var(--primary)">~₹2.2L</span></td>
+          </tr>
+          <tr>
+            <td><strong>OT Control Tablet</strong><br><span style="font-size:11px;color:var(--text-light)">Remote access, voice commands, annotation</span></td>
+            <td style="font-size:12px">10"+, Wi-Fi 6, 8 GB RAM, antimicrobial</td>
+            <td class="tier-good" style="font-size:12px"><strong>Samsung Galaxy Tab S8</strong><br><span style="color:var(--text-light)">11" AMOLED, Snapdragon 8 Gen 1, 8 GB RAM, Wi-Fi 6</span><br><span style="font-size:10px;color:var(--success)">~₹52K</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>Microsoft Surface Pro 9</strong><br><span style="color:var(--text-light)">13" PixelSense, Core i7, 16 GB, Wi-Fi 6E, stylus</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹1.1L</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>Apple iPad Pro M4 13"</strong><br><span style="color:var(--text-light)">13" OLED, M4 chip, 16 GB, Wi-Fi 6E, Apple Pencil Pro</span><br><span style="font-size:10px;color:var(--primary)">~₹1.6L</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="padding:12px 22px;font-size:11px;color:var(--text-light)">Prices are indicative Indian market estimates (April 2026) and exclude GST, installation, and AMC. Actual quotes may vary.</div>
+    </div>
+  </div>
+
+  <!-- ===== RISKS & ASSUMPTIONS ===== -->
+  <div class="card">
+    <div class="card-header">&#9888; Risks &amp; Assumptions</div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:20px">
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Risk</th><th>Impact</th><th>Likelihood</th><th>Mitigation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Hospital network latency</strong> causing video jitter</td><td><span class="risk-high">High</span></td><td><span class="risk-med">Medium</span></td><td>Dedicated VLAN for OT traffic, QoS prioritisation, edge buffering</td></tr>
+          <tr><td><strong>EMR/HIS API unavailability</strong> or non-standard HL7</td><td><span class="risk-med">Medium</span></td><td><span class="risk-high">High</span></td><td>Phase 4 scope; fallback to manual patient tagging; FHIR adapter layer</td></tr>
+          <tr><td><strong>Regulatory approval</strong> (CDSCO for SaMD classification)</td><td><span class="risk-high">High</span></td><td><span class="risk-med">Medium</span></td><td>Engage regulatory consultant from Week 1; design for IEC 62304</td></tr>
+          <tr><td><strong>Surgical camera compatibility</strong> (proprietary SDI/HDMI)</td><td><span class="risk-med">Medium</span></td><td><span class="risk-med">Medium</span></td><td>Hardware capture card (Magewell Pro Capture) as universal adapter</td></tr>
+          <tr><td><strong>AI Copilot hallucination</strong> in clinical context</td><td><span class="risk-high">High</span></td><td><span class="risk-low">Low</span></td><td>RAG over verified medical knowledge base; prominent "not a substitute" disclaimer</td></tr>
+          <tr><td><strong>Staff adoption resistance</strong></td><td><span class="risk-med">Medium</span></td><td><span class="risk-med">Medium</span></td><td>Clinical UAT from Week 40, champion surgeon programme, in-app guide</td></tr>
+        </tbody>
+      </table>
+
+      <ul class="assump-list">
+        <li data-icon="✓">UX prototype (v1.1 mock) is approved. No major redesign is expected — saves ~80 PD.</li>
+        <li data-icon="✓">Hospital provides dedicated OT network VLAN and IT admin access during setup.</li>
+        <li data-icon="✓">Surgical cameras output standard HDMI or SDI. Proprietary capture cards budgeted if needed.</li>
+        <li data-icon="✓">Anthropic Claude API is approved for clinical data. Data processed within India-region endpoints.</li>
+        <li data-icon="⚠">EMR/HIS integration timeline depends on hospital IT team responsiveness (3rd party dependency).</li>
+        <li data-icon="⚠">CDSCO SaMD regulatory filing is out of scope for Phase 1 but recommended before full hospital rollout.</li>
+        <li data-icon="⚠">Hardware procurement lead time: allow 4–6 weeks for servers and medical-grade displays.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== BUDGET SUMMARY ===== -->
+  <div class="card">
+    <div class="card-header">&#128176; Indicative Budget Summary</div>
+    <div class="card-body" style="padding:0">
+      <table class="data-table">
+        <thead>
+          <tr><th>Category</th><th>Item</th><th class="c">Good Tier (₹)</th><th class="c">Better Tier (₹)</th><th class="c">Best Tier (₹)</th></tr>
+        </thead>
+        <tbody>
+          <tr class="sec-row"><td colspan="5">Software Development</td></tr>
+          <tr><td>Development</td><td>610 person-days × blended day rate</td><td class="c">₹1.2 Cr</td><td class="c">₹1.8 Cr</td><td class="c">₹2.8 Cr</td></tr>
+          <tr><td>3rd Party Licences</td><td>Claude API, Whisper, monitoring tools (annual)</td><td class="c">₹4L / yr</td><td class="c">₹8L / yr</td><td class="c">₹15L / yr</td></tr>
+          <tr class="sec-row"><td colspan="5">Hardware (per OT room)</td></tr>
+          <tr><td>Compute &amp; Storage</td><td>Video server + app server + NAS</td><td class="c">₹6.8L</td><td class="c">₹11.8L</td><td class="c">₹38L</td></tr>
+          <tr><td>Cameras &amp; Displays</td><td>Laparoscope camera + room camera + surgical display</td><td class="c">₹5.6L</td><td class="c">₹10.2L</td><td class="c">₹24.6L</td></tr>
+          <tr><td>Networking &amp; Power</td><td>Switch + AP + UPS + workstation + tablet</td><td class="c">₹2.6L</td><td class="c">₹4.6L</td><td class="c">₹10.2L</td></tr>
+          <tr class="sec-row"><td colspan="5">Implementation</td></tr>
+          <tr><td>Installation &amp; Integration</td><td>On-site setup, commissioning, cabling (per OT room)</td><td class="c">₹1.5L</td><td class="c">₹2L</td><td class="c">₹3L</td></tr>
+          <tr><td>Training</td><td>Clinical staff training, admin training (2 days on-site)</td><td class="c">₹50K</td><td class="c">₹80K</td><td class="c">₹1.5L</td></tr>
+          <tr><td>Annual Maintenance</td><td>AMC — hardware + software support (10% of capex)</td><td class="c">~₹1.7L / yr</td><td class="c">~₹3L / yr</td><td class="c">~₹7.6L / yr</td></tr>
+        </tbody>
+        <tfoot>
+          <tr style="background:rgba(0,51,102,0.05)">
+            <td colspan="2" style="padding:12px 14px;font-weight:800;color:var(--primary);font-size:13px">TOTAL PROJECT COST (3 OT Rooms)</td>
+            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--success);font-size:13px">~₹2.1 Cr</td>
+            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--accent-dark);font-size:13px">~₹3.2 Cr</td>
+            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--primary);font-size:13px">~₹6.5 Cr</td>
+          </tr>
+        </tfoot>
+      </table>
+      <div style="padding:12px 22px;font-size:11px;color:var(--text-light)">All costs are indicative and exclusive of GST. Development rates assume India-based team. Hardware costs are per OT room × 3 rooms. Budget to be refined after hardware vendor RFQ and team structure confirmation.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== PDF GENERATION ===== -->
+<script>
+async function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  const pw = doc.internal.pageSize.getWidth();
+  const ph = doc.internal.pageSize.getHeight();
+  const margin = 14;
+
+  // ── Page 1: Executive Summary ──
+  doc.setFillColor(0, 51, 102); doc.rect(0, 0, pw, 28, 'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica', 'bold');
+  doc.text('Virtual OT — Project Estimation Report', margin, 12);
+  doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+  doc.text('Central Hospital  ·  Confidential  ·  April 2026', margin, 19);
+  doc.text('v1.0 Estimation', pw - margin, 19, { align: 'right' });
+
+  doc.setTextColor(0,0,0); doc.setFontSize(12); doc.setFont('helvetica','bold');
+  doc.text('Executive Summary', margin, 38);
+
+  const kpis = [
+    ['~610', 'Person-Days'], ['12', 'Months Total'], ['18', 'Modules'],
+    ['10', 'Team Size'], ['4', 'Phases']
+  ];
+  const kw = (pw - margin*2 - 16) / 5;
+  kpis.forEach((k, i) => {
+    const x = margin + i * (kw + 4);
+    doc.setFillColor(240, 244, 248); doc.roundedRect(x, 42, kw, 22, 3, 3, 'F');
+    doc.setFontSize(16); doc.setFont('helvetica','bold'); doc.setTextColor(0,51,102);
+    doc.text(k[0], x + kw/2, 55, { align: 'center' });
+    doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(90,106,122);
+    doc.text(k[1].toUpperCase(), x + kw/2, 61, { align: 'center' });
+  });
+
+  doc.setTextColor(0,0,0); doc.setFontSize(9); doc.setFont('helvetica','normal');
+  const summaryText = 'Virtual OT is a web-based Digital Operation Theatre platform delivering live multi-camera surgical feeds, AES-256 encrypted recording, AI surgery assistance, voice control, live annotation for remote consultation, role-based access control, and HIPAA/DPDP Act 2023 compliance — in a single browser-based application.';
+  const lines = doc.splitTextToSize(summaryText, pw - margin*2);
+  doc.text(lines, margin, 74);
+
+  // ── Page 2: Module Effort Table ──
+  doc.addPage();
+  doc.setFillColor(0, 51, 102); doc.rect(0, 0, pw, 18, 'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+  doc.text('Feature Modules & Effort Estimate', margin, 12);
+
+  doc.autoTable({
+    startY: 22,
+    head: [['#', 'Module', 'Type', 'Effort (PD)', 'Weeks', 'Priority']],
+    body: [
+      ['1', 'Architecture & Project Setup', 'DevOps', '10', '2', 'Critical'],
+      ['2', 'Authentication & RBAC', 'Backend', '25', '4', 'Critical'],
+      ['3', 'Live Video Streaming', 'Backend', '60', '8', 'Critical'],
+      ['4', 'Multi-Room Management', 'Backend', '30', '4', 'Critical'],
+      ['5', 'Video Player UI', 'Frontend', '20', '3', 'Critical'],
+      ['6', 'Recording Engine (AES-256)', 'Backend', '40', '5', 'Critical'],
+      ['7', 'Archive & Search', 'Full-stack', '20', '3', 'Critical'],
+      ['8', 'Security & Compliance', 'Security', '35', '5', 'Critical'],
+      ['9', 'User Management', 'Full-stack', '20', '3', 'High'],
+      ['10', 'AI Surgery Copilot', 'AI/ML', '45', '6', 'High'],
+      ['11', 'Voice Command System', 'Frontend', '20', '3', 'High'],
+      ['12', 'Live Annotation Overlay', 'Frontend', '30', '4', 'High'],
+      ['13', 'Remote & Telemedicine View', 'Full-stack', '45', '6', 'High'],
+      ['14', 'Snapshot & DICOM Export', 'Frontend', '10', '2', 'High'],
+      ['15', 'OR Analytics Dashboard', 'Full-stack', '30', '4', 'Medium'],
+      ['16', 'EMR / HIS Integration', 'Backend', '50', '6', 'Medium'],
+      ['17', 'Infrastructure & DevOps', 'DevOps', '40', '5', 'Critical'],
+      ['18', 'QA, Testing & Documentation', 'QA', '60', '8', 'Critical'],
+      ['', 'TOTAL', '', '610 PD', '~48 wk', '12 months'],
+    ],
+    theme: 'striped',
+    headStyles: { fillColor: [0, 51, 102], textColor: 255, fontStyle: 'bold', fontSize: 8 },
+    bodyStyles: { fontSize: 8, cellPadding: 2.5 },
+    columnStyles: { 0:{cellWidth:8}, 1:{cellWidth:70}, 2:{cellWidth:25}, 3:{cellWidth:22,halign:'center'}, 4:{cellWidth:18,halign:'center'}, 5:{cellWidth:22,halign:'center'} },
+    didParseCell: (data) => {
+      if (data.row.index === 18) {
+        data.cell.styles.fontStyle = 'bold';
+        data.cell.styles.fillColor = [220, 230, 242];
+        data.cell.styles.textColor = [0, 51, 102];
+      }
+    }
+  });
+
+  // ── Page 3: Timeline & Team ──
+  doc.addPage();
+  doc.setFillColor(0, 51, 102); doc.rect(0, 0, pw, 18, 'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+  doc.text('Project Timeline & Team Composition', margin, 12);
+
+  doc.autoTable({
+    startY: 22,
+    head: [['Phase', 'Duration', 'Key Deliverables', 'Effort']],
+    body: [
+      ['Phase 1 — Core Infrastructure & MVP', 'Weeks 1–20', 'Auth, RBAC, live streaming, multi-room, recording, archive, compliance bar', '~185 PD'],
+      ['Phase 2 — Advanced Clinical Features', 'Weeks 21–36', 'AI Copilot, voice commands, annotation overlay, remote view, snapshot', '~150 PD'],
+      ['Phase 3 — Integrations & Analytics', 'Weeks 37–44', 'OR analytics dashboard, EMR/HIS integration, infrastructure hardening', '~80 PD'],
+      ['Phase 4 — QA, UAT & Go-Live', 'Weeks 45–48', 'Full regression, pen-test, clinical UAT, training, soft launch, full rollout', '~60 PD'],
+    ],
+    theme: 'striped',
+    headStyles: { fillColor: [0, 51, 102], textColor: 255, fontStyle: 'bold', fontSize: 9 },
+    bodyStyles: { fontSize: 9, cellPadding: 3.5 },
+    columnStyles: { 0:{cellWidth:60}, 1:{cellWidth:30}, 2:{cellWidth:140}, 3:{cellWidth:25,halign:'center'} },
+  });
+
+  doc.autoTable({
+    startY: doc.lastAutoTable.finalY + 10,
+    head: [['Role', 'Count', 'Responsibilities']],
+    body: [
+      ['Project Manager', '1', 'Delivery, stakeholder communication, sprint planning'],
+      ['Backend Engineers', '3', 'Video streaming, APIs, auth, recording, EMR integration'],
+      ['Frontend Engineers', '2', 'UI, video player, annotation canvas, voice, RBAC UI'],
+      ['AI/ML Engineer', '1', 'LLM integration, prompt engineering, speech recognition'],
+      ['DevOps Engineer', '1', 'Infrastructure, CI/CD, Docker/K8s, monitoring, backup'],
+      ['Security Engineer', '1', 'AES-256, TLS, HIPAA/DPDP compliance, pen-testing'],
+      ['QA Engineers', '2', 'Test automation, UAT coordination, regression, clinical scenarios'],
+      ['Business Analyst', '1', 'Requirements, user guide, training material, change management'],
+      ['TOTAL', '12', '10 FTEs + BA + PM'],
+    ],
+    theme: 'striped',
+    headStyles: { fillColor: [0, 120, 110], textColor: 255, fontStyle: 'bold', fontSize: 9 },
+    bodyStyles: { fontSize: 9, cellPadding: 3 },
+    columnStyles: { 0:{cellWidth:45}, 1:{cellWidth:18,halign:'center'}, 2:{cellWidth:192} },
+    didParseCell: (data) => {
+      if (data.row.index === 8) {
+        data.cell.styles.fontStyle = 'bold';
+        data.cell.styles.fillColor = [220, 230, 242];
+        data.cell.styles.textColor = [0, 51, 102];
+      }
+    }
+  });
+
+  // ── Page 4: Hardware Table ──
+  doc.addPage();
+  doc.setFillColor(0, 51, 102); doc.rect(0, 0, pw, 18, 'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+  doc.text('Hardware Procurement — Good / Better / Best', margin, 12);
+
+  doc.autoTable({
+    startY: 22,
+    head: [['Component', 'Min Spec', 'Good (~₹)', 'Better (~₹)', 'Best (~₹)']],
+    body: [
+      ['OT Video Server', 'Xeon 8-core, 32 GB, 1 TB SSD, 10 GbE', 'Dell PowerEdge R350\n~₹2.8L', 'Dell PowerEdge R550\n~₹5.5L', 'HP ProLiant DL380 Gen10\n~₹12L'],
+      ['Application Server', 'Xeon 4-core, 16 GB, 500 GB SSD', 'HP ProLiant DL20 Gen10\n~₹1.8L', 'Dell PowerEdge R350\n~₹2.8L', 'Dell PowerEdge R450\n~₹6L'],
+      ['NAS Storage (Archive)', 'RAID-6, 40 TB raw, 10 GbE', 'Synology DS1823xs+\n~₹2.2L', 'QNAP TS-873A\n~₹3.5L', 'NetApp FAS2750\n~₹20L+'],
+      ['Core Network Switch', 'Managed L2/L3, PoE+, 10G uplinks', 'TP-Link TL-SG3452XP\n~₹55K', 'Cisco SG350-28P\n~₹90K', 'Cisco Catalyst 9300\n~₹3.5L'],
+      ['Wireless Access Point', 'Wi-Fi 6, WPA3, PoE, medical-grade', 'TP-Link EAP670\n~₹8K', 'Ubiquiti UniFi U6 Pro\n~₹18K', 'Cisco Catalyst CW9166I\n~₹55K'],
+      ['Surgical Display Monitor', '27"+, 4K UHD, IPS, ≥400 nit', 'LG 27UK650-W\n~₹35K', 'Dell UltraSharp U2723QE\n~₹65K', 'NEC MultiSync MD211C2\n~₹3.8L'],
+      ['Control Workstation', 'i7/Ryzen 7, 16 GB, discrete GPU, SSD', 'HP EliteDesk 800 G9\n~₹75K', 'Dell Precision 3660 Tower\n~₹1.4L', 'HP Z4 G5 Workstation\n~₹3.2L'],
+      ['Laparoscope Camera', 'Full HD, HDMI/SDI out', 'Storz IMAGE1 S\n~₹5L', 'Olympus VISERA Elite II\n~₹9L', 'Stryker 1688 AIM 4K\n~₹18L'],
+      ['Overhead / Room Camera', 'Full HD, PTZ, PoE, RTSP', 'Hikvision DS-2DE4425IWG-E\n~₹28K', 'Axis P3245-V\n~₹55K', 'Sony SRG-A40\n~₹2.8L'],
+      ['UPS', 'Online double-conversion, 3000 VA', 'APC Smart-UPS SRT 3000VA\n~₹65K', 'Eaton 5PX 3000i RT2U\n~₹90K', 'Eaton 9PX 6000i RT6U\n~₹2.2L'],
+      ['OT Control Tablet', '10"+, Wi-Fi 6, 8 GB RAM', 'Samsung Galaxy Tab S8\n~₹52K', 'Microsoft Surface Pro 9\n~₹1.1L', 'Apple iPad Pro M4 13"\n~₹1.6L'],
+    ],
+    theme: 'striped',
+    headStyles: { fillColor: [0, 51, 102], textColor: 255, fontStyle: 'bold', fontSize: 8 },
+    bodyStyles: { fontSize: 7.5, cellPadding: 3, valign: 'top' },
+    columnStyles: { 0:{cellWidth:38}, 1:{cellWidth:50}, 2:{cellWidth:62}, 3:{cellWidth:62}, 4:{cellWidth:62} },
+    rowPageBreak: 'avoid',
+  });
+
+  // ── Page 5: Budget Summary ──
+  doc.addPage();
+  doc.setFillColor(0, 51, 102); doc.rect(0, 0, pw, 18, 'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+  doc.text('Indicative Budget Summary', margin, 12);
+
+  doc.autoTable({
+    startY: 22,
+    head: [['Category', 'Item', 'Good Tier (₹)', 'Better Tier (₹)', 'Best Tier (₹)']],
+    body: [
+      ['Development', '610 person-days × blended day rate', '₹1.2 Cr', '₹1.8 Cr', '₹2.8 Cr'],
+      ['3rd Party Licences', 'Claude API, Whisper, monitoring (annual)', '₹4L / yr', '₹8L / yr', '₹15L / yr'],
+      ['Compute & Storage (per OT room)', 'Video server + app server + NAS', '₹6.8L', '₹11.8L', '₹38L'],
+      ['Cameras & Displays (per OT room)', 'Laparoscope + room camera + surgical display', '₹5.6L', '₹10.2L', '₹24.6L'],
+      ['Networking & Power (per OT room)', 'Switch + AP + UPS + workstation + tablet', '₹2.6L', '₹4.6L', '₹10.2L'],
+      ['Installation & Integration', 'On-site setup, commissioning, cabling per OT room', '₹1.5L', '₹2L', '₹3L'],
+      ['Training', 'Clinical & admin training (2 days on-site)', '₹50K', '₹80K', '₹1.5L'],
+      ['Annual Maintenance (AMC)', '10% of capex — hardware + software', '~₹1.7L / yr', '~₹3L / yr', '~₹7.6L / yr'],
+      ['TOTAL (3 OT Rooms)', '', '~₹2.1 Cr', '~₹3.2 Cr', '~₹6.5 Cr'],
+    ],
+    theme: 'striped',
+    headStyles: { fillColor: [0, 51, 102], textColor: 255, fontStyle: 'bold', fontSize: 9 },
+    bodyStyles: { fontSize: 9, cellPadding: 3 },
+    columnStyles: { 0:{cellWidth:55}, 1:{cellWidth:85}, 2:{cellWidth:38,halign:'center'}, 3:{cellWidth:38,halign:'center'}, 4:{cellWidth:38,halign:'center'} },
+    didParseCell: (data) => {
+      if (data.row.index === 8) {
+        data.cell.styles.fontStyle = 'bold';
+        data.cell.styles.fillColor = [220, 230, 242];
+        data.cell.styles.textColor = [0, 51, 102];
+      }
+    }
+  });
+
+  doc.setFontSize(8); doc.setTextColor(90,106,122); doc.setFont('helvetica','normal');
+  const note = 'All costs are indicative and exclusive of GST. Development rates assume India-based team. Hardware costs are per OT room × 3 rooms. Prices are April 2026 estimates; actual quotes may vary.';
+  doc.text(doc.splitTextToSize(note, pw - margin*2), margin, doc.lastAutoTable.finalY + 8);
+
+  // Footer on all pages
+  const pgCount = doc.getNumberOfPages();
+  for (let i = 1; i <= pgCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(7); doc.setTextColor(150,160,170); doc.setFont('helvetica','normal');
+    doc.text('Virtual OT  |  Central Hospital  |  Confidential  |  April 2026', pw/2, ph - 5, { align: 'center' });
+    doc.text(`Page ${i} of ${pgCount}`, pw - margin, ph - 5, { align: 'right' });
+  }
+
+  doc.save('VirtualOT-Estimation-Report.pdf');
+}
+</script>
+
+</body>
+</html>
