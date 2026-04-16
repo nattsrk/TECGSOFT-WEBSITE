@@ -963,6 +963,34 @@
     border-radius: 8px; padding: 2px 7px; font-size: 10px; font-weight: 700;
   }
 
+  /* ===== USER GUIDE — DARK MODE ===== */
+  #page-guide {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-light: #8b949e;
+    --accent: #00c4b8;
+    --accent-dark: #00a89d;
+    --success: #3fb950;
+    --danger: #f85149;
+    background: #0d1117;
+    color: #e6edf3;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  /* Table headers inside guide */
+  #page-guide table th {
+    background: rgba(255,255,255,0.05) !important;
+    color: #8b949e !important;
+    border-bottom: 2px solid #30363d !important;
+  }
+  #page-guide table td { border-bottom: 1px solid #30363d !important; }
+  #page-guide table tr:last-child td { border-bottom: none !important; }
+  /* Override hardcoded navy text inside guide */
+  #page-guide [style*="color:var(--primary)"],
+  #page-guide [style*="color: var(--primary)"] { color: #5b9bd5; }
+
   /* ===== RESPONSIVE ===== */
 
   /* Hamburger button — hidden on desktop */

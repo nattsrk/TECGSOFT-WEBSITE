@@ -9,10 +9,11 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --primary: #003366; --accent: #00a89d; --accent-dark: #007b74;
-    --bg: #f0f4f8; --card: #fff; --border: #dce4ed;
-    --text: #1a2a3a; --text-light: #5a6a7a;
-    --success: #28a745; --danger: #dc3545; --warning: #f0ad4e;
+    --primary: #003366; --accent: #00c4b8; --accent-dark: #00a89d;
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #e6edf3; --text-light: #8b949e;
+    --success: #3fb950; --danger: #f85149; --warning: #d29922;
+    --primary-text: #5b9bd5;
     --radius: 12px;
   }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
@@ -31,49 +32,49 @@
   .body { max-width: 1060px; margin: 32px auto; padding: 0 20px 60px; display: flex; flex-direction: column; gap: 28px; }
 
   /* Card */
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 2px 12px rgba(0,51,102,0.06); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,0.4); }
   .card-header { background: var(--primary); color: #fff; padding: 14px 22px; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
   .card-body { padding: 24px; }
 
   /* Summary KPIs */
   .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
   .kpi { background: var(--bg); border-radius: 10px; padding: 18px 14px; text-align: center; border: 1px solid var(--border); }
-  .kpi-val { font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 4px; }
+  .kpi-val { font-size: 26px; font-weight: 800; color: var(--primary-text); line-height: 1; margin-bottom: 4px; }
   .kpi-val.accent { color: var(--accent-dark); }
   .kpi-lbl { font-size: 11px; color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
 
   /* Tables */
   .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .data-table th { background: var(--bg); padding: 9px 14px; text-align: left; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--text-light); border-bottom: 2px solid var(--border); }
+  .data-table th { background: rgba(255,255,255,0.04); padding: 9px 14px; text-align: left; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--text-light); border-bottom: 2px solid var(--border); }
   .data-table th.c { text-align: center; }
   .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
   .data-table td.c { text-align: center; }
   .data-table tr:last-child td { border-bottom: none; }
-  .data-table tbody tr:hover { background: rgba(0,51,102,0.02); }
+  .data-table tbody tr:hover { background: rgba(255,255,255,0.03); }
 
   /* Section header row inside table */
-  .sec-row td { background: rgba(0,51,102,0.04); font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--primary); letter-spacing: .5px; padding: 6px 14px; }
+  .sec-row td { background: rgba(255,255,255,0.05); font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--primary-text); letter-spacing: .5px; padding: 6px 14px; }
 
   /* Badges */
   .badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
   .b-p1 { background: rgba(220,53,69,0.1); color: var(--danger); }
-  .b-p2 { background: rgba(240,173,78,0.13); color: #9a6500; }
-  .b-p3 { background: rgba(40,167,69,0.1); color: var(--success); }
-  .b-fe { background: rgba(0,168,157,0.1); color: var(--accent-dark); }
-  .b-be { background: rgba(0,51,102,0.1); color: var(--primary); }
-  .b-ai { background: rgba(111,66,193,0.1); color: #5b21b6; }
-  .b-do { background: rgba(23,162,184,0.1); color: #0c6674; }
-  .b-qa { background: rgba(240,173,78,0.12); color: #9a6500; }
+  .b-p2 { background: rgba(240,173,78,0.15); color: #d29922; }
+  .b-p3 { background: rgba(63,185,80,0.15); color: var(--success); }
+  .b-fe { background: rgba(0,196,184,0.15); color: var(--accent); }
+  .b-be { background: rgba(59,130,246,0.15); color: var(--primary-text); }
+  .b-ai { background: rgba(167,139,250,0.15); color: #a78bfa; }
+  .b-do { background: rgba(56,189,248,0.15); color: #38bdf8; }
+  .b-qa { background: rgba(240,173,78,0.13); color: #d29922; }
   .b-sec { background: rgba(220,53,69,0.08); color: var(--danger); }
 
   /* Tier cells */
-  .tier-good  { background: rgba(40,167,69,0.05); }
-  .tier-better { background: rgba(0,168,157,0.06); }
-  .tier-best  { background: rgba(0,51,102,0.05); }
+  .tier-good  { background: rgba(63,185,80,0.08); }
+  .tier-better { background: rgba(0,196,184,0.08); }
+  .tier-best  { background: rgba(59,130,246,0.08); }
   .tier-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .4px; }
   .tl-good  { color: var(--success); }
-  .tl-better { color: var(--accent-dark); }
-  .tl-best  { color: var(--primary); }
+  .tl-better { color: var(--accent); }
+  .tl-best  { color: var(--primary-text); }
 
   /* Timeline phases */
   .timeline { display: flex; flex-direction: column; gap: 14px; }
@@ -85,27 +86,27 @@
   .phase-body li { list-style: none; padding-left: 14px; position: relative; line-height: 1.7; }
   .phase-body li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
 
-  .ph-1 .phase-hdr { background: linear-gradient(90deg, rgba(220,53,69,0.12), rgba(220,53,69,0.04)); border-bottom: 1px solid rgba(220,53,69,0.15); }
-  .ph-1 .phase-hdr h3 { color: #c0392b; }
-  .ph-1 .dur { background: rgba(220,53,69,0.1); color: var(--danger); }
+  .ph-1 .phase-hdr { background: linear-gradient(90deg, rgba(248,81,73,0.15), rgba(248,81,73,0.05)); border-bottom: 1px solid rgba(248,81,73,0.2); }
+  .ph-1 .phase-hdr h3 { color: #f85149; }
+  .ph-1 .dur { background: rgba(248,81,73,0.15); color: var(--danger); }
 
-  .ph-2 .phase-hdr { background: linear-gradient(90deg, rgba(0,168,157,0.12), rgba(0,168,157,0.04)); border-bottom: 1px solid rgba(0,168,157,0.15); }
-  .ph-2 .phase-hdr h3 { color: var(--accent-dark); }
-  .ph-2 .dur { background: rgba(0,168,157,0.1); color: var(--accent-dark); }
+  .ph-2 .phase-hdr { background: linear-gradient(90deg, rgba(0,196,184,0.15), rgba(0,196,184,0.05)); border-bottom: 1px solid rgba(0,196,184,0.2); }
+  .ph-2 .phase-hdr h3 { color: var(--accent); }
+  .ph-2 .dur { background: rgba(0,196,184,0.15); color: var(--accent); }
 
-  .ph-3 .phase-hdr { background: linear-gradient(90deg, rgba(0,51,102,0.1), rgba(0,51,102,0.03)); border-bottom: 1px solid rgba(0,51,102,0.12); }
-  .ph-3 .phase-hdr h3 { color: var(--primary); }
-  .ph-3 .dur { background: rgba(0,51,102,0.1); color: var(--primary); }
+  .ph-3 .phase-hdr { background: linear-gradient(90deg, rgba(91,155,213,0.15), rgba(91,155,213,0.05)); border-bottom: 1px solid rgba(91,155,213,0.2); }
+  .ph-3 .phase-hdr h3 { color: var(--primary-text); }
+  .ph-3 .dur { background: rgba(91,155,213,0.15); color: var(--primary-text); }
 
-  .ph-4 .phase-hdr { background: linear-gradient(90deg, rgba(40,167,69,0.1), rgba(40,167,69,0.03)); border-bottom: 1px solid rgba(40,167,69,0.15); }
-  .ph-4 .phase-hdr h3 { color: #1e7e34; }
-  .ph-4 .dur { background: rgba(40,167,69,0.1); color: var(--success); }
+  .ph-4 .phase-hdr { background: linear-gradient(90deg, rgba(63,185,80,0.15), rgba(63,185,80,0.05)); border-bottom: 1px solid rgba(63,185,80,0.2); }
+  .ph-4 .phase-hdr h3 { color: var(--success); }
+  .ph-4 .dur { background: rgba(63,185,80,0.15); color: var(--success); }
 
   /* Team grid */
   .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
   .team-card { border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
   .team-icon { font-size: 24px; margin-bottom: 6px; }
-  .team-role { font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 3px; }
+  .team-role { font-size: 12px; font-weight: 700; color: var(--primary-text); margin-bottom: 3px; }
   .team-count { font-size: 22px; font-weight: 800; color: var(--accent-dark); }
   .team-note { font-size: 10px; color: var(--text-light); margin-top: 3px; line-height: 1.4; }
 
@@ -115,7 +116,7 @@
   .stack-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--text-light); margin-bottom: 10px; }
   .stack-item { font-size: 12px; color: var(--text); padding: 4px 0; border-bottom: 1px dashed var(--border); line-height: 1.5; }
   .stack-item:last-child { border-bottom: none; }
-  .stack-item strong { color: var(--primary); }
+  .stack-item strong { color: var(--accent); }
 
   /* Assumptions */
   .assump-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
@@ -124,7 +125,7 @@
 
   /* Risk table */
   .risk-high { color: var(--danger); font-weight: 700; }
-  .risk-med  { color: #9a6500; font-weight: 700; }
+  .risk-med  { color: #d29922; font-weight: 700; }
   .risk-low  { color: var(--success); font-weight: 700; }
 
   /* Package cards */
@@ -132,26 +133,26 @@
   .pkg-card { border-radius: 12px; overflow: hidden; border: 2px solid var(--border); }
   .pkg-card.starter  { border-color: var(--success); }
   .pkg-card.pro      { border-color: var(--accent); }
-  .pkg-card.ent      { border-color: var(--primary); }
+  .pkg-card.ent      { border-color: var(--primary-text); }
   .pkg-hdr { padding: 18px 20px 14px; }
-  .pkg-card.starter .pkg-hdr  { background: linear-gradient(135deg,rgba(40,167,69,0.12),rgba(40,167,69,0.04)); }
-  .pkg-card.pro .pkg-hdr      { background: linear-gradient(135deg,rgba(0,168,157,0.12),rgba(0,168,157,0.04)); }
-  .pkg-card.ent .pkg-hdr      { background: linear-gradient(135deg,rgba(0,51,102,0.1),rgba(0,51,102,0.03)); }
+  .pkg-card.starter .pkg-hdr  { background: linear-gradient(135deg,rgba(63,185,80,0.12),rgba(63,185,80,0.04)); }
+  .pkg-card.pro .pkg-hdr      { background: linear-gradient(135deg,rgba(0,196,184,0.12),rgba(0,196,184,0.04)); }
+  .pkg-card.ent .pkg-hdr      { background: linear-gradient(135deg,rgba(59,130,246,0.12),rgba(59,130,246,0.04)); }
   .pkg-tag  { font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px; }
   .pkg-card.starter .pkg-tag { color:var(--success); }
-  .pkg-card.pro .pkg-tag      { color:var(--accent-dark); }
-  .pkg-card.ent .pkg-tag      { color:var(--primary); }
+  .pkg-card.pro .pkg-tag      { color:var(--accent); }
+  .pkg-card.ent .pkg-tag      { color:var(--primary-text); }
   .pkg-name { font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px; }
   .pkg-sub  { font-size:12px;color:var(--text-light);line-height:1.5; }
   .pkg-price { font-size:22px;font-weight:800;margin-top:12px; }
   .pkg-card.starter .pkg-price { color:var(--success); }
-  .pkg-card.pro .pkg-price     { color:var(--accent-dark); }
-  .pkg-card.ent .pkg-price     { color:var(--primary); }
+  .pkg-card.pro .pkg-price     { color:var(--accent); }
+  .pkg-card.ent .pkg-price     { color:var(--primary-text); }
   .pkg-price-note { font-size:11px;color:var(--text-light);font-weight:400;margin-left:4px; }
   .pkg-body { padding: 16px 20px 20px; background: var(--card); display:flex;flex-direction:column;gap:12px; }
   .pkg-stat-row { display:grid;grid-template-columns:repeat(3,1fr);gap:8px; }
   .pkg-stat { background:var(--bg);border-radius:8px;padding:8px 10px;text-align:center; }
-  .pkg-stat-val { font-size:14px;font-weight:800;color:var(--primary); }
+  .pkg-stat-val { font-size:14px;font-weight:800;color:var(--primary-text); }
   .pkg-stat-lbl { font-size:10px;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.3px; }
   .pkg-feat-list { list-style:none;display:flex;flex-direction:column;gap:4px; }
   .pkg-feat-list li { font-size:12px;color:var(--text-light);padding-left:16px;position:relative;line-height:1.6; }
@@ -349,7 +350,7 @@
               <li>Kubernetes HA deployment</li>
               <li>Unlimited OT rooms (site licence)</li>
             </ul>
-            <div style="background:rgba(0,51,102,0.05);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text-light)">
+            <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text-light)">
               <strong style="color:var(--primary)">Best for:</strong> Large tertiary hospitals (300+ beds), hospital chains with multiple campuses, and medical universities requiring full EMR integration and analytics.
             </div>
           </div>
@@ -382,16 +383,16 @@
             <tr><td>EMR / HIS integration</td><td class="c" style="color:var(--border)">—</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td></tr>
             <tr><td>Multi-site / hospital chain</td><td class="c" style="color:var(--border)">—</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td></tr>
             <tr><td>SLA (99.9% uptime)</td><td class="c" style="color:var(--border)">—</td><td class="c" style="color:var(--border)">—</td><td class="c">✓</td></tr>
-            <tr style="background:rgba(0,51,102,0.03)">
+            <tr style="background:rgba(255,255,255,0.04)">
               <td><strong>OT Rooms</strong></td><td class="c"><strong>1–2</strong></td><td class="c"><strong>3–5</strong></td><td class="c"><strong>5+ (unlimited)</strong></td>
             </tr>
-            <tr style="background:rgba(0,51,102,0.03)">
+            <tr style="background:rgba(255,255,255,0.04)">
               <td><strong>Dev Effort (Claude Code)</strong></td><td class="c"><strong style="color:var(--success)">~80 PD</strong></td><td class="c"><strong style="color:var(--accent-dark)">~155 PD</strong></td><td class="c"><strong style="color:var(--primary)">~220 PD</strong></td>
             </tr>
-            <tr style="background:rgba(0,51,102,0.03)">
+            <tr style="background:rgba(255,255,255,0.04)">
               <td><strong>Timeline</strong></td><td class="c"><strong>14 weeks</strong></td><td class="c"><strong>24 weeks</strong></td><td class="c"><strong>36 weeks</strong></td>
             </tr>
-            <tr style="background:rgba(0,51,102,0.03)">
+            <tr style="background:rgba(255,255,255,0.04)">
               <td><strong>Indicative Turnkey Price</strong></td>
               <td class="c"><strong style="color:var(--success)">₹48–55L</strong></td>
               <td class="c"><strong style="color:var(--accent-dark)">₹1.3–1.6 Cr</strong></td>
@@ -591,10 +592,10 @@
           </tr>
         </tbody>
         <tfoot>
-          <tr style="background:rgba(0,51,102,0.04)">
-            <td colspan="4" style="padding:12px 14px;font-weight:800;color:var(--primary);font-size:13px">TOTAL (full enterprise scope)</td>
-            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--primary);font-size:15px">610 PD</td>
-            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--primary)">~48 wk</td>
+          <tr style="background:rgba(255,255,255,0.05)">
+            <td colspan="4" style="padding:12px 14px;font-weight:800;color:var(--primary-text);font-size:13px">TOTAL (full enterprise scope)</td>
+            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--primary-text);font-size:15px">610 PD</td>
+            <td class="c" style="padding:12px 14px;font-weight:800;color:var(--primary-text)">~48 wk</td>
             <td style="padding:12px 14px;font-size:11px;color:var(--text-light)">With Claude Code: ~220 PD</td>
           </tr>
         </tfoot>
@@ -736,7 +737,7 @@
         <div class="phase ph-4">
           <div class="phase-hdr">
             <div>
-              <div style="font-size:10px;text-transform:uppercase;color:#1e7e34;font-weight:800;letter-spacing:.5px;margin-bottom:3px">Phase 4 · Weeks 45–48</div>
+              <div style="font-size:10px;text-transform:uppercase;color:var(--success);font-weight:800;letter-spacing:.5px;margin-bottom:3px">Phase 4 · Weeks 45–48</div>
               <h3>QA, UAT &amp; Go-Live</h3>
             </div>
             <span class="dur">4 Weeks &nbsp;·&nbsp; ~60 PD</span>
@@ -761,7 +762,7 @@
         <div><span style="display:inline-block;width:14px;height:14px;background:rgba(0,168,157,0.5);border-radius:3px;margin-right:6px;vertical-align:middle"></span>Phase 2 · Wk 21–36</div>
         <div><span style="display:inline-block;width:14px;height:14px;background:rgba(0,51,102,0.35);border-radius:3px;margin-right:6px;vertical-align:middle"></span>Phase 3 · Wk 37–44</div>
         <div><span style="display:inline-block;width:14px;height:14px;background:rgba(40,167,69,0.45);border-radius:3px;margin-right:6px;vertical-align:middle"></span>Phase 4 · Wk 45–48</div>
-        <div style="margin-left:auto;font-weight:700;color:var(--primary)">Total: 48 weeks (~12 months)</div>
+        <div style="margin-left:auto;font-weight:700;color:var(--primary-text)">Total: 48 weeks (~12 months)</div>
       </div>
     </div>
   </div>
@@ -1061,9 +1062,9 @@
             <td colspan="2" style="padding:14px;font-weight:800;color:var(--accent-dark);font-size:13px">PROFESSIONAL — Turnkey (4 OT rooms)</td>
             <td colspan="3" style="padding:14px;font-weight:800;color:var(--accent-dark);font-size:18px">₹1.3–1.6 Crore</td>
           </tr>
-          <tr style="background:rgba(0,51,102,0.06);border-top:2px solid rgba(0,51,102,0.15)">
-            <td colspan="2" style="padding:14px;font-weight:800;color:var(--primary);font-size:13px">ENTERPRISE — Turnkey (6 OT rooms)</td>
-            <td colspan="3" style="padding:14px;font-weight:800;color:var(--primary);font-size:18px">₹3.5–4.5 Crore</td>
+          <tr style="background:rgba(59,130,246,0.1);border-top:2px solid rgba(0,51,102,0.15)">
+            <td colspan="2" style="padding:14px;font-weight:800;color:var(--primary-text);font-size:13px">ENTERPRISE — Turnkey (6 OT rooms)</td>
+            <td colspan="3" style="padding:14px;font-weight:800;color:var(--primary-text);font-size:18px">₹3.5–4.5 Crore</td>
           </tr>
         </tfoot>
       </table>
