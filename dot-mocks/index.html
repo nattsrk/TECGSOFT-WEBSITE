@@ -2414,10 +2414,12 @@
     const lbl = document.getElementById('mm-lbl-' + cell);
     lbl.textContent = mmLabels[src];
     const target = mmVideoSrc(src);
-    if (vid.dataset.mmSrc !== src) {
+    // Include currentRoom in cache key for 'ot' so switching rooms reloads the correct feed
+    const cacheKey = src === 'ot' ? 'ot-' + currentRoom : src;
+    if (vid.dataset.mmSrc !== cacheKey) {
       vid.src = target;
       vid.load();
-      vid.dataset.mmSrc = src;
+      vid.dataset.mmSrc = cacheKey;
     }
     vid.muted = !isAudioOn;
     setTimeout(() => vid.play().catch(() => {}), 80);
