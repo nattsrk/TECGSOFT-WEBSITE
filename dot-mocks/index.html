@@ -866,6 +866,31 @@
   .voice-cmd-row:last-child { border-bottom: none; }
   .voice-cmd-row span:first-child { color: var(--accent-dark); font-weight: 600; }
 
+  /* ===== MULTI-MONITOR VIEW ===== */
+  #mm-view {
+    display: none; position: absolute; inset: 0; z-index: 8;
+    background: #0a0a0a; padding: 4px; gap: 4px;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  #mm-view.active { display: grid; }
+  .mm-cell {
+    position: relative; overflow: hidden; background: #111;
+    border-radius: 6px; cursor: pointer;
+    border: 2px solid transparent; transition: border-color 0.15s;
+  }
+  .mm-cell:hover { border-color: var(--accent); }
+  .mm-cell video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mm-cell-a { grid-row: 1 / 3; }
+  .mm-label {
+    position: absolute; top: 7px; left: 7px; z-index: 2;
+    background: rgba(0,0,0,0.68); color: #fff;
+    padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .mm-label .mm-dot { width: 6px; height: 6px; background: var(--live-red); border-radius: 50%; animation: pulse-live 1.5s infinite; }
+  .mm-hint { position: absolute; bottom: 7px; right: 8px; z-index: 2; font-size: 10px; color: rgba(255,255,255,0.45); }
+
   /* ===== RESPONSIVE ===== */
 
   /* Hamburger button — hidden on desktop */
@@ -1243,6 +1268,24 @@
               <div class="kb-hints">
                 <span>Space ▶/⏸</span><span>M mute</span><span>S snapshot</span><span>R record</span><span>1 2 3 rooms</span>
               </div>
+              <!-- MULTI MONITOR GRID -->
+              <div id="mm-view">
+                <div class="mm-cell mm-cell-a" onclick="mmSwap('a')">
+                  <video id="mm-vid-a" muted loop playsinline></video>
+                  <div class="mm-label"><span class="mm-dot"></span><span id="mm-lbl-a">OT Camera</span></div>
+                  <div class="mm-hint">Click for single view</div>
+                </div>
+                <div class="mm-cell" onclick="mmSwap('b')">
+                  <video id="mm-vid-b" muted loop playsinline poster="video/For_the_Laparoscope_202604152029.png"></video>
+                  <div class="mm-label"><span id="mm-lbl-b">Laparoscope</span></div>
+                  <div class="mm-hint">Click to expand</div>
+                </div>
+                <div class="mm-cell" onclick="mmSwap('c')">
+                  <video id="mm-vid-c" muted loop playsinline poster="video/For_the_Laparoscope_202604152030.jpeg"></video>
+                  <div class="mm-label"><span id="mm-lbl-c">Endoscope</span></div>
+                  <div class="mm-hint">Click to expand</div>
+                </div>
+              </div>
               <!-- Laparoscope video feed (loaded on demand) -->
               <video id="lap-overlay" loop playsinline
                 style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
@@ -1255,6 +1298,7 @@
                 <button class="vc-btn source" id="src-ot" onclick="switchSource('ot')">&#128247; OT Camera</button>
                 <button class="vc-btn source" id="src-lap" onclick="switchSource('lap')">&#128300; Laparoscope</button>
                 <button class="vc-btn source" id="src-endo" onclick="switchSource('endo')">&#128065; Endoscope</button>
+                <button class="vc-btn source" id="src-multi" onclick="toggleMultiMonitor()" title="Show all camera feeds simultaneously">&#128250; All Monitors</button>
                 <button class="vc-btn rec-start" id="rec-toggle" onclick="toggleRec()">&#9679; Start Recording</button>
                 <button class="vc-btn snapshot" id="audio-btn" onclick="toggleAudio()">&#128263; Unmute</button>
                 <button class="vc-btn snapshot" onclick="takeSnapshot()">&#128248; Snapshot</button>
@@ -2117,6 +2161,8 @@
     document.querySelectorAll('.source-btn')[0]?.classList.add('active');
     // Reset source control bar highlight and switch back to OT Camera
     switchSource('ot');
+    // Exit multi-monitor on room switch
+    if (mmActive) toggleMultiMonitor();
     // Update AI Copilot for the switched room
     if (typeof renderCopilot === 'function') renderCopilot(n);
   }
@@ -2166,6 +2212,69 @@
     if (activeBtn) activeBtn.style.background = 'var(--accent)';
 
     toast('Switched to ' + (labels[src] || src), 'info');
+  }
+
+  // ===== MULTI-MONITOR VIEW =====
+  let mmActive = false;
+  // Tracks which source is displayed in each grid cell: a=primary(large), b=top-right, c=bottom-right
+  let mmState = { a: 'ot', b: 'lap', c: 'endo' };
+  const mmLabels = { ot: 'OT Camera', lap: 'Laparoscope', endo: 'Endoscope' };
+
+  function mmVideoSrc(src) {
+    if (src === 'ot') return rooms[currentRoom] ? rooms[currentRoom].video : 'video/Flow_202604152218.mp4';
+    return sourceFiles[src];
+  }
+
+  function mmLoadCell(cell) {
+    const src = mmState[cell];
+    const vid = document.getElementById('mm-vid-' + cell);
+    const lbl = document.getElementById('mm-lbl-' + cell);
+    lbl.textContent = mmLabels[src];
+    const target = mmVideoSrc(src);
+    if (vid.dataset.mmSrc !== src) {
+      vid.src = target;
+      vid.load();
+      vid.dataset.mmSrc = src;
+    }
+    vid.muted = !isAudioOn;
+    setTimeout(() => vid.play().catch(() => {}), 80);
+  }
+
+  function toggleMultiMonitor() {
+    mmActive = !mmActive;
+    const view = document.getElementById('mm-view');
+    const btn  = document.getElementById('src-multi');
+    if (mmActive) {
+      // Reset state to default layout
+      mmState = { a: 'ot', b: 'lap', c: 'endo' };
+      ['a','b','c'].forEach(mmLoadCell);
+      view.classList.add('active');
+      btn.style.background = 'var(--accent)';
+      btn.innerHTML = '&#10005; Single View';
+      toast('All monitors — click any feed to expand it', 'info');
+    } else {
+      view.classList.remove('active');
+      ['a','b','c'].forEach(cell => { try { document.getElementById('mm-vid-' + cell).pause(); } catch(e){} });
+      btn.style.background = 'rgba(255,255,255,0.15)';
+      btn.innerHTML = '&#128250; All Monitors';
+    }
+  }
+
+  function mmSwap(clickedCell) {
+    if (clickedCell === 'a') {
+      // Clicking primary exits multi-monitor to single view with that source
+      const src = mmState.a;
+      toggleMultiMonitor();
+      switchSource(src);
+      return;
+    }
+    // Swap clicked cell with primary (a)
+    const temp = mmState.a;
+    mmState.a = mmState[clickedCell];
+    mmState[clickedCell] = temp;
+    mmLoadCell('a');
+    mmLoadCell(clickedCell);
+    toast(mmLabels[mmState.a] + ' is now primary', 'info');
   }
 
   // ===== MODAL =====
