@@ -265,25 +265,13 @@
 
   <!-- Feature Gaps -->
   <div class="card">
-    <div class="card-header">&#9888; Feature Gaps — Status Update</div>
+    <div class="card-header">&#9888; Feature Gaps</div>
     <div class="card-body" style="padding:0">
-      <!-- Resolved banner -->
-      <div style="background:rgba(40,167,69,0.08);border-bottom:1px solid rgba(40,167,69,0.2);padding:12px 20px;display:flex;align-items:center;gap:10px">
-        <span style="font-size:20px">&#10003;</span>
-        <div>
-          <div style="font-size:13px;font-weight:700;color:var(--success)">4 High-Priority Gaps Resolved in v1.1</div>
-          <div style="font-size:12px;color:var(--text-light)">All critical procurement blockers have been implemented. Virtual OT now exceeds Olympus ENDOALPHA on feature count.</div>
-        </div>
-      </div>
       <table class="gaps-table">
         <thead>
           <tr><th>Feature</th><th>Priority</th><th>Competitor Has It</th><th>Status</th></tr>
         </thead>
         <tbody>
-          <tr style="opacity:0.6"><td><s><strong>Archive search &amp; filter</strong> (by date, doctor, procedure)</s></td><td><span class="priority p-high">High</span></td><td>Both</td><td><span style="color:var(--success);font-weight:700">&#10003; Done — v1.1</span></td></tr>
-          <tr style="opacity:0.6"><td><s><strong>Role-based access control</strong> (Admin / Doctor / OT Staff)</s></td><td><span class="priority p-high">High</span></td><td>Both</td><td><span style="color:var(--success);font-weight:700">&#10003; Done — v1.1</span></td></tr>
-          <tr style="opacity:0.6"><td><s><strong>AES-256 encryption + HIPAA compliance bar</strong></s></td><td><span class="priority p-high">High</span></td><td>Both</td><td><span style="color:var(--success);font-weight:700">&#10003; Done — v1.1</span></td></tr>
-          <tr style="opacity:0.6"><td><s><strong>Live annotation overlay</strong> for remote consultants</s></td><td><span class="priority p-high">High</span></td><td>Proximie</td><td><span style="color:var(--success);font-weight:700">&#10003; Done — v1.1</span></td></tr>
           <tr><td><strong>EMR / HIS integration</strong></td><td><span class="priority p-medium">Medium</span></td><td>Both</td><td><span style="color:#9a6500;font-weight:600">Planned — Phase 2</span></td></tr>
           <tr><td><strong>OR efficiency dashboard</strong> (case times, room utilisation)</td><td><span class="priority p-medium">Medium</span></td><td>Proximie</td><td><span style="color:#9a6500;font-weight:600">Planned — Phase 2</span></td></tr>
           <tr><td><strong>Auto face / PHI blurring</strong> before storage</td><td><span class="priority p-medium">Medium</span></td><td>Medtronic TSE</td><td><span style="color:#9a6500;font-weight:600">Planned — Phase 2</span></td></tr>
@@ -533,10 +521,6 @@ async function generatePDF() {
     startY: 22,
     head: [['Missing Feature', 'Priority', 'Who Has It', 'Business Impact']],
     body: [
-      ['[DONE v1.1] Archive search & filter', 'HIGH', 'Both', '✓ Implemented — real-time search + date/doctor/procedure filters'],
-      ['[DONE v1.1] Role-based access (Admin / Doctor / Staff)', 'HIGH', 'Both', '✓ Implemented — nav, recording, download restrictions per role'],
-      ['[DONE v1.1] AES-256 + HIPAA compliance bar', 'HIGH', 'Both', '✓ Implemented — persistent security bar + Settings compliance card'],
-      ['[DONE v1.1] Live annotation overlay', 'HIGH', 'Proximie', '✓ Implemented — pen/arrow/circle on live feed + save frame'],
       ['EMR / HIS integration', 'MEDIUM', 'Both', 'Reduces nurse manual data entry — Phase 2'],
       ['OR efficiency dashboard', 'MEDIUM', 'Proximie', 'Strong ROI argument for administrators — Phase 2'],
       ['Auto face / PHI blurring', 'MEDIUM', 'Medtronic TSE', 'DPDP Act 2023 India compliance — Phase 2'],
