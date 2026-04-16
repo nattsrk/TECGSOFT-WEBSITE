@@ -1388,10 +1388,13 @@
                   <div class="annot-color" data-color="#ffffff" style="background:#fff;border:1px solid rgba(255,255,255,0.3)" onclick="setAnnotColor('#ffffff')" title="White"></div>
                 </div>
                 <div class="annot-sep"></div>
-                <button class="annot-tool" onclick="clearAnnotations()" title="Clear all" style="font-size:13px">&#128465;</button>
+                <button class="annot-tool" onclick="clearAnnotations()" title="Clear all annotations" style="font-size:13px">&#128465;</button>
+                <button class="annot-tool" onclick="takeSnapshot()" title="Save annotated frame as snapshot">&#128248;</button>
+                <div class="annot-sep"></div>
+                <button class="annot-tool" onclick="toggleAnnotate()" title="Exit annotation mode" style="background:rgba(220,53,69,0.5);font-size:12px;font-weight:700">&#10005;</button>
               </div>
               <!-- Annotation active badge -->
-              <div class="annot-badge" id="annot-badge">&#9998; Annotations ON — visible to remote viewers</div>
+              <div class="annot-badge" id="annot-badge">&#9998; Annotating — click ✕ in toolbar or the Annotate button to exit</div>
               <div class="video-controls">
                 <button class="vc-btn source" id="src-ot" onclick="switchSource('ot')">&#128247; OT Camera</button>
                 <button class="vc-btn source" id="src-lap" onclick="switchSource('lap')">&#128300; Laparoscope</button>
