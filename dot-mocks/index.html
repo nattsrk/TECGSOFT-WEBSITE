@@ -1094,9 +1094,9 @@
         <div class="nav-item" onclick="showPage('notifications')" data-page="notifications">
           <span class="nav-icon">&#128276;</span> Notifications
         </div>
-        <a class="nav-item" href="user-guide.html" target="_blank" style="text-decoration:none;color:rgba(255,255,255,0.7)">
+        <div class="nav-item" onclick="showPage('guide')" data-page="guide">
           <span class="nav-icon">&#128214;</span> User Guide
-        </a>
+        </div>
       </nav>
       <div class="sidebar-footer" onclick="doLogout()">
         <div class="sidebar-avatar" id="user-avatar">DS</div>
@@ -1115,7 +1115,7 @@
         </div>
         <div class="topbar-right">
           <span style="font-size:13px;color:var(--text-light)" id="clock">10:32 AM</span>
-          <a href="user-guide.html" target="_blank" class="btn-icon" title="User Guide" style="text-decoration:none">&#128214;</a>
+          <button class="btn-icon" onclick="showPage('guide')" title="User Guide">&#128214;</button>
           <button class="btn-icon" onclick="showPage('notifications')">&#128276;</button>
         </div>
       </div>
@@ -1698,6 +1698,136 @@
             <div class="notif-item"><div class="notif-icon rec">&#9679;</div><div class="notif-body"><strong>Recording Started</strong><span>OT Room 1 &mdash; Appendectomy by Dr. Sharma</span></div><div class="notif-time">Yesterday</div></div>
             <div class="notif-item"><div class="notif-icon info">&#9881;</div><div class="notif-body"><strong>Settings Updated</strong><span>Retention period changed to 60 days by Admin</span></div><div class="notif-time">2 days ago</div></div>
           </div>
+        </div>
+
+        <!-- ===== PAGE: USER GUIDE ===== -->
+        <div class="page" id="page-guide" style="max-width:860px;margin:0 auto;padding-bottom:40px">
+
+          <!-- Hero -->
+          <div style="background:linear-gradient(135deg,var(--primary) 0%,#001a33 60%,var(--accent-dark) 100%);border-radius:var(--radius-lg);padding:32px;color:#fff;margin-bottom:24px">
+            <div style="font-size:28px;font-weight:800;margin-bottom:6px">&#129657; Virtual OT — User Guide</div>
+            <div style="font-size:14px;color:rgba(255,255,255,0.75);max-width:560px;line-height:1.6">Complete reference for the Digital Operation Theatre. Live feeds, recordings, AI features, voice commands and more.</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
+              <span style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:600">v1.0 MVP</span>
+              <span style="background:var(--accent);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:600">AI-Powered</span>
+              <span style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:600">Voice Control</span>
+              <span style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:600">Multi-Room</span>
+            </div>
+          </div>
+
+          <!-- Feature Grid -->
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px">
+            <div style="background:var(--primary);color:#fff;padding:14px 20px;font-size:15px;font-weight:700">&#10024; All Features</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1px;background:var(--border)">
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#127909;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">3 Live OT Rooms</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">Monitor multiple theatres simultaneously</div></div>
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#128247;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">Multi-Camera Sources</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">OT Camera, Laparoscope, Endoscope per room</div></div>
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#9210;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">Independent Recording</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">Record without stopping the live feed</div></div>
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#128248;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">Snapshot Capture</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">Save frames from any source with ⬇ Save button</div></div>
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#127908;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">Voice Commands</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">8 hands-free commands via microphone</div></div>
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#129504;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">AI Surgery Copilot</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">Step tracking with confidence &amp; risk indicators</div></div>
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#9654;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">Playback Controls</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">Seek, skip, volume, fullscreen, clip capture</div></div>
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#128196;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">PDF Surgery Report</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">Auto-generated with clips, notes, metadata</div></div>
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#127760;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">Remote View</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">Consultants observe live from anywhere</div></div>
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#9000;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">Keyboard Shortcuts</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">Space, M, S, R, 1/2/3, V, ? — full keyboard control</div></div>
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#128452;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">Recording Archive</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">Searchable, filterable past recordings list</div></div>
+              <div style="background:var(--card);padding:14px 16px"><div style="font-size:18px;margin-bottom:6px">&#128241;</div><div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px">Mobile Responsive</div><div style="font-size:11px;color:var(--text-light);line-height:1.4">Full functionality on tablets &amp; phones</div></div>
+            </div>
+          </div>
+
+          <!-- Login -->
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px">
+            <div style="background:var(--primary);color:#fff;padding:14px 20px;font-size:15px;font-weight:700">&#128274; Login</div>
+            <div style="padding:20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+              <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:12px 20px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-light);font-weight:700;margin-bottom:4px">Username</div><div style="font-size:14px;font-weight:700;color:var(--primary);font-family:monospace">dr.sharma@apollo.in</div></div>
+              <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:12px 20px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-light);font-weight:700;margin-bottom:4px">Password</div><div style="font-size:14px;font-weight:700;color:var(--primary);font-family:monospace">Apollo@123</div></div>
+              <div style="font-size:13px;color:var(--text-light);line-height:1.6">Fields are pre-filled — just click <strong>Sign In</strong>.</div>
+            </div>
+          </div>
+
+          <!-- Live OT -->
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px">
+            <div style="background:var(--primary);color:#fff;padding:14px 20px;font-size:15px;font-weight:700">&#9673; Live OT</div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:18px">
+
+              <div><div style="font-size:13px;font-weight:700;color:var(--primary);border-bottom:2px solid var(--accent);display:inline-block;padding-bottom:4px;margin-bottom:10px">Video Sources</div>
+              <table style="width:100%;border-collapse:collapse;font-size:13px">
+                <tr style="background:var(--bg)"><th style="padding:8px 12px;text-align:left;font-size:11px;text-transform:uppercase;color:var(--text-light);border-bottom:2px solid var(--border)">Button</th><th style="padding:8px 12px;text-align:left;font-size:11px;text-transform:uppercase;color:var(--text-light);border-bottom:2px solid var(--border)">Feed</th></tr>
+                <tr><td style="padding:8px 12px;border-bottom:1px solid var(--border);font-weight:600;color:var(--primary)">📷 OT Camera</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text-light)">Wide-angle ceiling view of the full operating room</td></tr>
+                <tr><td style="padding:8px 12px;border-bottom:1px solid var(--border);font-weight:600;color:var(--primary)">🔬 Laparoscope</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text-light)">Internal laparoscopic camera feed inside patient</td></tr>
+                <tr><td style="padding:8px 12px;font-weight:600;color:var(--primary)">👁 Endoscope</td><td style="padding:8px 12px;color:var(--text-light)">Auxiliary endoscope / second instrument camera</td></tr>
+              </table></div>
+
+              <div><div style="font-size:13px;font-weight:700;color:var(--primary);border-bottom:2px solid var(--accent);display:inline-block;padding-bottom:4px;margin-bottom:10px">Recording</div>
+              <div style="font-size:13px;color:var(--text-light);line-height:1.8">Click <strong>🔴 Start Recording</strong> → timer starts. Click <strong>⏹ Stop Recording</strong> to end session. <strong>The live feed always keeps playing</strong> — stop recording never interrupts the video.</div></div>
+
+              <div><div style="font-size:13px;font-weight:700;color:var(--primary);border-bottom:2px solid var(--accent);display:inline-block;padding-bottom:4px;margin-bottom:10px">Snapshots</div>
+              <div style="font-size:13px;color:var(--text-light);line-height:1.8">Click <strong>📷 Snapshot</strong> or press <kbd style="background:#fff;border:1.5px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:12px">S</kbd> → frame captured from current source → appears in <strong>Snapshots panel</strong> on the right → click <strong>⬇ Save</strong> to download as JPG.</div></div>
+
+              <div><div style="font-size:13px;font-weight:700;color:var(--primary);border-bottom:2px solid var(--accent);display:inline-block;padding-bottom:4px;margin-bottom:10px">Audio</div>
+              <div style="font-size:13px;color:var(--text-light);line-height:1.8">All feeds start <strong>muted</strong> (browser requirement). Click <strong>🔇 Unmute</strong> to enable sound. When Voice Commands are active, video auto-mutes to prevent mic interference — restored when voice is stopped.</div></div>
+            </div>
+          </div>
+
+          <!-- Keyboard + Voice in 2 cols -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+              <div style="background:var(--primary);color:#fff;padding:14px 20px;font-size:15px;font-weight:700">&#9000; Keyboard Shortcuts</div>
+              <table style="width:100%;border-collapse:collapse;font-size:13px">
+                <tr><td style="padding:8px 12px;border-bottom:1px solid var(--border)"><kbd style="background:#fff;border:1.5px solid var(--border);border-bottom-width:3px;border-radius:4px;padding:1px 7px;font-family:monospace;font-size:11px">Space</kbd></td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text-light);font-size:12px">Play / Pause</td></tr>
+                <tr><td style="padding:8px 12px;border-bottom:1px solid var(--border)"><kbd style="background:#fff;border:1.5px solid var(--border);border-bottom-width:3px;border-radius:4px;padding:1px 7px;font-family:monospace;font-size:11px">M</kbd></td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text-light);font-size:12px">Mute / Unmute</td></tr>
+                <tr><td style="padding:8px 12px;border-bottom:1px solid var(--border)"><kbd style="background:#fff;border:1.5px solid var(--border);border-bottom-width:3px;border-radius:4px;padding:1px 7px;font-family:monospace;font-size:11px">S</kbd></td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text-light);font-size:12px">Take Snapshot</td></tr>
+                <tr><td style="padding:8px 12px;border-bottom:1px solid var(--border)"><kbd style="background:#fff;border:1.5px solid var(--border);border-bottom-width:3px;border-radius:4px;padding:1px 7px;font-family:monospace;font-size:11px">R</kbd></td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text-light);font-size:12px">Start / Stop Recording</td></tr>
+                <tr><td style="padding:8px 12px;border-bottom:1px solid var(--border)"><kbd style="background:#fff;border:1.5px solid var(--border);border-bottom-width:3px;border-radius:4px;padding:1px 7px;font-family:monospace;font-size:11px">1</kbd> <kbd style="background:#fff;border:1.5px solid var(--border);border-bottom-width:3px;border-radius:4px;padding:1px 7px;font-family:monospace;font-size:11px">2</kbd> <kbd style="background:#fff;border:1.5px solid var(--border);border-bottom-width:3px;border-radius:4px;padding:1px 7px;font-family:monospace;font-size:11px">3</kbd></td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text-light);font-size:12px">Switch OT Room</td></tr>
+                <tr><td style="padding:8px 12px;border-bottom:1px solid var(--border)"><kbd style="background:#fff;border:1.5px solid var(--border);border-bottom-width:3px;border-radius:4px;padding:1px 7px;font-family:monospace;font-size:11px">V</kbd></td><td style="padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text-light);font-size:12px">Toggle Voice</td></tr>
+                <tr><td style="padding:8px 12px"><kbd style="background:#fff;border:1.5px solid var(--border);border-bottom-width:3px;border-radius:4px;padding:1px 7px;font-family:monospace;font-size:11px">?</kbd></td><td style="padding:8px 12px;color:var(--text-light);font-size:12px">Voice Help Panel</td></tr>
+              </table>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+              <div style="background:var(--primary);color:#fff;padding:14px 20px;font-size:15px;font-weight:700">&#127908; Voice Commands</div>
+              <div style="padding:12px 16px;background:rgba(240,173,78,0.1);border-bottom:1px solid var(--border);font-size:11px;color:#8a6200">Chrome / Edge + HTTPS required. Video auto-mutes while listening.</div>
+              <table style="width:100%;border-collapse:collapse;font-size:12px">
+                <tr><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--accent);font-weight:600">"Start / Stop recording"</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--text-light)">Toggle recording</td></tr>
+                <tr><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--accent);font-weight:600">"Take snapshot"</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--text-light)">Capture frame</td></tr>
+                <tr><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--accent);font-weight:600">"Laparoscope"</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--text-light)">Switch source</td></tr>
+                <tr><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--accent);font-weight:600">"OT camera"</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--text-light)">Switch source</td></tr>
+                <tr><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--accent);font-weight:600">"Room one / two / three"</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--text-light)">Switch room</td></tr>
+                <tr><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--accent);font-weight:600">"Mute" / "Unmute"</td><td style="padding:7px 12px;border-bottom:1px solid var(--border);color:var(--text-light)">Toggle audio</td></tr>
+                <tr><td style="padding:7px 12px;color:var(--accent);font-weight:600">"Go to archive"</td><td style="padding:7px 12px;color:var(--text-light)">Navigate</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <!-- Playback -->
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px">
+            <div style="background:var(--primary);color:#fff;padding:14px 20px;font-size:15px;font-weight:700">&#9654; Playback &amp; Reports</div>
+            <div style="padding:20px;font-size:13px;color:var(--text-light);line-height:1.9">
+              <strong style="color:var(--text)">Custom player controls:</strong> ▶/⏸ Play·Pause &nbsp;|&nbsp; Click seek bar to jump &nbsp;|&nbsp; ±10s skip &nbsp;|&nbsp; Volume slider &nbsp;|&nbsp; Fullscreen<br>
+              <strong style="color:var(--text)">✂ Capture Clip:</strong> Grabs current frame as a clip thumbnail in the right panel.<br>
+              <strong style="color:var(--text)">⬇ Download:</strong> Downloads the full recording video.<br>
+              <strong style="color:var(--text)">🔗 Copy Share Link:</strong> Copies a shareable URL to clipboard.<br>
+              <strong style="color:var(--text)">📄 Save Notes &amp; Generate Report:</strong> Add notes → click button → PDF generated with procedure details, clips &amp; notes → View or Download from the report panel.
+            </div>
+          </div>
+
+          <!-- Device Tiers -->
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px">
+            <div style="background:var(--primary);color:#fff;padding:14px 20px;font-size:15px;font-weight:700">&#128268; Device Tiers</div>
+            <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:13px">
+              <tr style="background:var(--bg)"><th style="padding:10px 14px;text-align:left;border-bottom:2px solid var(--border);font-size:11px;text-transform:uppercase;color:var(--text-light)">Feature</th><th style="padding:10px 14px;text-align:center;border-bottom:2px solid var(--border);font-size:11px;text-transform:uppercase;color:var(--text-light)">Basic</th><th style="padding:10px 14px;text-align:center;border-bottom:2px solid var(--border);font-size:11px;text-transform:uppercase;color:var(--text-light)">Advanced</th><th style="padding:10px 14px;text-align:center;border-bottom:2px solid var(--border);font-size:11px;text-transform:uppercase;color:var(--accent);font-weight:800">Enterprise</th></tr>
+              <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border)">OT Camera + Live Streaming</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center">✅</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center">✅</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;background:rgba(0,168,157,0.04)">✅</td></tr>
+              <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border)">Recording + Archive</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center">✅</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center">✅</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;background:rgba(0,168,157,0.04)">✅</td></tr>
+              <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border)">Snapshot Capture</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center">✅</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center">✅</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;background:rgba(0,168,157,0.04)">✅</td></tr>
+              <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border)">Laparoscope + Endoscope Feed</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;color:var(--text-light)">—</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center">✅</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;background:rgba(0,168,157,0.04)">✅</td></tr>
+              <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border)">Remote View</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;color:var(--text-light)">—</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center">✅</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;background:rgba(0,168,157,0.04)">✅</td></tr>
+              <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border)">PDF Surgery Reports</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;color:var(--text-light)">—</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center">✅</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;background:rgba(0,168,157,0.04)">✅</td></tr>
+              <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border)">Voice Commands</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;color:var(--text-light)">—</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;color:var(--text-light)">—</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;background:rgba(0,168,157,0.04)">✅</td></tr>
+              <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border)">AI Surgery Copilot</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;color:var(--text-light)">—</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;color:var(--text-light)">—</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;background:rgba(0,168,157,0.04)">✅</td></tr>
+              <tr><td style="padding:9px 14px">PACS Integration + Multi-Hospital</td><td style="padding:9px 14px;text-align:center;color:var(--text-light)">—</td><td style="padding:9px 14px;text-align:center;color:var(--text-light)">—</td><td style="padding:9px 14px;text-align:center;background:rgba(0,168,157,0.04)">✅</td></tr>
+            </table>
+            </div>
+          </div>
+
         </div>
 
       </div>
