@@ -692,6 +692,14 @@
             <td class="tier-best" style="font-size:12px"><strong>Sony SRG-A40</strong><br><span style="color:var(--text-light)">4K PTZ, 20× optical, USB/IP/SDI, AI auto-framing</span><br><span style="font-size:10px;color:var(--primary)">~₹2.8L</span></td>
           </tr>
 
+          <tr>
+            <td><strong>Video Encoder / Capture Card</strong><br><span style="font-size:11px;color:var(--text-light)">HDMI/SDI → IP stream (per camera)</span></td>
+            <td style="font-size:12px">H.264/H.265, RTSP out, &lt;500 ms latency, 1080p min</td>
+            <td class="tier-good" style="font-size:12px"><strong>Magewell Ultra Encode HDMI</strong><br><span style="color:var(--text-light)">1-ch HDMI in, H.264/H.265, RTSP/RTMP/HLS, standalone box</span><br><span style="font-size:10px;color:var(--success)">~₹45K</span></td>
+            <td class="tier-better" style="font-size:12px"><strong>Magewell Pro Convert HDMI 4K Plus</strong><br><span style="color:var(--text-light)">4K 60fps HDMI in, H.265, NDI + RTSP/HLS, &lt;200 ms latency</span><br><span style="font-size:10px;color:var(--accent-dark)">~₹65K</span></td>
+            <td class="tier-best" style="font-size:12px"><strong>Haivision KB Mini Encoder</strong><br><span style="color:var(--text-light)">Dual H.265 stream, SRT protocol, &lt;80 ms glass-to-glass, SDI + HDMI</span><br><span style="font-size:10px;color:var(--primary)">~₹1.8L</span></td>
+          </tr>
+
           <tr class="sec-row"><td colspan="5">Power &amp; Tablet</td></tr>
           <tr>
             <td><strong>UPS (Uninterruptible Power)</strong><br><span style="font-size:11px;color:var(--text-light)">Server &amp; OT equipment protection</span></td>
@@ -758,7 +766,7 @@
           <tr><td>3rd Party Licences</td><td>Claude API, Whisper, monitoring tools (annual)</td><td class="c">₹4L / yr</td><td class="c">₹8L / yr</td><td class="c">₹15L / yr</td></tr>
           <tr class="sec-row"><td colspan="5">Hardware (per OT room)</td></tr>
           <tr><td>Compute &amp; Storage</td><td>Video server + app server + NAS</td><td class="c">₹6.8L</td><td class="c">₹11.8L</td><td class="c">₹38L</td></tr>
-          <tr><td>Cameras &amp; Displays</td><td>Laparoscope camera + room camera + surgical display</td><td class="c">₹5.6L</td><td class="c">₹10.2L</td><td class="c">₹24.6L</td></tr>
+          <tr><td>Cameras, Encoders &amp; Displays</td><td>Laparoscope camera + room camera + video encoders (×3) + surgical display</td><td class="c">₹6.7L</td><td class="c">₹12.2L</td><td class="c">₹30L</td></tr>
           <tr><td>Networking &amp; Power</td><td>Switch + AP + UPS + workstation + tablet</td><td class="c">₹2.6L</td><td class="c">₹4.6L</td><td class="c">₹10.2L</td></tr>
           <tr class="sec-row"><td colspan="5">Implementation</td></tr>
           <tr><td>Installation &amp; Integration</td><td>On-site setup, commissioning, cabling (per OT room)</td><td class="c">₹1.5L</td><td class="c">₹2L</td><td class="c">₹3L</td></tr>
@@ -929,6 +937,7 @@ async function generatePDF() {
       ['Control Workstation', 'i7/Ryzen 7, 16 GB, discrete GPU, SSD', 'HP EliteDesk 800 G9\n~₹75K', 'Dell Precision 3660 Tower\n~₹1.4L', 'HP Z4 G5 Workstation\n~₹3.2L'],
       ['Laparoscope Camera', 'Full HD, HDMI/SDI out', 'Storz IMAGE1 S\n~₹5L', 'Olympus VISERA Elite II\n~₹9L', 'Stryker 1688 AIM 4K\n~₹18L'],
       ['Overhead / Room Camera', 'Full HD, PTZ, PoE, RTSP', 'Hikvision DS-2DE4425IWG-E\n~₹28K', 'Axis P3245-V\n~₹55K', 'Sony SRG-A40\n~₹2.8L'],
+      ['Video Encoder / Capture Card', 'H.264/H.265, RTSP out, <500ms latency (per camera)', 'Magewell Ultra Encode HDMI\n~₹45K', 'Magewell Pro Convert HDMI 4K Plus\n~₹65K', 'Haivision KB Mini Encoder\n~₹1.8L'],
       ['UPS', 'Online double-conversion, 3000 VA', 'APC Smart-UPS SRT 3000VA\n~₹65K', 'Eaton 5PX 3000i RT2U\n~₹90K', 'Eaton 9PX 6000i RT6U\n~₹2.2L'],
       ['OT Control Tablet', '10"+, Wi-Fi 6, 8 GB RAM', 'Samsung Galaxy Tab S8\n~₹52K', 'Microsoft Surface Pro 9\n~₹1.1L', 'Apple iPad Pro M4 13"\n~₹1.6L'],
     ],
@@ -952,7 +961,7 @@ async function generatePDF() {
       ['Development', '610 person-days × blended day rate', '₹1.2 Cr', '₹1.8 Cr', '₹2.8 Cr'],
       ['3rd Party Licences', 'Claude API, Whisper, monitoring (annual)', '₹4L / yr', '₹8L / yr', '₹15L / yr'],
       ['Compute & Storage (per OT room)', 'Video server + app server + NAS', '₹6.8L', '₹11.8L', '₹38L'],
-      ['Cameras & Displays (per OT room)', 'Laparoscope + room camera + surgical display', '₹5.6L', '₹10.2L', '₹24.6L'],
+      ['Cameras, Encoders & Displays (per OT room)', 'Laparoscope + room camera + video encoders (×3) + surgical display', '₹6.7L', '₹12.2L', '₹30L'],
       ['Networking & Power (per OT room)', 'Switch + AP + UPS + workstation + tablet', '₹2.6L', '₹4.6L', '₹10.2L'],
       ['Installation & Integration', 'On-site setup, commissioning, cabling per OT room', '₹1.5L', '₹2L', '₹3L'],
       ['Training', 'Clinical & admin training (2 days on-site)', '₹50K', '₹80K', '₹1.5L'],
