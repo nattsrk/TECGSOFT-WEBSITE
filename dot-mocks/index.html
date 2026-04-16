@@ -789,6 +789,57 @@
   .toast.info { background: var(--accent); }
   @keyframes toast-in { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
+  /* ===== AI COPILOT PANEL ===== */
+  .ai-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: linear-gradient(135deg, var(--primary), var(--accent-dark));
+    color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 3px 8px; border-radius: 10px; text-transform: uppercase;
+  }
+  .ai-pulse { width: 7px; height: 7px; border-radius: 50%; background: #4cff91; animation: ai-glow 1.2s infinite; }
+  @keyframes ai-glow { 0%,100%{ opacity:1; box-shadow:0 0 4px #4cff91; } 50%{ opacity:0.5; box-shadow:none; } }
+  .confidence-bar-wrap { background: var(--border); border-radius: 4px; height: 6px; margin: 6px 0 2px; overflow: hidden; }
+  .confidence-bar { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent), #4cff91); transition: width 0.8s ease; }
+  .step-name { font-size: 14px; font-weight: 700; color: var(--primary); transition: all 0.4s; }
+  .ai-event-feed { max-height: 110px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+  .ai-event { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+  .ai-event:last-child { border-bottom: none; }
+  .ai-event-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 3px; flex-shrink: 0; }
+  .ai-event-dot.ok   { background: var(--success); }
+  .ai-event-dot.warn { background: var(--warning); }
+  .ai-event-dot.info { background: var(--accent); }
+  .ai-risk { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-top: 4px; }
+  .ai-risk.low    { background: rgba(40,167,69,0.1);  color: var(--success); }
+  .ai-risk.medium { background: rgba(240,173,78,0.12); color: #b07800; }
+  .ai-risk.high   { background: rgba(220,53,69,0.1);  color: var(--danger); }
+  .ai-alert-item  { font-size: 12px; padding: 6px 10px; border-radius: 6px; background: rgba(240,173,78,0.1); border-left: 3px solid var(--warning); color: #7a5500; margin-top: 6px; }
+  .ai-event-row { font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--border); color: var(--text-light); }
+  .ai-event-row:last-child { border-bottom: none; }
+  .ai-event-row.new { color: var(--accent-dark); font-weight: 600; animation: fadeIn 0.5s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+  /* ===== VOICE COMMAND UI ===== */
+  .voice-cmd-overlay {
+    display: none; position: fixed; bottom: 76px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,20,40,0.88); color: #fff;
+    padding: 10px 22px; border-radius: 24px; font-size: 14px; font-weight: 600;
+    z-index: 500; border: 1.5px solid rgba(0,168,157,0.5);
+    backdrop-filter: blur(6px); white-space: nowrap;
+    animation: toast-in 0.3s ease;
+  }
+  .vc-btn.voice-active { background: rgba(229,57,53,0.85) !important; animation: pulse-live 1s infinite; }
+  .voice-help {
+    position: fixed; bottom: 70px; right: 20px; z-index: 600;
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow-lg);
+    width: 240px; padding: 14px; border: 1px solid var(--border);
+    font-size: 12px; display: none;
+  }
+  .voice-help-title { font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 13px; }
+  .voice-cmd-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); color: var(--text-light); }
+  .voice-cmd-row:last-child { border-bottom: none; }
+  .voice-cmd-row span:first-child { color: var(--accent-dark); font-weight: 600; }
+
   /* ===== RESPONSIVE ===== */
 
   /* Hamburger button — hidden on desktop */
@@ -931,6 +982,22 @@
 
 <!-- ===== TOAST CONTAINER ===== -->
 <div class="toast-container" id="toasts"></div>
+
+<!-- ===== VOICE COMMAND OVERLAY ===== -->
+<div class="voice-cmd-overlay" id="voice-cmd-display"></div>
+
+<!-- ===== VOICE HELP PANEL ===== -->
+<div class="voice-help" id="voice-help">
+  <div class="voice-help-title">&#127908; Voice Commands</div>
+  <div class="voice-cmd-row"><span>"Start recording"</span><span>Begin recording</span></div>
+  <div class="voice-cmd-row"><span>"Stop recording"</span><span>Stop recording</span></div>
+  <div class="voice-cmd-row"><span>"Take snapshot"</span><span>Capture frame</span></div>
+  <div class="voice-cmd-row"><span>"Laparoscope"</span><span>Switch source</span></div>
+  <div class="voice-cmd-row"><span>"OT camera"</span><span>Switch source</span></div>
+  <div class="voice-cmd-row"><span>"Room one / two / three"</span><span>Switch room</span></div>
+  <div class="voice-cmd-row"><span>"Mute / Unmute"</span><span>Toggle audio</span></div>
+  <div class="voice-cmd-row"><span>"Go to archive"</span><span>Navigate</span></div>
+</div>
 
 <!-- ===== SIDEBAR OVERLAY (mobile) ===== -->
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
@@ -1154,6 +1221,8 @@
                 <button class="vc-btn rec-start" id="rec-toggle" onclick="toggleRec()">&#9679; Start Recording</button>
                 <button class="vc-btn snapshot" id="audio-btn" onclick="toggleAudio()">&#128263; Unmute</button>
                 <button class="vc-btn snapshot" onclick="takeSnapshot()">&#128248; Snapshot</button>
+                <button class="vc-btn source" id="voice-btn" onclick="toggleVoice()">&#127908; Voice</button>
+                <button class="vc-btn source" onclick="toggleVoiceHelp()" title="Voice commands list">&#10067;</button>
               </div>
             </div>
             <div class="info-panel">
@@ -1191,6 +1260,20 @@
                 <div class="info-section-title">Team</div>
                 <div class="info-section-body" style="font-size:13px;color:var(--text-light);line-height:1.8" id="room-team">
                   Dr. M. Gupta (Anesthetist) &bull; Sr. Lakshmi (Nurse)
+                </div>
+              </div>
+              <!-- AI Surgery Copilot panel -->
+              <div class="info-section" id="ai-copilot-section">
+                <div class="info-section-title" style="display:flex;align-items:center;gap:8px">
+                  <span class="ai-badge"><span class="ai-pulse"></span>AI Copilot</span>
+                </div>
+                <div class="info-section-body">
+                  <div style="font-size:11px;color:var(--text-light);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Current Step</div>
+                  <div style="font-size:13px;font-weight:700;color:var(--text);line-height:1.4;min-height:36px" id="ai-step-name">Initialising…</div>
+                  <div class="confidence-bar-wrap"><div class="confidence-bar" id="ai-conf-bar" style="width:0%"></div></div>
+                  <div style="font-size:11px;color:var(--text-light);text-align:right;margin-bottom:6px" id="ai-conf-pct">–</div>
+                  <div id="ai-event-feed" class="ai-event-feed"></div>
+                  <div id="ai-risk" class="ai-risk low" style="margin-top:8px">&#9679; Low Risk — 0 alerts</div>
                 </div>
               </div>
               <!-- Snapshots panel — appears after first snapshot -->
@@ -1817,6 +1900,8 @@
     // Reset source buttons
     document.querySelectorAll('.source-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.source-btn')[0]?.classList.add('active');
+    // Update AI Copilot for the switched room
+    if (typeof renderCopilot === 'function') renderCopilot(n);
   }
 
   // ===== SOURCE SELECT =====
@@ -2097,6 +2182,185 @@
     c.appendChild(t);
     setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(100%)'; t.style.transition = 'all 0.3s'; setTimeout(() => t.remove(), 300); }, 2500);
   }
+
+  // ===== VOICE COMMANDS =====
+  let voiceActive = false;
+  let recognition = null;
+
+  function initVoice() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { toast('Voice recognition not supported in this browser.', 'danger'); return false; }
+    recognition = new SR();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-IN';
+    recognition.onresult = function(e) {
+      let transcript = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        transcript += e.results[i][0].transcript;
+      }
+      if (e.results[e.results.length - 1].isFinal) {
+        handleVoiceCommand(transcript.trim().toLowerCase());
+      } else {
+        showVoiceCommand('🎙️ ' + transcript, false);
+      }
+    };
+    recognition.onerror = function(e) {
+      if (e.error !== 'no-speech') { toast('Voice error: ' + e.error, 'danger'); stopVoice(); }
+    };
+    recognition.onend = function() { if (voiceActive) recognition.start(); };
+    return true;
+  }
+
+  function toggleVoice() {
+    if (voiceActive) { stopVoice(); return; }
+    if (!recognition && !initVoice()) return;
+    voiceActive = true;
+    recognition.start();
+    document.getElementById('voice-btn').classList.add('voice-active');
+    document.getElementById('voice-btn').innerHTML = '&#128308; Listening…';
+    toast('Voice commands active — speak a command', 'success');
+  }
+
+  function stopVoice() {
+    voiceActive = false;
+    if (recognition) { try { recognition.stop(); } catch(e){} }
+    document.getElementById('voice-btn').classList.remove('voice-active');
+    document.getElementById('voice-btn').innerHTML = '&#127908; Voice';
+    const ov = document.getElementById('voice-cmd-display');
+    ov.style.display = 'none';
+  }
+
+  function showVoiceCommand(text, isFinal) {
+    const ov = document.getElementById('voice-cmd-display');
+    ov.textContent = text;
+    ov.style.display = 'block';
+    ov.style.opacity = '1';
+    if (isFinal) {
+      setTimeout(() => { ov.style.opacity = '0'; setTimeout(() => { ov.style.display = 'none'; ov.style.opacity = '1'; }, 400); }, 1500);
+    }
+  }
+
+  function handleVoiceCommand(cmd) {
+    let matched = false;
+    if (cmd.includes('start recording')) { if (!isRecording) toggleRec(); showVoiceCommand('✅ Recording started', true); matched = true; }
+    else if (cmd.includes('stop recording')) { if (isRecording) toggleRec(); showVoiceCommand('✅ Recording stopped', true); matched = true; }
+    else if (cmd.includes('snapshot') || cmd.includes('capture')) { takeSnapshot(); showVoiceCommand('✅ Snapshot taken', true); matched = true; }
+    else if (cmd.includes('laparoscope') || cmd.includes('laparoscopy')) {
+      const s = document.querySelector('.source-btn[onclick*="lap"]');
+      if (s) { selectSource(s); switchSource('lap'); } showVoiceCommand('✅ Laparoscope view', true); matched = true;
+    }
+    else if (cmd.includes('ot camera') || cmd.includes('camera')) {
+      const s = document.querySelector('.source-btn[onclick*="ot"]');
+      if (s) { selectSource(s); switchSource('ot'); } showVoiceCommand('✅ OT Camera view', true); matched = true;
+    }
+    else if (cmd.includes('room one') || cmd.includes('room 1')) { switchRoom(1); showVoiceCommand('✅ OT Room 1', true); matched = true; }
+    else if (cmd.includes('room two') || cmd.includes('room 2')) { switchRoom(2); showVoiceCommand('✅ OT Room 2', true); matched = true; }
+    else if (cmd.includes('room three') || cmd.includes('room 3')) { switchRoom(3); showVoiceCommand('✅ OT Room 3', true); matched = true; }
+    else if (cmd.includes('mute')) { const v = document.getElementById('live-video'); v.muted = true; document.getElementById('audio-btn').innerHTML = '&#128263; Unmute'; showVoiceCommand('✅ Muted', true); matched = true; }
+    else if (cmd.includes('unmute')) { const v = document.getElementById('live-video'); v.muted = false; document.getElementById('audio-btn').innerHTML = '&#128264; Mute'; showVoiceCommand('✅ Unmuted', true); matched = true; }
+    else if (cmd.includes('archive') || cmd.includes('recordings')) { showScreen('archive-screen'); showVoiceCommand('✅ Going to Archive', true); matched = true; }
+    if (!matched) showVoiceCommand('❓ "' + cmd + '"', true);
+  }
+
+  function toggleVoiceHelp() {
+    const h = document.getElementById('voice-help');
+    h.style.display = h.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // ===== AI SURGERY COPILOT =====
+  const copilotSteps = {
+    1: [
+      { name: 'Port Placement & Trocar Insertion', conf: 91 },
+      { name: 'CO₂ Insufflation — Pneumoperitoneum', conf: 88 },
+      { name: 'Laparoscope Insertion & Initial Survey', conf: 95 },
+      { name: 'Cystic Duct & Artery Dissection', conf: 84 },
+      { name: 'Critical View of Safety Achieved', conf: 97 },
+      { name: 'Clip Application on Cystic Duct', conf: 93 },
+      { name: 'Gallbladder Dissection from Liver Bed', conf: 89 },
+      { name: 'Specimen Retrieval via Umbilical Port', conf: 90 },
+      { name: 'Haemostasis Verification', conf: 96 },
+      { name: 'Port Closure & Skin Suturing', conf: 98 },
+    ],
+    2: [
+      { name: 'Median Sternotomy', conf: 92 },
+      { name: 'Cardiopulmonary Bypass Established', conf: 87 },
+      { name: 'Aortic Cross-Clamp Applied', conf: 94 },
+      { name: 'Cardioplegia Delivery', conf: 89 },
+      { name: 'Saphenous Vein Harvest', conf: 85 },
+      { name: 'Proximal Anastomosis — Aorta', conf: 91 },
+      { name: 'Distal Anastomosis — LAD Bypass', conf: 83 },
+      { name: 'De-airing & Cross-Clamp Removal', conf: 88 },
+      { name: 'Weaning Off Bypass', conf: 96 },
+      { name: 'Sternal Closure', conf: 97 },
+    ],
+    3: [
+      { name: 'Skin Incision & Tissue Dissection', conf: 90 },
+      { name: 'Femoral Component Preparation', conf: 86 },
+      { name: 'Tibial Plateau Resection', conf: 88 },
+      { name: 'Trial Components Placement', conf: 93 },
+      { name: 'Range of Motion Assessment', conf: 95 },
+      { name: 'Cement Mixing & Application', conf: 82 },
+      { name: 'Femoral Component Impaction', conf: 89 },
+      { name: 'Tibial Component Impaction', conf: 91 },
+      { name: 'Patella Resurfacing', conf: 84 },
+      { name: 'Final Stability & ROM Check', conf: 97 },
+    ],
+  };
+  const copilotEvents = {
+    1: ['Bile duct anatomy confirmed', 'Calot triangle dissected', 'CVS verified by attending', 'Clip count: 4 applied', 'Specimen bagged'],
+    2: ['CPB flow stable at 4.8L/min', 'Core temp: 32°C', 'Cardioplegia dose 2 delivered', 'EKG flat-line confirmed', 'Reperfusion initiated'],
+    3: ['Tourniquet pressure: 280mmHg', 'Bone cuts within 0.5mm target', 'Trial ROM 0–120° achieved', 'No MCL tension detected', 'Cement pressurisation done'],
+  };
+
+  let copilotStepIdx = { 1: 0, 2: 3, 3: 1 };
+  let copilotAlerts = { 1: 0, 2: 1, 3: 0 };
+  let copilotEventIdx = { 1: 0, 2: 0, 3: 0 };
+  let currentCopilotRoom = 1;
+
+  function renderCopilot(room) {
+    currentCopilotRoom = room;
+    const steps = copilotSteps[room];
+    const idx = copilotStepIdx[room];
+    const step = steps[idx];
+    document.getElementById('ai-step-name').textContent = step.name;
+    document.getElementById('ai-conf-bar').style.width = step.conf + '%';
+    document.getElementById('ai-conf-pct').textContent = step.conf + '% confidence';
+    const alerts = copilotAlerts[room];
+    const riskEl = document.getElementById('ai-risk');
+    if (alerts === 0) { riskEl.className = 'ai-risk low'; riskEl.innerHTML = '&#9679; Low Risk — 0 alerts'; }
+    else if (alerts === 1) { riskEl.className = 'ai-risk medium'; riskEl.innerHTML = '&#9679; Moderate — ' + alerts + ' alert'; }
+    else { riskEl.className = 'ai-risk high'; riskEl.innerHTML = '&#9679; High — ' + alerts + ' alerts'; }
+    renderEventFeed(room);
+  }
+
+  function renderEventFeed(room) {
+    const feed = document.getElementById('ai-event-feed');
+    const evts = copilotEvents[room];
+    const maxShow = Math.min(copilotEventIdx[room] + 1, evts.length);
+    feed.innerHTML = '';
+    for (let i = maxShow - 1; i >= Math.max(0, maxShow - 3); i--) {
+      const d = document.createElement('div');
+      d.className = 'ai-event-row' + (i === maxShow - 1 ? ' new' : '');
+      d.innerHTML = '<span style="color:var(--accent);margin-right:4px">&#10003;</span>' + evts[i];
+      feed.appendChild(d);
+    }
+  }
+
+  function advanceCopilot() {
+    const room = currentCopilotRoom;
+    const steps = copilotSteps[room];
+    copilotStepIdx[room] = (copilotStepIdx[room] + 1) % steps.length;
+    const evts = copilotEvents[room];
+    if (copilotEventIdx[room] < evts.length - 1) copilotEventIdx[room]++;
+    // Occasionally bump alert count for Room 2 (cardiac = higher risk)
+    if (room === 2 && Math.random() < 0.15 && copilotAlerts[room] < 3) copilotAlerts[room]++;
+    renderCopilot(room);
+  }
+
+  // Initial render + auto-advance every 18 seconds
+  setTimeout(() => { renderCopilot(1); }, 800);
+  setInterval(advanceCopilot, 18000);
 
   // ===== CLOCK =====
   function updateClock() {
