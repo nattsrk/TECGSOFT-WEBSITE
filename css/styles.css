@@ -1101,3 +1101,49 @@ p {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== NAVBAR WHATSAPP ===== */
+/* Sits outside .nav-links so it stays visible on mobile, where WhatsApp matters most. */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 50%;
+  color: #25D366;
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  background: rgba(37, 211, 102, 0.08);
+  transition: var(--transition);
+}
+
+.nav-whatsapp:hover {
+  color: #0A0A1A;
+  background: #25D366;
+  border-color: #25D366;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+}
+
+.nav-whatsapp svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+/* The underline animation on .nav-links a must not apply to the icon. */
+.nav-whatsapp::after { display: none !important; }
+
+.nav-drawer .drawer-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #25D366;
+}

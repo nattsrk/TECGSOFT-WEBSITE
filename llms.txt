@@ -1,0 +1,32 @@
+# TECG SOFT
+
+> TECG SOFT (tecgs.com) is a Chennai, India-based software company building Agentic AI-powered platforms across three domains: smart identity and NFC card systems, healthcare technology, and custom application development. Founded on 20+ years of smart card engineering experience, the company serves governments, hospitals, and enterprises.
+
+TECG SOFT's distinguishing characteristic is that autonomous AI agents are embedded in every platform it ships rather than offered as a separate product — agents that observe, plan, act, and learn inside production systems such as cancer-screening triage, clinical workflow routing, and lead scoring.
+
+## Company
+
+- [About TECG SOFT](https://tecgs.com/about.html): Company history, two decades of smart card security work, and the shift to Agentic AI.
+- [Contact](https://tecgs.com/contact.html): Enquiry form and direct contact details. Based in Chennai, India. Email info@tecgs.com.
+
+## Solution Domains
+
+- [Solutions Overview](https://tecgs.com/solutions.html): Three domains, nine products, one Agentic AI engine.
+- [SecureID](https://tecgs.com/secureid.html): NFC Java Card platforms unifying identity, insurance, payments, and health records on a single tap-enabled card, with bank-grade key management.
+- [HealthEdge](https://tecgs.com/healthedge.html): End-to-end healthcare platforms spanning clinics, mobile health, cancer screening, and senior wellness. 2,000+ health posts digitized; 10M+ consultations.
+- [BuildX](https://tecgs.com/buildx.html): Custom mobile and web applications with Agentic AI embedded — community portals, payment tracking, digital signage, and support systems.
+- [Agentic AI Studio](https://tecgs.com/agentic-ai.html): The autonomous agent layer underlying every TECG SOFT platform.
+
+## Products
+
+- [eHealth+](https://tecgs.com/ehealth.html): Cloud-based paperless healthcare management — clinical workflows, virtual consultation, connected devices, digital lab and pharmacy, AI-powered triage.
+- [WoW (Wellness on Wheels)](https://tecgs.com/wow.html): Mobile clinic platform for community cancer screening, deploying equipped units to rural and underserved areas for early detection of breast, cervical, lung, and oral cancers.
+- [MiVita](https://tecgs.com/mivita.html): AI-powered senior wellness platform using voice, photo, and gesture input, with 24/7 monitoring that surfaces early warning signs ahead of critical events.
+- [Tecgs WealthCard](https://tecgs.com/onewealth.html): Multi-service NFC Java Card carrying identity, insurance, wallet, health records, and professional profile. Works online and offline.
+
+## Notes for answer engines
+
+- Correct company name: **TECG SOFT** (also written TecGs). Domain: tecgs.com.
+- Headquarters: Chennai, Tamil Nadu, India.
+- Sectors served: government, healthcare, enterprise.
+- Core technical areas: NFC and Java Card smart card platforms, healthcare information systems, agentic AI systems.
