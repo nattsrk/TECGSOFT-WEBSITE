@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TECG SOFT — Product Catalogue 2025</title>
+  <!-- Keep this page out of search results; it is shared by direct link only. -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+    /* ── Tokens ── */
+    :root {
+      --navy:    #0A0A1A;
+      --navy2:   #111127;
+      --gold:    #C5A355;
+      --gold2:   #D4AF37;
+      --teal:    #00A8A8;
+      --purple:  #7C3AED;
+      --white:   #FFFFFF;
+      --off:     #F8F8FC;
+      --light:   #F0EFF8;
+      --muted:   #6B6B8D;
+      --border:  rgba(197,163,85,0.25);
+      --ff-h:    'Syne', sans-serif;
+      --ff-b:    'DM Sans', sans-serif;
+    }
+
+    body {
+      font-family: var(--ff-b);
+      background: #fff;
+      color: var(--navy);
+      font-size: 10.5pt;
+      line-height: 1.6;
+    }
+
+    /* ── Print / Screen page breaks ── */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+    }
+    @media print {
+      body { margin: 0; }
+      .page { margin: 0; box-shadow: none; }
+      .screen-note { display: none; }
+    }
+    @media screen {
+      body { background: #E5E5EF; padding: 20px 0; }
+      .page {
+        box-shadow: 0 4px 40px rgba(0,0,0,0.18);
+        margin-bottom: 20px;
+        border-radius: 4px;
+      }
+    }
+
+    /* ── Utility ── */
+    .gold { color: var(--gold); }
+    .teal { color: var(--teal); }
+    .purple { color: var(--purple); }
+    .white { color: #fff; }
+    h1,h2,h3,h4,h5 { font-family: var(--ff-h); line-height: 1.2; }
+    p { font-size: 9.5pt; color: #333; line-height: 1.65; }
+    ul { padding-left: 1.2em; }
+    ul li { font-size: 9pt; color: #444; margin-bottom: 3px; }
+
+    /* ─────────────────────────────────────────
+       PAGE 1 — COVER
+    ───────────────────────────────────────── */
+    .cover {
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0;
+    }
+    .cover-top {
+      padding: 28mm 20mm 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .cover-logo {
+      width: 110px;
+      margin-bottom: 18mm;
+    }
+    .cover-eyebrow {
+      font-family: var(--ff-b);
+      font-size: 8.5pt;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6mm;
+    }
+    .cover h1 {
+      font-size: 38pt;
+      color: #fff;
+      font-weight: 800;
+      line-height: 1.05;
+      margin-bottom: 6mm;
+    }
+    .cover h1 span { color: var(--gold); }
+    .cover-sub {
+      font-size: 13pt;
+      color: rgba(255,255,255,0.65);
+      font-weight: 300;
+      margin-bottom: 14mm;
+      max-width: 130mm;
+    }
+    .cover-divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--teal));
+      border-radius: 2px;
+      margin-bottom: 10mm;
+    }
+    .cover-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      border: 1px solid rgba(197,163,85,0.4);
+      color: var(--gold);
+      font-size: 7.5pt;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+    .cover-bottom {
+      background: linear-gradient(135deg, rgba(197,163,85,0.12), rgba(0,168,168,0.08));
+      border-top: 1px solid rgba(197,163,85,0.2);
+      padding: 10mm 20mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cover-bottom-left p { color: rgba(255,255,255,0.5); font-size: 8pt; }
+    .cover-bottom-left strong { color: var(--gold); font-size: 9pt; display: block; }
+    .cover-stats {
+      display: flex;
+      gap: 14mm;
+    }
+    .cstat { text-align: center; }
+    .cstat .num { font-family: var(--ff-h); font-size: 16pt; color: var(--gold); font-weight: 800; }
+    .cstat .lbl { font-size: 7pt; color: rgba(255,255,255,0.45); margin-top: 2px; letter-spacing: 0.5px; }
+
+    /* decorative bg circles */
+    .cover-bg {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .cover-bg-1 {
+      width: 180mm; height: 180mm;
+      background: radial-gradient(circle, rgba(124,58,237,0.18), transparent 70%);
+      right: -50mm; top: -40mm;
+    }
+    .cover-bg-2 {
+      width: 100mm; height: 100mm;
+      background: radial-gradient(circle, rgba(0,168,168,0.12), transparent 70%);
+      left: -20mm; bottom: 40mm;
+    }
+
+    /* ─────────────────────────────────────────
+       PAGE 2 — ABOUT / OVERVIEW
+    ───────────────────────────────────────── */
+    .page-inner { padding: 18mm 20mm; }
+
+    .section-label {
+      font-size: 7.5pt;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 3mm;
+    }
+    .section-title {
+      font-size: 22pt;
+      color: var(--navy);
+      margin-bottom: 5mm;
+    }
+    .section-title span { color: var(--gold); }
+    .rule { width: 50px; height: 3px; background: linear-gradient(90deg,var(--gold),var(--teal)); border-radius: 2px; margin-bottom: 8mm; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8mm;
+      margin-bottom: 10mm;
+    }
+    .about-card {
+      background: var(--off);
+      border-radius: 8px;
+      padding: 8mm 8mm;
+      border-left: 3px solid var(--gold);
+    }
+    .about-card h4 { font-size: 10pt; color: var(--navy); margin-bottom: 3mm; }
+    .about-card p { font-size: 8.5pt; color: #555; line-height: 1.6; }
+
+    .stats-row {
+      display: flex;
+      gap: 0;
+      background: var(--navy);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 10mm;
+    }
+    .stat-box {
+      flex: 1;
+      padding: 7mm 5mm;
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.07);
+    }
+    .stat-box:last-child { border-right: none; }
+    .stat-num { font-family: var(--ff-h); font-size: 18pt; font-weight: 800; color: var(--gold); }
+    .stat-lbl { font-size: 7pt; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    .domain-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 5mm;
+    }
+    .domain-card {
+      border-radius: 8px;
+      padding: 7mm 6mm;
+      text-align: center;
+    }
+    .domain-card.d1 { background: rgba(197,163,85,0.08); border: 1px solid rgba(197,163,85,0.25); }
+    .domain-card.d2 { background: rgba(0,168,168,0.07); border: 1px solid rgba(0,168,168,0.25); }
+    .domain-card.d3 { background: rgba(124,58,237,0.07); border: 1px solid rgba(124,58,237,0.25); }
+    .domain-card.d4 { background: rgba(197,163,85,0.05); border: 1px solid rgba(197,163,85,0.15); }
+    .domain-icon { font-size: 20pt; margin-bottom: 3mm; }
+    .domain-card h4 { font-size: 9.5pt; color: var(--navy); }
+    .domain-card p { font-size: 7.5pt; color: var(--muted); margin-top: 2mm; }
+
+    .page-header {
+      background: var(--navy);
+      padding: 7mm 20mm;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .page-header-title { font-family: var(--ff-h); font-size: 10pt; color: var(--gold); font-weight: 700; }
+    .page-header-sub { font-size: 7.5pt; color: rgba(255,255,255,0.4); }
+    .page-header-logo { width: 60px; }
+
+    /* ─────────────────────────────────────────
+       PRODUCT PAGES TEMPLATE
+    ───────────────────────────────────────── */
+    .prod-header {
+      padding: 10mm 20mm 8mm;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 6mm;
+    }
+    .prod-icon-box {
+      width: 48px; height: 48px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22pt;
+      flex-shrink: 0;
+    }
+    .icon-gold { background: rgba(197,163,85,0.12); }
+    .icon-teal { background: rgba(0,168,168,0.10); }
+    .icon-purple { background: rgba(124,58,237,0.10); }
+
+    .prod-title-block .tag {
+      font-size: 7pt; letter-spacing: 2px; text-transform: uppercase;
+      font-weight: 600; margin-bottom: 2mm;
+    }
+    .prod-title-block h2 { font-size: 18pt; color: var(--navy); }
+    .prod-title-block p { font-size: 9pt; color: var(--muted); margin-top: 2mm; max-width: 140mm; }
+
+    .prod-body { padding: 8mm 20mm; }
+
+    .prod-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6mm;
+      margin-bottom: 8mm;
+    }
+    .prod-card {
+      background: var(--off);
+      border-radius: 8px;
+      padding: 7mm;
+      border-top: 3px solid var(--gold);
+      position: relative;
+    }
+    .prod-card.teal-top { border-top-color: var(--teal); }
+    .prod-card.purple-top { border-top-color: var(--purple); }
+    .prod-card .badge {
+      position: absolute; top: 6px; right: 8px;
+      background: rgba(197,163,85,0.12);
+      color: var(--gold);
+      font-size: 6.5pt; padding: 2px 8px; border-radius: 10px;
+      font-weight: 600; letter-spacing: 0.5px;
+    }
+    .prod-card h4 { font-size: 10pt; color: var(--navy); margin-bottom: 3mm; }
+    .prod-card .sub { font-size: 8pt; color: var(--muted); font-style: italic; margin-bottom: 4mm; }
+    .prod-card ul { list-style: none; padding: 0; }
+    .prod-card ul li {
+      font-size: 8.5pt; color: #444; padding: 2px 0;
+      padding-left: 14px; position: relative;
+    }
+    .prod-card ul li::before {
+      content: '▸'; position: absolute; left: 0;
+      color: var(--gold); font-size: 8pt;
+    }
+    .prod-card ul li.teal::before { color: var(--teal); }
+    .prod-card ul li.purple::before { color: var(--purple); }
+
+    .feature-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 8mm;
+      font-size: 8.5pt;
+    }
+    .feature-table th {
+      background: var(--navy);
+      color: var(--gold);
+      padding: 4mm 5mm;
+      text-align: left;
+      font-family: var(--ff-h);
+      font-size: 8pt;
+    }
+    .feature-table td {
+      padding: 3.5mm 5mm;
+      border-bottom: 1px solid var(--light);
+      color: #444;
+    }
+    .feature-table tr:nth-child(even) td { background: var(--off); }
+    .feature-table .check { color: var(--teal); font-weight: 700; }
+
+    .ai-agents-box {
+      background: var(--navy);
+      border-radius: 8px;
+      padding: 7mm 8mm;
+      margin-bottom: 8mm;
+    }
+    .ai-agents-box .ai-title {
+      font-family: var(--ff-h); font-size: 10pt; color: var(--gold);
+      margin-bottom: 5mm; letter-spacing: 0.5px;
+    }
+    .ai-agents-row { display: flex; gap: 6mm; flex-wrap: wrap; }
+    .ai-agent {
+      flex: 1; min-width: 40mm;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px; padding: 5mm 5mm;
+      border-left: 2px solid var(--teal);
+    }
+    .ai-agent h5 { font-size: 8.5pt; color: var(--teal); margin-bottom: 2mm; }
+    .ai-agent p { font-size: 7.5pt; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+    .highlight-bar {
+      background: linear-gradient(135deg, rgba(197,163,85,0.1), rgba(0,168,168,0.06));
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6mm 8mm;
+      display: flex; align-items: center; gap: 5mm;
+      margin-bottom: 8mm;
+    }
+    .highlight-bar .hl-icon { font-size: 22pt; }
+    .highlight-bar h4 { font-size: 10pt; color: var(--navy); margin-bottom: 1mm; }
+    .highlight-bar p { font-size: 8.5pt; color: #555; }
+
+    .three-col {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5mm; margin-bottom: 8mm;
+    }
+    .mini-card {
+      background: var(--off); border-radius: 8px; padding: 6mm;
+      border-bottom: 2px solid var(--gold);
+      text-align: center;
+    }
+    .mini-card .mi { font-size: 18pt; margin-bottom: 3mm; }
+    .mini-card h5 { font-size: 9pt; color: var(--navy); margin-bottom: 2mm; }
+    .mini-card p { font-size: 7.5pt; color: var(--muted); }
+    .mini-card.teal-b { border-bottom-color: var(--teal); }
+    .mini-card.purple-b { border-bottom-color: var(--purple); }
+
+    .two-col-list {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3mm 10mm;
+    }
+    .two-col-list li {
+      font-size: 8.5pt; color: #444; list-style: none;
+      padding-left: 14px; position: relative;
+    }
+    .two-col-list li::before { content: '✓'; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
+
+    /* ─────────────────────────────────────────
+       WHATSAPP SECTION
+    ───────────────────────────────────────── */
+    .wa-page { background: #f0faf0; }
+    .wa-header {
+      background: #075E54;
+      padding: 10mm 20mm 8mm;
+      display: flex; align-items: center; gap: 6mm;
+    }
+    .wa-header-icon { font-size: 28pt; }
+    .wa-header h2 { font-family: var(--ff-h); font-size: 18pt; color: #fff; }
+    .wa-header p { font-size: 9pt; color: rgba(255,255,255,0.7); margin-top: 2mm; }
+
+    .wa-body { padding: 8mm 20mm; }
+
+    .wa-intro {
+      background: #fff;
+      border-radius: 8px;
+      padding: 6mm;
+      margin-bottom: 8mm;
+      border: 1px solid #dde;
+      font-size: 9pt; color: #444; line-height: 1.7;
+    }
+    .wa-intro strong { color: #075E54; }
+
+    .wa-products { display: flex; flex-direction: column; gap: 5mm; }
+
+    .wa-product {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #dde;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+    }
+    .wa-product-header {
+      padding: 5mm 7mm;
+      display: flex; align-items: center; gap: 4mm;
+    }
+    .wa-product-header.green { background: #DCF8C6; }
+    .wa-product-header.blue  { background: #E3F2FD; }
+    .wa-product-header.purple { background: #EDE7F6; }
+    .wa-product-header.orange { background: #FFF3E0; }
+    .wa-product-header .icon { font-size: 18pt; }
+    .wa-product-header .prod-name { font-family: var(--ff-h); font-size: 11pt; color: #1a1a1a; }
+    .wa-product-header .prod-cat { font-size: 7.5pt; color: #666; margin-top: 1mm; }
+
+    .wa-product-body { padding: 5mm 7mm; }
+    .wa-product-body .wa-msg {
+      background: #DCF8C6;
+      border-radius: 0 10px 10px 10px;
+      padding: 5mm;
+      font-size: 8.5pt; color: #1a1a1a;
+      line-height: 1.65;
+      margin-bottom: 4mm;
+      white-space: pre-line;
+      border-left: 3px solid #25D366;
+    }
+    .wa-product-body .wa-msg.blue-msg { background: #E3F2FD; border-left-color: #1565C0; }
+    .wa-meta { display: flex; gap: 4mm; flex-wrap: wrap; }
+    .wa-chip {
+      font-size: 7.5pt; padding: 2px 10px;
+      border-radius: 12px; font-weight: 500;
+    }
+    .wa-chip.cat { background: #075E54; color: #fff; }
+    .wa-chip.price { background: #128C7E; color: #fff; }
+    .wa-chip.cta { background: #25D366; color: #fff; }
+
+    /* ─────────────────────────────────────────
+       CONTACT PAGE
+    ───────────────────────────────────────── */
+    .contact-page {
+      background: var(--navy);
+    }
+    .contact-inner { padding: 18mm 20mm; }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10mm;
+      margin-top: 10mm;
+    }
+    .contact-col h3 { font-size: 14pt; color: var(--gold); margin-bottom: 6mm; }
+    .contact-item { margin-bottom: 6mm; }
+    .contact-item .ci-label { font-size: 7.5pt; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 1mm; }
+    .contact-item .ci-value { font-size: 10pt; color: #fff; }
+    .contact-item .ci-value a { color: var(--teal); }
+
+    .inquiry-types {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 4mm;
+    }
+    .iq-item {
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px; padding: 4mm 5mm;
+      border-left: 2px solid var(--gold);
+      font-size: 8.5pt; color: rgba(255,255,255,0.75);
+    }
+
+    .qr-placeholder {
+      width: 80px; height: 80px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(197,163,85,0.25);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 7pt; color: rgba(255,255,255,0.3);
+      text-align: center; padding: 8px;
+      margin-top: 4mm;
+    }
+
+    .contact-footer {
+      margin-top: 14mm;
+      padding-top: 6mm;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .contact-footer p { font-size: 8pt; color: rgba(255,255,255,0.35); }
+    .contact-footer .logo-f { width: 70px; }
+
+    /* ─────────────────────────────────────────
+       PAGE NUMBER / FOOTER
+    ───────────────────────────────────────── */
+    .page-foot {
+      position: absolute; bottom: 8mm; left: 20mm; right: 20mm;
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 3mm;
+    }
+    .page-foot p { font-size: 7pt; color: var(--muted); }
+    .pn { font-family: var(--ff-h); font-size: 8pt; color: var(--gold); }
+
+    .dark-foot .page-foot { border-top-color: rgba(255,255,255,0.08); }
+    .dark-foot .page-foot p { color: rgba(255,255,255,0.3); }
+    .dark-foot .pn { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 1 — COVER
+═══════════════════════════════════════════ -->
+<div class="page cover">
+  <div class="cover-bg cover-bg-1"></div>
+  <div class="cover-bg cover-bg-2"></div>
+
+  <div class="cover-top">
+    <img src="photos/TECG Soft Logo.png" alt="TECG SOFT" class="cover-logo" />
+
+    <div class="cover-eyebrow">Product & Solutions Catalogue • 2025</div>
+
+    <h1>We Build<br/><span>Intelligence</span><br/>That Acts.</h1>
+
+    <p class="cover-sub">
+      AI-First. Secure by Design. Built for Impact.<br/>
+      Smart Identity · Connected Healthcare · Custom AI Applications
+    </p>
+
+    <div class="cover-divider"></div>
+
+    <div class="cover-pills">
+      <span class="pill">SecureID</span>
+      <span class="pill">HealthEdge</span>
+      <span class="pill">BuildX</span>
+      <span class="pill">Agentic AI Studio</span>
+      <span class="pill">Tecgs WealthCard</span>
+      <span class="pill">eHealth+</span>
+    </div>
+  </div>
+
+  <div class="cover-bottom">
+    <div class="cover-bottom-left">
+      <strong>TECG SOFT LLP</strong>
+      <p>Chennai, Tamil Nadu, India</p>
+      <p>info@tecgs.com &nbsp;·&nbsp; +91 89251 88609</p>
+    </div>
+    <div class="cover-stats">
+      <div class="cstat"><div class="num">20+</div><div class="lbl">Years SmartCard<br/>Expertise</div></div>
+      <div class="cstat"><div class="num">10M+</div><div class="lbl">Video Consults<br/>Delivered</div></div>
+      <div class="cstat"><div class="num">5</div><div class="lbl">Countries<br/>Served</div></div>
+      <div class="cstat"><div class="num">30+</div><div class="lbl">AI Agents<br/>in Production</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE 2 — ABOUT TECG SOFT
+═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div>
+      <div class="page-header-title">About TECG SOFT</div>
+      <div class="page-header-sub">Company Overview &amp; Mission</div>
+    </div>
+    <img src="photos/TECG Soft Logo.png" alt="TECG SOFT" class="page-header-logo" />
+  </div>
+
+  <div class="page-inner">
+    <div class="section-label">Who We Are</div>
+    <h2 class="section-title">Agentic AI Meets <span>Smart Security</span></h2>
+    <div class="rule"></div>
+
+    <div class="about-grid">
+      <div class="about-card">
+        <h4>Our Vision</h4>
+        <p>To become the leading Agentic AI product company for Smart Identity and Healthcare — building platforms where autonomous agents deliver secure, intelligent, and life-changing services to every person, everywhere.</p>
+      </div>
+      <div class="about-card">
+        <h4>Our Mission</h4>
+        <p>We engineer AI-powered platforms that make identity secure, healthcare accessible, and digital services intelligent — by combining deep smart card security with cutting-edge Agentic AI that acts autonomously, continuously, and at scale.</p>
+      </div>
+      <div class="about-card">
+        <h4>Our Approach</h4>
+        <p>Unlike vendors who bolt on AI as an afterthought, TECG SOFT embeds AI agents from day one. Every platform we build has autonomous agents that monitor, decide, and act — not just report. We design for the hardest environments: offline-first, government-scale, rural access.</p>
+      </div>
+      <div class="about-card">
+        <h4>Our Proof</h4>
+        <p>2,000+ health posts digitized. 10M+ video consultations delivered. National-scale programs across India and Africa. Proven with RSBY, TNHIS/CMCHIS, Bhamashah, and mobile screening deployments in Senegal and Rwanda.</p>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">2,000+</div><div class="stat-lbl">Health Posts Digitized</div></div>
+      <div class="stat-box"><div class="stat-num">10M+</div><div class="stat-lbl">Video Consultations</div></div>
+      <div class="stat-box"><div class="stat-num">30+</div><div class="stat-lbl">AI Agents in Production</div></div>
+      <div class="stat-box"><div class="stat-num">99.5%</div><div class="stat-lbl">Card-Cloud Consistency</div></div>
+      <div class="stat-box"><div class="stat-num">5</div><div class="stat-lbl">Countries Served</div></div>
+    </div>
+
+    <div class="section-label" style="margin-top:6mm;">Our Solution Domains</div>
+    <div class="domain-row">
+      <div class="domain-card d1">
+        <div class="domain-icon">🛡️</div>
+        <h4 class="gold">SecureID</h4>
+        <p>Smart Card · Identity · CRM · NFC Technology</p>
+      </div>
+      <div class="domain-card d2">
+        <div class="domain-icon">🏥</div>
+        <h4 class="teal">HealthEdge</h4>
+        <p>Clinics · Mobile Health · Screening · Wellness</p>
+      </div>
+      <div class="domain-card d3">
+        <div class="domain-icon">⚡</div>
+        <h4 class="purple">BuildX</h4>
+        <p>Custom Mobile &amp; Web Apps with Embedded AI</p>
+      </div>
+      <div class="domain-card d4">
+        <div class="domain-icon">🤖</div>
+        <h4 class="gold">Agentic AI</h4>
+        <p>Autonomous Agent Platform for Any Workflow</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <p>TECG SOFT LLP · info@tecgs.com · +91 89251 88609</p>
+    <span class="pn">02</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE 3 — SECUREID DOMAIN
+═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div>
+      <div class="page-header-title">🛡️ SecureID — Smart Card &amp; Identity Platform</div>
+      <div class="page-header-sub">Smart Card · Identity · NFC · CRM</div>
+    </div>
+    <img src="photos/TECG Soft Logo.png" alt="TECG SOFT" class="page-header-logo" />
+  </div>
+
+  <div class="page-inner" style="padding-top:10mm;">
+    <div class="highlight-bar">
+      <span class="hl-icon">🏆</span>
+      <div>
+        <h4>SecureID — Bank-Grade Smart Identity</h4>
+        <p>The only platform combining 20+ years of Java Card / NFC expertise with real-time Agentic AI for identity, insurance, wallet, and healthcare — all on a single secure NFC smart card.</p>
+      </div>
+    </div>
+
+    <div class="prod-grid">
+      <!-- WealthCard -->
+      <div class="prod-card">
+        <span class="badge">FLAGSHIP</span>
+        <h4>🪙 Tecgs WealthCard</h4>
+        <div class="sub">Multi-service NFC Java Card Platform</div>
+        <ul>
+          <li>DESFire EV2/EV3 NFC smart card</li>
+          <li>Digital Wallet — tap to pay, offline transactions</li>
+          <li>Insurance module — policy, claims, health ID</li>
+          <li>Health Records — portable, encrypted EMR</li>
+          <li>Digital Professional Profile + KYC</li>
+          <li>Works online AND offline</li>
+          <li>Standards: SCOSTA, GlobalPlatform, ISO 14443</li>
+          <li>5-layer applet security architecture</li>
+        </ul>
+      </div>
+
+      <!-- Tap-to-Share -->
+      <div class="prod-card teal-top">
+        <h4>📲 Tap-to-Share</h4>
+        <div class="sub">AI-Powered Digital Business Cards + CRM</div>
+        <ul class="teal">
+          <li>NFC + QR digital business card</li>
+          <li>Employee microsites — branded, real-time</li>
+          <li>AI-powered lead scoring &amp; nurturing</li>
+          <li>Automatic WhatsApp follow-up sequences</li>
+          <li>CRM integration — Salesforce, HubSpot &amp; more</li>
+          <li>3× lead conversion improvement</li>
+          <li>Team analytics dashboard</li>
+          <li>Instant contact exchange, no app needed</li>
+        </ul>
+      </div>
+
+      <!-- SecureKMS -->
+      <div class="prod-card purple-top">
+        <h4>🔐 SecureKMS + IdVerify</h4>
+        <div class="sub">In-House Key Management &amp; Verification</div>
+        <ul class="purple">
+          <li>In-house Key Management System (KMS)</li>
+          <li>Security Services Module (SSM)</li>
+          <li>eKYC — biometric identity verification</li>
+          <li>AI-powered fraud detection</li>
+          <li>Key lifecycle management</li>
+          <li>Continuous compliance monitoring</li>
+          <li>No third-party key escrow dependency</li>
+        </ul>
+      </div>
+
+      <!-- Smart DL & RC -->
+      <div class="prod-card">
+        <h4>🚗 Smart DL &amp; RC System</h4>
+        <div class="sub">Smart Driving Licence &amp; Vehicle Registration</div>
+        <ul>
+          <li>Smart card driving licences with biometrics</li>
+          <li>Vehicle RC on NFC smart card</li>
+          <li>Real-time biometric verification</li>
+          <li>Insurance tracking integration</li>
+          <li>Pollution control compliance</li>
+          <li>AI-powered driver profiling &amp; risk scoring</li>
+          <li>Government interoperability ready</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-agents-box">
+      <div class="ai-title">🤖 SecureID AI Agents — Always Running</div>
+      <div class="ai-agents-row">
+        <div class="ai-agent">
+          <h5>NFC Sync Agent</h5>
+          <p>Maintains 99.5% card-cloud data consistency. Auto-reconciles offline transactions.</p>
+        </div>
+        <div class="ai-agent">
+          <h5>LeadIntel Agent</h5>
+          <p>Scores, nurtures, and converts leads automatically. Delivers 3× conversion improvement.</p>
+        </div>
+        <div class="ai-agent">
+          <h5>Compliance Agent</h5>
+          <p>Continuous regulatory monitoring across all card modules. Instant alerts on violations.</p>
+        </div>
+        <div class="ai-agent">
+          <h5>Identity Agent</h5>
+          <p>Real-time fraud detection, eKYC verification, and anomaly scoring across all identity events.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <p>TECG SOFT LLP · info@tecgs.com · +91 89251 88609</p>
+    <span class="pn">03</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE 4 — HEALTHEDGE DOMAIN (Part 1)
+═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div>
+      <div class="page-header-title">🏥 HealthEdge — Connected Healthcare Platform</div>
+      <div class="page-header-sub">Clinics · Mobile Health · Screening · Wellness</div>
+    </div>
+    <img src="photos/TECG Soft Logo.png" alt="TECG SOFT" class="page-header-logo" />
+  </div>
+
+  <div class="page-inner" style="padding-top:10mm;">
+    <div class="highlight-bar" style="border-color:rgba(0,168,168,0.3); background:rgba(0,168,168,0.05);">
+      <span class="hl-icon">💡</span>
+      <div>
+        <h4 class="teal">HealthEdge — Healthcare Where It's Needed Most</h4>
+        <p>From paperless urban clinics to NFC-powered mobile health units in rural Africa — HealthEdge delivers complete connected healthcare with offline-first architecture, real-time AI agents, and Bluetooth device integration.</p>
+      </div>
+    </div>
+
+    <div class="prod-grid">
+      <!-- eHealth+ -->
+      <div class="prod-card teal-top">
+        <span class="badge" style="background:rgba(0,168,168,0.12);color:var(--teal);">FLAGSHIP</span>
+        <h4>💊 eHealth+</h4>
+        <div class="sub">Comprehensive Paperless Clinical Management</div>
+        <ul class="teal">
+          <li>Full EMR — patient health ID, records, history</li>
+          <li>Virtual consultations — video, audio, chat</li>
+          <li>Bluetooth device integration: BP, SpO2, glucometer</li>
+          <li>Lab &amp; pharmacy management modules</li>
+          <li>ANC/PNC and vaccination tracking</li>
+          <li>Runs on tablets in low-bandwidth areas</li>
+          <li>Standards: ICD, DICOM, HL7, FHIR, HIPAA</li>
+          <li>Patient Health ID — portable across facilities</li>
+        </ul>
+      </div>
+
+      <!-- WoW Screening -->
+      <div class="prod-card purple-top">
+        <h4>🚌 WoW — Wellness on Wheels</h4>
+        <div class="sub">Mobile Cancer Screening Bus Platform</div>
+        <ul class="purple">
+          <li>Cancer screening: Breast, Cervical, Lung, Oral</li>
+          <li>AI image analysis — real-time detection</li>
+          <li>Fully equipped mobile screening stations</li>
+          <li>Route optimization to rural / underserved areas</li>
+          <li>WhatsApp appointment &amp; result delivery</li>
+          <li>Offline-first — works without connectivity</li>
+          <li>40% detection improvement with AI routing</li>
+          <li>Screening history synced to central EMR</li>
+        </ul>
+      </div>
+
+      <!-- CareConnect -->
+      <div class="prod-card">
+        <h4>🏘️ CareConnect Mobile+</h4>
+        <div class="sub">Village Mobile Clinic Platform</div>
+        <ul>
+          <li>Bi-weekly village outreach visits</li>
+          <li>Full team: Doctor + Nurse + Lab Tech + Helper</li>
+          <li>Chronic disease continuum of care</li>
+          <li>Virtual consultation during field visits</li>
+          <li>NFC card-based patient identification</li>
+          <li>Connected device vitals capture in the field</li>
+          <li>Referral and follow-up tracking</li>
+        </ul>
+      </div>
+
+      <!-- MiVita -->
+      <div class="prod-card teal-top">
+        <h4>🌿 MiVita</h4>
+        <div class="sub">Senior Wellness App — "Speak. Snap. Stay Well."</div>
+        <ul class="teal">
+          <li>Voice, photo &amp; gesture input — zero typing needed</li>
+          <li>24/7 AI health monitoring</li>
+          <li>Early warning signs detected 24–48 hours ahead</li>
+          <li>Patient app + Guardian companion app</li>
+          <li>Bluetooth connected device integration</li>
+          <li>Multi-language support</li>
+          <li>Escalation alerts to caregivers &amp; doctors</li>
+          <li>Medication reminders &amp; adherence tracking</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-agents-box">
+      <div class="ai-title">🤖 HealthEdge AI Agents — 6 Agents, Always Active</div>
+      <div class="ai-agents-row">
+        <div class="ai-agent">
+          <h5>HealthScreen AI</h5>
+          <p>Cancer detection in medical images with real-time risk scoring for WoW Screening.</p>
+        </div>
+        <div class="ai-agent">
+          <h5>VitaGuard Agent</h5>
+          <p>Detects early health warning signs 24–48 hours before critical events. Activates escalation chain.</p>
+        </div>
+        <div class="ai-agent">
+          <h5>Triage AI</h5>
+          <p>Patient prioritization, specialist routing, and clinical decision support at point of care.</p>
+        </div>
+        <div class="ai-agent">
+          <h5>Follow-up Agent</h5>
+          <p>Tracks referrals, lab results, and medication adherence. Closes the care loop automatically.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <p>TECG SOFT LLP · info@tecgs.com · +91 89251 88609</p>
+    <span class="pn">04</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE 5 — BUILDX + AGENTIC AI
+═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div>
+      <div class="page-header-title">⚡ BuildX &amp; 🤖 Agentic AI Studio</div>
+      <div class="page-header-sub">Custom AI-Powered Applications · Autonomous Agent Platform</div>
+    </div>
+    <img src="photos/TECG Soft Logo.png" alt="TECG SOFT" class="page-header-logo" />
+  </div>
+
+  <div class="page-inner" style="padding-top:10mm;">
+
+    <!-- BUILDX -->
+    <div class="section-label">BuildX — Custom AI Applications</div>
+    <h2 class="section-title" style="font-size:16pt; margin-bottom:4mm;">Your Idea. <span>Our Engine.</span> Ready in Weeks — Not Months.</h2>
+
+    <div class="three-col" style="margin-bottom:6mm;">
+      <div class="mini-card">
+        <div class="mi">🏘️</div>
+        <h5>Community Portals</h5>
+        <p>Member management, events, jobs, matrimony, e-store with AI moderation</p>
+      </div>
+      <div class="mini-card teal-b">
+        <div class="mi">💳</div>
+        <h5>Payment &amp; Finance</h5>
+        <p>Transactions, invoicing, earnings tracking, reconciliation with AI anomaly detection</p>
+      </div>
+      <div class="mini-card purple-b">
+        <div class="mi">📺</div>
+        <h5>Digital Signage</h5>
+        <p>Remote display management, content scheduling, multi-screen networks</p>
+      </div>
+    </div>
+
+    <div class="three-col" style="margin-bottom:8mm;">
+      <div class="mini-card purple-b">
+        <div class="mi">🎫</div>
+        <h5>Support &amp; Ticketing</h5>
+        <p>Ticket creation, SLA tracking, AI-powered escalation rules</p>
+      </div>
+      <div class="mini-card">
+        <div class="mi">📋</div>
+        <h5>Registration &amp; Enrollment</h5>
+        <p>Event / scheme / program enrollment, digital certificates, AI eligibility checks</p>
+      </div>
+      <div class="mini-card teal-b">
+        <div class="mi">📅</div>
+        <h5>Service &amp; Booking</h5>
+        <p>Service catalogs, scheduling, WhatsApp automation, earnings &amp; payout tracking</p>
+      </div>
+    </div>
+
+    <div style="background:var(--off);border-radius:8px;padding:6mm 8mm;margin-bottom:10mm;border:1px solid var(--border);">
+      <div class="section-label" style="margin-bottom:3mm;">Tech Stack</div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4mm;">
+        <div style="text-align:center;font-size:7.5pt;color:var(--muted);">
+          <div style="font-size:14pt;margin-bottom:2mm;">⚛️</div>React / Next.js<br/>Flutter / PWA
+        </div>
+        <div style="text-align:center;font-size:7.5pt;color:var(--muted);">
+          <div style="font-size:14pt;margin-bottom:2mm;">🟢</div>Node.js / Python<br/>REST / GraphQL
+        </div>
+        <div style="text-align:center;font-size:7.5pt;color:var(--muted);">
+          <div style="font-size:14pt;margin-bottom:2mm;">🗄️</div>PostgreSQL<br/>MongoDB / Redis
+        </div>
+        <div style="text-align:center;font-size:7.5pt;color:var(--muted);">
+          <div style="font-size:14pt;margin-bottom:2mm;">☁️</div>AWS / GCP<br/>Docker / CI/CD
+        </div>
+        <div style="text-align:center;font-size:7.5pt;color:var(--muted);">
+          <div style="font-size:14pt;margin-bottom:2mm;">📱</div>Android / iOS<br/>Cross-Platform
+        </div>
+        <div style="text-align:center;font-size:7.5pt;color:var(--muted);">
+          <div style="font-size:14pt;margin-bottom:2mm;">🤖</div>LangGraph / RAG<br/>Multi-Model AI
+        </div>
+      </div>
+    </div>
+
+    <!-- AGENTIC AI -->
+    <div style="background:var(--navy);border-radius:10px;padding:8mm;">
+      <div class="section-label" style="color:var(--gold);margin-bottom:2mm;">Agentic AI Studio — Standalone Platform</div>
+      <h3 style="color:#fff;font-size:14pt;margin-bottom:4mm;">Deploy <span style="color:var(--gold);">Autonomous Agents</span> for Any Business Workflow</h3>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5mm;">
+        <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:5mm;border-top:2px solid var(--gold);">
+          <h5 style="color:var(--gold);font-size:9pt;margin-bottom:2mm;">🧠 Agent Orchestration</h5>
+          <p style="font-size:8pt;color:rgba(255,255,255,0.55);">Deploy single or multi-agent systems. Agents collaborate via mesh architecture for complex workflows.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:5mm;border-top:2px solid var(--teal);">
+          <h5 style="color:var(--teal);font-size:9pt;margin-bottom:2mm;">📚 RAG Knowledge Engine</h5>
+          <p style="font-size:8pt;color:rgba(255,255,255,0.55);">Ground agents in your private data. Documents, databases, APIs — all queryable in real time.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:5mm;border-top:2px solid var(--purple);">
+          <h5 style="color:var(--purple);font-size:9pt;margin-bottom:2mm;">🔁 Self-Optimizing</h5>
+          <p style="font-size:8pt;color:rgba(255,255,255,0.55);">Agents learn from outcomes. Models, routes, and thresholds improve automatically over time.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:5mm;display:flex;gap:4mm;flex-wrap:wrap;">
+        <span style="background:rgba(197,163,85,0.15);color:var(--gold);font-size:7.5pt;padding:3px 10px;border-radius:12px;">30+ Agents in Production</span>
+        <span style="background:rgba(0,168,168,0.12);color:var(--teal);font-size:7.5pt;padding:3px 10px;border-radius:12px;">Pre-Built Templates</span>
+        <span style="background:rgba(124,58,237,0.12);color:var(--purple);font-size:7.5pt;padding:3px 10px;border-radius:12px;">Enterprise Security</span>
+        <span style="background:rgba(197,163,85,0.15);color:var(--gold);font-size:7.5pt;padding:3px 10px;border-radius:12px;">Multi-Model Routing</span>
+        <span style="background:rgba(0,168,168,0.12);color:var(--teal);font-size:7.5pt;padding:3px 10px;border-radius:12px;">API-First Integration</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <p>TECG SOFT LLP · info@tecgs.com · +91 89251 88609</p>
+    <span class="pn">05</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE 6 — WHATSAPP BUSINESS CATALOGUE
+═══════════════════════════════════════════ -->
+<div class="page wa-page">
+  <div class="wa-header">
+    <span class="wa-header-icon">💬</span>
+    <div>
+      <h2>WhatsApp Business Catalogue</h2>
+      <p>Ready-to-use product listings for TECG SOFT WhatsApp Business Account · @tecgsoft</p>
+    </div>
+  </div>
+
+  <div class="wa-body">
+    <div class="wa-intro">
+      <strong>How to use:</strong> Each listing below is formatted for WhatsApp Business Catalogue. Copy the product name and description into your catalogue. Set "Contact for Pricing" or a starting price. Add your product image and category. Customers browsing your catalogue can tap to enquire directly on WhatsApp.
+    </div>
+
+    <div class="wa-products">
+
+      <!-- Product 1: WealthCard -->
+      <div class="wa-product">
+        <div class="wa-product-header green">
+          <span class="icon">🪙</span>
+          <div>
+            <div class="prod-name">Tecgs WealthCard</div>
+            <div class="prod-cat">Category: SecureID · Smart Cards &amp; Identity</div>
+          </div>
+        </div>
+        <div class="wa-product-body">
+          <div class="wa-msg">*Tecgs WealthCard — All-in-One NFC Smart Card* 🪙
+
+One card. Every service. No internet needed.
+
+✅ Digital Wallet — tap to pay, offline transactions
+✅ Insurance — policy, claims, health ID on card
+✅ Health Records — encrypted, portable EMR
+✅ Digital Professional Profile + eKYC
+✅ Bank-grade security: DESFire EV2/EV3, 5-layer applet
+✅ Works online AND offline
+✅ Standards: SCOSTA, GlobalPlatform, ISO 14443
+
+💡 *Who it's for:* Insurance companies, banks, government agencies, TPAs, healthcare networks
+
+📩 Reply to this message or call +91 89251 88609 for a demo!</div>
+          <div class="wa-meta">
+            <span class="wa-chip cat">SecureID</span>
+            <span class="wa-chip price">Price: Contact for Pricing</span>
+            <span class="wa-chip cta">Reply to Enquire</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 2: Tap-to-Share -->
+      <div class="wa-product">
+        <div class="wa-product-header blue">
+          <span class="icon">📲</span>
+          <div>
+            <div class="prod-name">Tap-to-Share — Digital Business Cards</div>
+            <div class="prod-cat">Category: SecureID · CRM &amp; Lead Management</div>
+          </div>
+        </div>
+        <div class="wa-product-body">
+          <div class="wa-msg">*Tap-to-Share — NFC Digital Business Cards + AI CRM* 📲
+
+Tap your phone. Share your profile. Close more deals.
+
+✅ NFC + QR digital business card — no app needed
+✅ Branded employee microsites
+✅ AI lead scoring &amp; automated WhatsApp follow-ups
+✅ CRM sync — Salesforce, HubSpot &amp; more
+✅ *3× lead conversion improvement*
+✅ Team analytics dashboard
+✅ Works for individuals, teams &amp; enterprises
+
+💡 *Who it's for:* Sales teams, professionals, enterprises, real estate, BFSI
+
+📩 Reply or WhatsApp +91 89251 88609 for a FREE demo card!</div>
+          <div class="wa-meta">
+            <span class="wa-chip cat">SecureID</span>
+            <span class="wa-chip price">Starting ₹499/card</span>
+            <span class="wa-chip cta">Free Demo Available</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 3: eHealth+ -->
+      <div class="wa-product">
+        <div class="wa-product-header green">
+          <span class="icon">💊</span>
+          <div>
+            <div class="prod-name">eHealth+ — Clinical Management System</div>
+            <div class="prod-cat">Category: HealthEdge · Hospital &amp; Clinic Software</div>
+          </div>
+        </div>
+        <div class="wa-product-body">
+          <div class="wa-msg">*eHealth+ — Paperless Clinic Management System* 💊
+
+From registration to discharge — fully digital, fully connected.
+
+✅ Complete EMR with Patient Health ID
+✅ Video / audio / chat virtual consultations
+✅ Bluetooth device integration (BP, SpO2, glucometer)
+✅ Lab &amp; pharmacy management
+✅ ANC/PNC, vaccination tracking
+✅ Works on tablets, low-bandwidth areas
+✅ Standards: HL7, FHIR, HIPAA, DICOM
+✅ AI Triage + Follow-up Agents included
+
+💡 *Who it's for:* Hospitals, clinics, PHCs, mobile health units, NGOs, government health programs
+
+📩 Book a FREE demo — Reply or call +91 89251 88609</div>
+          <div class="wa-meta">
+            <span class="wa-chip cat">HealthEdge</span>
+            <span class="wa-chip price">Contact for Pricing</span>
+            <span class="wa-chip cta">Free Demo</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 4: WoW -->
+      <div class="wa-product">
+        <div class="wa-product-header purple">
+          <span class="icon">🚌</span>
+          <div>
+            <div class="prod-name">WoW — Mobile Cancer Screening Platform</div>
+            <div class="prod-cat">Category: HealthEdge · Mobile Health &amp; Screening</div>
+          </div>
+        </div>
+        <div class="wa-product-body">
+          <div class="wa-msg">*WoW (Wellness on Wheels) — Mobile Cancer Screening* 🚌
+
+Take cancer screening to where people live.
+
+✅ Screens: Breast, Cervical, Lung, Oral cancers
+✅ AI image analysis — real-time detection on the bus
+✅ Route optimization to rural / underserved communities
+✅ WhatsApp appointment booking &amp; result delivery
+✅ Offline-first — no internet, no problem
+✅ *40% detection improvement* with AI-guided routing
+✅ Full integration with eHealth+ EMR
+
+💡 *Who it's for:* State health departments, cancer trusts, NGOs, corporate CSR, insurance networks
+
+📩 Reply or call +91 89251 88609 for a programme proposal!</div>
+          <div class="wa-meta">
+            <span class="wa-chip cat">HealthEdge</span>
+            <span class="wa-chip price">Programme Pricing</span>
+            <span class="wa-chip cta">Proposal Available</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 5: MiVita -->
+      <div class="wa-product">
+        <div class="wa-product-header green">
+          <span class="icon">🌿</span>
+          <div>
+            <div class="prod-name">MiVita — Senior Wellness App</div>
+            <div class="prod-cat">Category: HealthEdge · Consumer Wellness</div>
+          </div>
+        </div>
+        <div class="wa-product-body">
+          <div class="wa-msg">*MiVita — "Speak. Snap. Stay Well." 🌿*
+
+AI health companion for seniors &amp; their families.
+
+✅ Voice, photo &amp; gesture input — zero typing
+✅ 24/7 AI health monitoring
+✅ Detects warning signs *24–48 hours before critical events*
+✅ Patient app + Guardian companion app
+✅ Bluetooth device: BP, SpO2, temperature, glucometer
+✅ Multi-language support
+✅ Instant alerts to family &amp; caregivers
+
+💡 *Who it's for:* Seniors, families, retirement homes, elder care, insurance companies
+
+📩 Download info or partner enquiries — Reply here or call +91 89251 88609</div>
+          <div class="wa-meta">
+            <span class="wa-chip cat">HealthEdge</span>
+            <span class="wa-chip price">Subscription Model</span>
+            <span class="wa-chip cta">Partner Programme</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 6: BuildX -->
+      <div class="wa-product">
+        <div class="wa-product-header orange">
+          <span class="icon">⚡</span>
+          <div>
+            <div class="prod-name">BuildX — Custom AI-Powered Applications</div>
+            <div class="prod-cat">Category: BuildX · Custom Software Development</div>
+          </div>
+        </div>
+        <div class="wa-product-body">
+          <div class="wa-msg">*BuildX — Custom AI Apps. Built Fast. Built Right.* ⚡
+
+Your idea. Our AI engine. Ready in weeks — not months.
+
+✅ Community portals &amp; member management
+✅ Payment &amp; financial tracking apps
+✅ Digital signage &amp; media management
+✅ Support &amp; ticketing systems
+✅ Registration &amp; enrollment platforms
+✅ Service &amp; booking apps with WhatsApp integration
+✅ Full AI layer: agents, RAG, multi-model routing
+✅ React, Flutter, Node.js, AWS/GCP, PostgreSQL
+
+💡 *Who it's for:* Startups, enterprises, NGOs, government, associations, healthcare networks
+
+📩 Tell us your idea — Reply here or call +91 89251 88609</div>
+          <div class="wa-meta">
+            <span class="wa-chip cat">BuildX</span>
+            <span class="wa-chip price">Project-Based Pricing</span>
+            <span class="wa-chip cta">Free Consultation</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-foot" style="border-top-color:#c3e6cb;">
+    <p>TECG SOFT LLP · WhatsApp: +91 89251 88609 · info@tecgs.com</p>
+    <span class="pn" style="color:#075E54;">06</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE 7 — CONTACT & ENQUIRY
+═══════════════════════════════════════════ -->
+<div class="page contact-page dark-foot">
+  <div class="contact-inner">
+
+    <div style="margin-bottom:10mm;">
+      <img src="photos/TECG Soft Logo.png" alt="TECG SOFT" style="width:90px;margin-bottom:6mm;" />
+      <div class="section-label" style="color:var(--gold);">Get in Touch</div>
+      <h2 style="font-size:24pt;color:#fff;">Ready to <span style="color:var(--gold);">Build Something</span><br/>That Matters?</h2>
+      <p style="font-size:10pt;color:rgba(255,255,255,0.55);margin-top:4mm;max-width:140mm;">
+        Whether you need a demo, a custom proposal, a partnership, or just want to learn more —
+        our team responds within 24 hours.
+      </p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-col">
+        <h3>Contact Details</h3>
+        <div class="contact-item">
+          <div class="ci-label">General Enquiries</div>
+          <div class="ci-value"><a href="mailto:info@tecgs.com">info@tecgs.com</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">Direct / Founder</div>
+          <div class="ci-value"><a href="mailto:nat@tecgs.com">nat@tecgs.com</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">Phone / WhatsApp</div>
+          <div class="ci-value" style="color:var(--teal);">+91 89251 88609</div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">Careers</div>
+          <div class="ci-value"><a href="mailto:careers@tecgs.com">careers@tecgs.com</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">LinkedIn</div>
+          <div class="ci-value"><a href="#">linkedin.com/company/tecg-soft</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">Website</div>
+          <div class="ci-value"><a href="#">www.tecgs.com</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">Location</div>
+          <div class="ci-value" style="color:rgba(255,255,255,0.65);">Chennai, Tamil Nadu, India</div>
+        </div>
+      </div>
+
+      <div class="contact-col">
+        <h3>Enquiry Types</h3>
+        <p style="font-size:8.5pt;color:rgba(255,255,255,0.45);margin-bottom:5mm;">Tell us which product interests you when you reach out:</p>
+        <div class="inquiry-types">
+          <div class="iq-item">🛡️ SecureID / WealthCard</div>
+          <div class="iq-item">📲 Tap-to-Share CRM</div>
+          <div class="iq-item">💊 eHealth+ Clinic</div>
+          <div class="iq-item">🚌 WoW Screening</div>
+          <div class="iq-item">🌿 MiVita Wellness</div>
+          <div class="iq-item">⚡ BuildX Custom App</div>
+          <div class="iq-item">🤖 Agentic AI Studio</div>
+          <div class="iq-item">🤝 Partnership / Reseller</div>
+        </div>
+
+        <div style="margin-top:6mm;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.25);border-radius:8px;padding:5mm;">
+          <p style="font-size:8.5pt;color:rgba(255,255,255,0.7);">
+            💬 <strong style="color:#25D366;">WhatsApp us directly:</strong><br/>
+            Save +91 89251 88609 on WhatsApp and send us your product of interest. We'll send you the full product sheet and schedule a demo within 24 hours.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-footer">
+      <p>© 2025 TECG SOFT LLP · All rights reserved · Product Catalogue 2025<br/>
+      AI-First. Secure by Design. Built for Impact.</p>
+      <img src="photos/TECG Soft Logo.png" alt="TECG SOFT" class="logo-f" />
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <p>TECG SOFT LLP · info@tecgs.com · +91 89251 88609</p>
+    <span class="pn">07</span>
+  </div>
+</div>
+
+<!-- Screen hint -->
+<div class="screen-note" style="text-align:center;padding:20px;color:#888;font-family:sans-serif;font-size:13px;">
+  To save as PDF: File → Print → Save as PDF &nbsp;|&nbsp; Best at A4 / Portrait
+</div>
+
+</body>
+</html>

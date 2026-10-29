@@ -23,3 +23,7 @@ User-agent: Bingbot
 Allow: /
 
 Sitemap: https://tecgs.com/sitemap.xml
+
+# Data file, not a page — no meta tag possible, so blocked here.
+User-agent: *
+Disallow: /whatsapp-catalogue-data.txt

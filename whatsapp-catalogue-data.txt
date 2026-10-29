@@ -1,0 +1,298 @@
+══════════════════════════════════════════════════════════
+TECG SOFT LLP — WhatsApp Business Catalogue Data
+Copy-paste ready for WhatsApp Business Manager
+Phone: +91 89251 88609 | info@tecgs.com
+══════════════════════════════════════════════════════════
+
+BUSINESS PROFILE:
+Business Name:  TECG SOFT LLP
+Category:       Technology / Software
+Tagline:        AI-First. Secure by Design. Built for Impact.
+Website:        www.tecgs.com
+Email:          info@tecgs.com
+Address:        Chennai, Tamil Nadu, India
+
+══════════════════════════════════════════════════════════
+CATALOGUE ITEM 1
+══════════════════════════════════════════════════════════
+Product Name:   Tecgs WealthCard
+Category:       Smart Cards & Identity (SecureID)
+Price:          Contact for Pricing
+SKU/Code:       TS-SEC-001
+
+Description:
+One NFC card. Every service. Offline & online.
+
+The Tecgs WealthCard is a DESFire EV2/EV3 NFC Java Card that unifies digital wallet, insurance, health records, and professional identity on a single bank-grade secure card.
+
+What's included:
+• Digital Wallet — tap to pay, offline transactions
+• Insurance module — policy, claims, health ID
+• Health Records — encrypted, portable EMR
+• Digital Professional Profile + eKYC
+• 5-layer applet security architecture
+• Standards: SCOSTA, GlobalPlatform, ISO 14443, ISO 7816
+• Backed by 20+ years of smart card expertise
+
+Best for: Insurance companies, banks, TPAs, government agencies, healthcare networks
+
+Reply to enquire or call +91 89251 88609
+
+══════════════════════════════════════════════════════════
+CATALOGUE ITEM 2
+══════════════════════════════════════════════════════════
+Product Name:   Tap-to-Share Digital Business Card
+Category:       CRM & Lead Management (SecureID)
+Price:          Starting ₹499/card
+SKU/Code:       TS-SEC-002
+
+Description:
+Tap. Share. Convert. The AI-powered NFC digital business card.
+
+Tap-to-Share turns every employee into a lead machine — NFC card tap or QR scan shares a branded microsite instantly, with AI scoring leads and WhatsApp automating follow-ups.
+
+What's included:
+• NFC + QR digital business card (no app needed to receive)
+• Branded employee microsites
+• AI lead scoring & nurturing engine
+• Automated WhatsApp follow-up sequences
+• CRM integration (Salesforce, HubSpot & more)
+• 3× lead conversion improvement
+• Team analytics dashboard
+
+Best for: Sales teams, professionals, real estate, BFSI, enterprises
+
+Reply for a FREE demo card or call +91 89251 88609
+
+══════════════════════════════════════════════════════════
+CATALOGUE ITEM 3
+══════════════════════════════════════════════════════════
+Product Name:   SecureKMS + IdVerify
+Category:       Security & Identity Verification (SecureID)
+Price:          Contact for Pricing
+SKU/Code:       TS-SEC-003
+
+Description:
+In-house Key Management & AI-Powered Identity Verification.
+
+SecureKMS + IdVerify gives you full control over your key infrastructure and identity verification — no third-party key escrow, no external dependency.
+
+What's included:
+• In-house Key Management System (KMS)
+• Security Services Module (SSM)
+• eKYC — biometric identity verification
+• AI-powered fraud detection
+• Key lifecycle management
+• Continuous compliance monitoring
+
+Best for: Banks, fintechs, insurance companies, government ID programs
+
+Reply to enquire or call +91 89251 88609
+
+══════════════════════════════════════════════════════════
+CATALOGUE ITEM 4
+══════════════════════════════════════════════════════════
+Product Name:   eHealth+ Clinical Management System
+Category:       Hospital & Clinic Software (HealthEdge)
+Price:          Contact for Pricing
+SKU/Code:       TS-HE-001
+
+Description:
+From registration to discharge — fully digital, fully connected.
+
+eHealth+ is a comprehensive paperless clinical management system that runs on tablets, works in low-bandwidth areas, and connects every touchpoint of the patient journey.
+
+What's included:
+• Full EMR with Patient Health ID
+• Video / audio / chat virtual consultations
+• Bluetooth device integration (BP, SpO2, glucometer, temperature)
+• Lab & pharmacy management
+• ANC/PNC, vaccination tracking
+• AI Triage Agent + Follow-up Agent
+• Standards: HL7, FHIR, HIPAA, DICOM, ICD
+• Offline-first architecture
+
+Best for: Hospitals, clinics, PHCs, mobile health units, NGOs, government health programs
+
+Reply for a FREE demo or call +91 89251 88609
+
+══════════════════════════════════════════════════════════
+CATALOGUE ITEM 5
+══════════════════════════════════════════════════════════
+Product Name:   WoW — Mobile Cancer Screening Platform
+Category:       Mobile Health & Screening (HealthEdge)
+Price:          Programme Pricing (Contact Us)
+SKU/Code:       TS-HE-002
+
+Description:
+Take cancer screening to where people live.
+
+WoW (Wellness on Wheels) is a complete mobile cancer screening bus platform with AI image analysis, route optimization, and WhatsApp appointment management.
+
+What's included:
+• Cancer screening: Breast, Cervical, Lung, Oral
+• AI image analysis — real-time detection on the bus
+• Route optimization to rural & underserved areas
+• WhatsApp appointment booking & result delivery
+• Offline-first architecture
+• 40% detection improvement with AI routing
+• Integration with eHealth+ EMR
+
+Best for: State health departments, cancer trusts, NGOs, corporate CSR, insurance networks
+
+Reply for a programme proposal or call +91 89251 88609
+
+══════════════════════════════════════════════════════════
+CATALOGUE ITEM 6
+══════════════════════════════════════════════════════════
+Product Name:   CareConnect Mobile+
+Category:       Mobile Clinic Platform (HealthEdge)
+Price:          Contact for Pricing
+SKU/Code:       TS-HE-003
+
+Description:
+Village-level mobile clinic for continuous care.
+
+CareConnect Mobile+ enables bi-weekly village outreach with a full medical team — doctor, nurse, lab tech — connected digitally for chronic disease management and virtual consultations in the field.
+
+What's included:
+• Bi-weekly village outreach program setup
+• Team coordination: Doctor + Nurse + Lab Tech
+• Chronic disease continuum of care
+• Virtual consultation during field visits
+• NFC card-based patient identification
+• Connected device vitals capture
+• Referral and follow-up tracking
+
+Best for: NGOs, government health programs, rural health foundations, CSR health initiatives
+
+Reply to enquire or call +91 89251 88609
+
+══════════════════════════════════════════════════════════
+CATALOGUE ITEM 7
+══════════════════════════════════════════════════════════
+Product Name:   MiVita — Senior Wellness App
+Category:       Consumer Wellness (HealthEdge)
+Price:          Subscription Model (Contact for Plans)
+SKU/Code:       TS-HE-004
+
+Description:
+"Speak. Snap. Stay Well." — AI health companion for seniors.
+
+MiVita is a zero-typing wellness app that monitors seniors 24/7 and detects early warning signs 24–48 hours before critical health events, with instant alerts to family and caregivers.
+
+What's included:
+• Voice, photo & gesture input (no typing needed)
+• 24/7 AI health monitoring
+• Early warning detection: 24–48 hours ahead of critical events
+• Patient app + Guardian companion app
+• Bluetooth device integration: BP, SpO2, temperature, glucometer
+• Multi-language support
+• Escalation alerts to family, caregivers, doctors
+• Medication reminders & adherence tracking
+
+Best for: Seniors, families, retirement homes, elder care providers, insurance companies
+
+Reply for subscription plans or partner programme — call +91 89251 88609
+
+══════════════════════════════════════════════════════════
+CATALOGUE ITEM 8
+══════════════════════════════════════════════════════════
+Product Name:   BuildX — Custom AI-Powered Applications
+Category:       Custom Software Development
+Price:          Project-Based Pricing (Contact Us)
+SKU/Code:       TS-BX-001
+
+Description:
+Your idea. Our AI engine. Ready in weeks — not months.
+
+BuildX is TECG SOFT's custom application development service — we build AI-embedded mobile and web apps across six solution domains, with a full modern tech stack and 30+ production AI agents.
+
+What we build:
+• Community portals & member management
+• Payment & financial tracking apps
+• Digital signage & media management
+• Support & ticketing systems
+• Registration & enrollment platforms
+• Service & booking apps with WhatsApp integration
+
+Tech stack: React / Next.js, Flutter, Node.js, Python, PostgreSQL, MongoDB, AWS, GCP, Docker, LangGraph, RAG, Multi-Model AI
+
+Best for: Startups, enterprises, NGOs, government, associations, healthcare networks
+
+Reply with your idea or call +91 89251 88609 for a free consultation
+
+══════════════════════════════════════════════════════════
+CATALOGUE ITEM 9
+══════════════════════════════════════════════════════════
+Product Name:   Agentic AI Studio
+Category:       AI Platform / Enterprise Software
+Price:          Enterprise Licensing (Contact Us)
+SKU/Code:       TS-AI-001
+
+Description:
+Deploy autonomous AI agents for any business workflow.
+
+Agentic AI Studio is TECG SOFT's standalone AI orchestration platform — 30+ agents in production, multi-model routing, RAG knowledge engine, pre-built templates, and enterprise-grade security.
+
+What's included:
+• Agent orchestration (single & multi-agent systems)
+• Multi-model AI routing
+• RAG knowledge engine — grounded in your private data
+• 30+ pre-built agent templates
+• Self-optimizing agents — learn and improve over time
+• Enterprise security & compliance
+• API-first integration with any system
+• Multi-agent mesh collaboration
+
+Best for: Enterprises, healthcare systems, insurance, fintech, government, any organization wanting AI that acts — not just advises
+
+Reply or call +91 89251 88609 for an enterprise demo
+
+══════════════════════════════════════════════════════════
+SUGGESTED WHATSAPP BUSINESS AUTO-REPLIES
+══════════════════════════════════════════════════════════
+
+GREETING MESSAGE (when customer first messages):
+---
+Hi! 👋 Welcome to *TECG SOFT* — AI-First. Secure by Design.
+
+We build intelligent platforms for:
+🛡️ Smart Identity & NFC Cards (SecureID)
+🏥 Connected Healthcare (HealthEdge)
+⚡ Custom AI Apps (BuildX)
+🤖 Agentic AI Studio
+
+Type the number for what interests you:
+1️⃣ Tecgs WealthCard / Smart Cards
+2️⃣ Tap-to-Share Digital Business Cards
+3️⃣ eHealth+ Clinic System
+4️⃣ WoW Cancer Screening
+5️⃣ MiVita Senior Wellness
+6️⃣ Custom App (BuildX)
+7️⃣ Agentic AI Platform
+8️⃣ Schedule a Demo
+9️⃣ Partnership / Reseller
+
+Or just describe what you need — we'll get back within *24 hours*! 🚀
+---
+
+AWAY MESSAGE:
+---
+Hi! 👋 Thanks for reaching out to *TECG SOFT*.
+
+We're currently away but will reply within *24 hours*.
+
+Meanwhile, browse our catalogue right here on WhatsApp to explore:
+• 🛡️ SecureID — Smart Cards & NFC Identity
+• 🏥 HealthEdge — Connected Healthcare
+• ⚡ BuildX — Custom AI Apps
+• 🤖 Agentic AI Studio
+
+For urgent queries: info@tecgs.com | www.tecgs.com
+---
+
+══════════════════════════════════════════════════════════
+END OF WHATSAPP BUSINESS CATALOGUE DATA
+TECG SOFT LLP | info@tecgs.com | +91 89251 88609
+══════════════════════════════════════════════════════════
